@@ -1,0 +1,818 @@
+/**************************
+ * CONFIGURAÇÕES GLOBAIS *
+ **************************/
+
+const ID_PLANILHA_PROSPECCOES = "1mzrjeofqODZmyFf1bmspqyyB2pXhK7FuEL75wKyoiIg";
+const ABA_PRINCIPAL = "base prospecções";
+const ABA_EVENTOS = "eventos prospecções";
+
+/**************************
+ * FUNÇÕES DE UTILIDADE / FORMATAÇÃO *
+ **************************/
+
+function log(msg, obj) {
+  if (obj !== undefined) {
+    Logger.log(msg + " %s", JSON.stringify(obj));
+  } else {
+    Logger.log(msg);
+  }
+}
+
+function formatarDataHora(data) {
+  if (!data) return '';
+  const d = new Date(data);
+  if (isNaN(d.getTime())) return data.toString();
+  const dia = String(d.getDate()).padStart(2, '0');
+  const mes = String(d.getMonth() + 1).padStart(2, '0');
+  const ano = d.getFullYear();
+  const hora = String(d.getHours()).padStart(2, '0');
+  const min = String(d.getMinutes()).padStart(2, '0');
+  return `${dia}/${mes}/${ano} ${hora}:${min}`;
+}
+
+function formatarData(data) {
+  if (!data) return '';
+  if (data instanceof Date && !isNaN(data.getTime())) {
+    const d = data;
+    const dia = String(d.getDate()).padStart(2, '0');
+    const mes = String(d.getMonth() + 1).padStart(2, '0');
+    const ano = d.getFullYear();
+    return `${dia}/${mes}/${ano}`;
+  }
+  return data.toString();
+}
+
+function formatarMoeda(valor) {
+  if (valor === null || valor === undefined || valor === '') return 'R$ 0,00';
+  const numero = typeof valor === 'number' ? valor : parseFloat(String(valor).replace(/[^\d,-]/g, '').replace(',', '.')) || 0;
+  return numero.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
+}
+
+function converterMoedaParaNumero(valor) {
+  if (valor === null || valor === undefined || valor === '') return 0;
+  if (typeof valor === 'number') return valor;
+  const s = valor.toString().replace(/\s/g, '').replace('R$', '').replace(/\./g, '').replace(',', '.');
+  const n = parseFloat(s);
+  return isNaN(n) ? 0 : n;
+}
+
+/**************************
+ * FUNÇÕES DE BUSCA *
+ **************************/
+
+function buscarTodasLojas() {
+  try {
+    const ss = SpreadsheetApp.openById(ID_PLANILHA_PROSPECCOES);
+    const aba = ss.getSheetByName(ABA_PRINCIPAL);
+    if (!aba) return [];
+
+    const ultimaLinha = aba.getLastRow();
+    if (ultimaLinha < 4) return [];
+
+    const valores = aba.getRange(4, 3, ultimaLinha - 3, 1).getValues();
+    const setLojas = new Set();
+
+    for (let i = 0; i < valores.length; i++) {
+      const v = valores[i][0];
+      if (v !== null && v !== undefined && v !== '') {
+        const s = String(v).trim();
+        if (s !== '') setLojas.add(s);
+      }
+    }
+
+    const lojasArray = Array.from(setLojas).sort((a, b) => a.localeCompare(b, 'pt-BR'));
+    console.log("Lojas carregadas:", lojasArray.length);
+    return lojasArray;
+
+  } catch (error) {
+    console.log("Erro buscarTodasLojas:", error);
+    return [];
+  }
+}
+
+// ⬇️ CORREÇÃO: Função auxiliar para formatar defasagem com "dias"
+function formatarDefasagem(dias) {
+  if (dias === 0) return "0 dias";
+  if (dias === 1) return "1 dia";
+  if (dias > 1) return `${dias} dias`;
+  return ""; // Para valores inválidos
+}
+
+function buscarDadosLoja(nomeLoja) {
+  try {
+    console.log("🔍 Buscando loja:", nomeLoja);
+    
+    if (!nomeLoja) {
+      return { encontrado: false, mensagem: "Nome da loja inválido" };
+    }
+
+    const ss = SpreadsheetApp.openById(ID_PLANILHA_PROSPECCOES);
+    const aba = ss.getSheetByName(ABA_PRINCIPAL);
+    
+    if (!aba) {
+      return { encontrado: false, mensagem: "Planilha não encontrada" };
+    }
+
+    const ultimaLinha = aba.getLastRow();
+    if (ultimaLinha < 4) {
+      return { encontrado: false, mensagem: "Nenhum dado encontrado" };
+    }
+
+    const dados = aba.getRange(4, 1, ultimaLinha - 3, 20).getValues();
+    const lojaBuscada = nomeLoja.toString().toLowerCase().trim();
+
+    for (let i = 0; i < dados.length; i++) {
+      const linha = dados[i];
+      const nomeDaLoja = linha[2] ? linha[2].toString().toLowerCase().trim() : '';
+      
+      if (nomeDaLoja === lojaBuscada || nomeDaLoja.includes(lojaBuscada)) {
+        console.log("✅ Loja encontrada na linha", i + 4);
+        
+        // ⬇️ CORREÇÃO: CÁLCULO AUTOMÁTICO DA DEFASAGEM COM "DIAS" ⬇️
+        let defasagemDias = 0;
+        const dataUltimoEvento = linha[17]; // Coluna R - Data último evento
+        
+        if (dataUltimoEvento && dataUltimoEvento instanceof Date && !isNaN(dataUltimoEvento.getTime())) {
+          const hoje = new Date();
+          // Zera as horas para comparar apenas as datas
+          const dataEvento = new Date(dataUltimoEvento);
+          dataEvento.setHours(0, 0, 0, 0);
+          const hojeZerado = new Date(hoje);
+          hojeZerado.setHours(0, 0, 0, 0);
+          
+          const diffMs = hojeZerado - dataEvento;
+          defasagemDias = Math.floor(diffMs / (1000 * 60 * 60 * 24));
+          
+          console.log("📅 Data último evento:", dataEvento);
+          console.log("📅 Hoje:", hojeZerado);
+          console.log("📊 Defasagem calculada:", defasagemDias, "dias");
+        } else {
+          console.log("📅 Data último evento inválida ou vazia");
+          // Se não tem data, considera defasagem máxima
+          defasagemDias = 999;
+        }
+
+        // ⬇️ CORREÇÃO: FORMATAR DEFASAGEM COM "DIAS" ⬇️
+        let defasagemFormatada = "";
+        if (defasagemDias === 0) {
+          defasagemFormatada = "0 dias";
+        } else if (defasagemDias === 1) {
+          defasagemFormatada = "1 dia";
+        } else if (defasagemDias > 1) {
+          defasagemFormatada = defasagemDias + " dias";
+        } else {
+          defasagemFormatada = "999 dias";
+        }
+
+        // ⬇️ CORREÇÃO: ADESÃO COMO NÚMERO PARA O SELECT ⬇️
+        const adesaoValor = linha[8] || 0;
+        const adesaoParaSelect = parseFloat(adesaoValor) || 0;
+
+        return {
+          encontrado: true,
+          id: linha[0] || '',
+          loja: linha[2] || '',
+          segmento: linha[3] || '',
+          telefone: linha[4] || '',
+          fornecedor: linha[5] || '',
+          trafego: linha[6] || '',
+          quantidade_lojas: linha[7] || '',
+          adesao: adesaoParaSelect,
+          data_pagamento_adesao: linha[9] ? formatarData(linha[9]) : '',
+          forma_pagamento: linha[10] || '',
+          parcelas: linha[11] || '',
+          plano_assinatura: linha[12] ? formatarMoeda(linha[12]) : '',
+          usuario: linha[13] || '',
+          representante: linha[14] || '',
+          status: linha[15] || 'Em andamento',
+          evento: linha[16] || '',
+          data_ultimo_evento: dataUltimoEvento ? formatarData(dataUltimoEvento) : '',
+          defasagem: defasagemFormatada, // ⬅️ AGORA COM "DIAS"
+          observacao: linha[19] || ''
+        };
+      }
+    }
+
+    console.log("❌ Loja não encontrada");
+    return { 
+      encontrado: false, 
+      mensagem: "Loja não encontrada na base de dados" 
+    };
+
+  } catch (error) {
+    console.log("❌ Erro buscarDadosLoja:", error);
+    return { 
+      encontrado: false, 
+      mensagem: "Erro: " + error.message 
+    };
+  }
+}
+
+function atualizarTodasDefasagens() {
+  try {
+    console.log("🔄 Atualizando defasagens de todas as lojas...");
+    
+    const ss = SpreadsheetApp.openById(ID_PLANILHA_PROSPECCOES);
+    const aba = ss.getSheetByName(ABA_PRINCIPAL);
+    
+    if (!aba) {
+      console.log("❌ Aba não encontrada");
+      return;
+    }
+
+    const ultimaLinha = aba.getLastRow();
+    if (ultimaLinha < 4) {
+      console.log("📝 Nenhum dado para atualizar");
+      return;
+    }
+
+    const dados = aba.getRange(4, 1, ultimaLinha - 3, 20).getValues();
+    const hoje = new Date();
+    hoje.setHours(0, 0, 0, 0);
+    
+    let atualizacoes = 0;
+
+    for (let i = 0; i < dados.length; i++) {
+      const linha = dados[i];
+      const dataUltimoEvento = linha[17]; // Coluna R
+      
+      let defasagemDias = 0;
+      
+      if (dataUltimoEvento && dataUltimoEvento instanceof Date && !isNaN(dataUltimoEvento.getTime())) {
+        const dataEvento = new Date(dataUltimoEvento);
+        dataEvento.setHours(0, 0, 0, 0);
+        
+        const diffMs = hoje - dataEvento;
+        defasagemDias = Math.floor(diffMs / (1000 * 60 * 60 * 24));
+        
+        // ⬇️ CORREÇÃO: USAR A FUNÇÃO formatarDefasagem ⬇️
+        const defasagemFormatada = formatarDefasagem(defasagemDias);
+        if (linha[18] !== defasagemFormatada) {
+          aba.getRange(i + 4, 19).setValue(defasagemFormatada); // Coluna S - Defasagem
+          atualizacoes++;
+        }
+      } else {
+        // ⬇️ CORREÇÃO: USAR A FUNÇÃO formatarDefasagem ⬇️
+        const defasagemMaxima = formatarDefasagem(999);
+        if (linha[18] !== defasagemMaxima) {
+          aba.getRange(i + 4, 19).setValue(defasagemMaxima);
+          atualizacoes++;
+        }
+      }
+    }
+    
+    console.log("✅ Defasagens atualizadas:", atualizacoes, "registros");
+    return { success: true, message: `✅ ${atualizacoes} defasagens atualizadas` };
+    
+  } catch (error) {
+    console.log("❌ Erro ao atualizar defasagens:", error);
+    return { success: false, message: "Erro: " + error.message };
+  }
+}
+function criarTriggerMeiaNoite() {
+  try {
+    // Remove triggers existentes
+    const triggers = ScriptApp.getProjectTriggers();
+    triggers.forEach(trigger => ScriptApp.deleteTrigger(trigger));
+    
+    // Cria trigger para rodar EXATAMENTE À MEIA-NOITE
+    ScriptApp.newTrigger('atualizarTodasDefasagens')
+      .timeBased()
+      .everyDays(1)
+      .atHour(0)
+      .nearMinute(0)  // ⬅️ Minuto 0 = em ponto
+      .create();
+    
+    console.log("✅ Trigger diário criado para atualizar defasagens às 00:00 em ponto");
+    return { success: true, message: "✅ Trigger configurado para rodar às 00:00 em ponto" };
+    
+  } catch (error) {
+    console.log("❌ Erro ao criar trigger:", error);
+    return { success: false, message: "Erro: " + error.message };
+  }
+}
+/**************************
+ * FUNÇÕES DE SALVAMENTO *
+ **************************/
+
+function salvarProspeccao(dados) {
+  try {
+    console.log("💾 Salvando prospecção - Ação:", dados.acao);
+    console.log("Dados recebidos:", dados);
+
+    const ss = SpreadsheetApp.openById(ID_PLANILHA_PROSPECCOES);
+    let aba = ss.getSheetByName(ABA_PRINCIPAL);
+
+    if (!aba) {
+      console.log("Criando aba principal...");
+      aba = ss.insertSheet(ABA_PRINCIPAL);
+      const cabecalho = [
+        'ID', 'Data registro', 'Loja', 'Segmento', 'Telefone', 'Fornecedor',
+        'Tráfego', 'Quantidade de lojas', 'Adesão', 'Data de pagamento adesão',
+        'Forma de pagamento', 'Parcelas', 'Plano de assinatura',
+        'Usuário', 'Representante', 'Status', 'Evento', 'Data último evento',
+        'Defasagem', 'Observação'
+      ];
+      aba.getRange('A3:T3').setValues([cabecalho]);
+      aba.getRange(3, 1, 1, cabecalho.length).setBackground("#7E3E9A").setFontColor("white").setFontWeight("bold");
+      aba.setFrozenRows(3);
+    }
+
+    inicializarAbaEventos(ss);
+
+    const dataHoraAtual = new Date();
+
+    // ⬇️ CONVERSÃO DA ADESÃO PARA NÚMERO ⬇️
+    if (dados.adesao) {
+      dados.adesao = converterMoedaParaNumero(dados.adesao);
+    }
+
+    if (dados.acao === 'cadastrar') {
+      return cadastrarNovaLoja(aba, dados, dataHoraAtual);
+    } else if (dados.acao === 'atualizar') {
+      return atualizarLojaExistente(aba, dados, dataHoraAtual);
+    } else {
+      return { success: false, message: "Ação não reconhecida" };
+    }
+
+  } catch (error) {
+    console.log("❌ Erro salvarProspeccao:", error);
+    return { success: false, message: "Erro: " + error.message };
+  }
+}
+
+function inicializarAbaEventos(ss) {
+  try {
+    let abaEventos = ss.getSheetByName(ABA_EVENTOS);
+    if (!abaEventos) {
+      console.log("Criando aba de eventos...");
+      abaEventos = ss.insertSheet(ABA_EVENTOS);
+      const cabecalho = [
+        'ID Evento', 'ID Loja', 'Data Evento', 'Loja', 'Segmento', 'Telefone', 'Fornecedor',
+        'Tráfego', 'Quantidade de lojas', 'Adesão', 'Data de pagamento adesão',
+        'Forma de pagamento', 'Parcelas', 'Plano de assinatura',
+        'Usuário', 'Representante', 'Status', 'Evento', 'Defasagem', 'Observação'
+      ];
+      abaEventos.getRange('A3:T3').setValues([cabecalho]);
+      abaEventos.getRange(3, 1, 1, cabecalho.length).setBackground("#2D3047").setFontColor("white").setFontWeight("bold");
+      abaEventos.setFrozenRows(3);
+    }
+  } catch (e) {
+    console.log("Erro inicializarAbaEventos:", e);
+  }
+}
+
+/**************************
+ * CADASTRO / ATUALIZAÇÃO *
+ **************************/
+
+function cadastrarNovaLoja(aba, dados, dataHoraAtual) {
+  try {
+    console.log("➕ Cadastrando nova loja:", dados.loja);
+
+    // Verificar duplicidade
+    const lojasExistentes = buscarTodasLojas();
+    if (lojasExistentes.includes(dados.loja)) {
+      return { success: false, message: "❌ Esta loja já está cadastrada!" };
+    }
+
+    const ultimaLinha = aba.getLastRow();
+    let proximoID = 1;
+    
+    if (ultimaLinha >= 4) {
+      const ids = aba.getRange(4, 1, ultimaLinha - 3, 1).getValues().flat();
+      const numerosIds = ids.filter(id => id !== '' && !isNaN(id)).map(Number);
+      if (numerosIds.length > 0) proximoID = Math.max(...numerosIds) + 1;
+    }
+
+    // ⬇️ CORREÇÃO: Converter adesão para número ⬇️
+    const adesaoNumero = parseFloat(dados.adesao) || 0;
+    const planoAssinaturaNumero = converterMoedaParaNumero(dados.plano_assinatura);
+
+    const linhaDados = [
+      proximoID,
+      dataHoraAtual,
+      dados.loja,
+      dados.segmento,
+      dados.telefone,
+      dados.fornecedor,
+      dados.trafego,
+      parseInt(dados.quantidade_lojas) || 1,
+      adesaoNumero, // ⬅️ AGORA É NÚMERO
+      dados.data_pagamento_adesao ? new Date(dados.data_pagamento_adesao) : '',
+      dados.forma_pagamento,
+      dados.parcelas,
+      planoAssinaturaNumero,
+      dados.usuario,
+      dados.representante || '',
+      'Em andamento',
+      'Cadastro inicial',
+      dataHoraAtual,
+      "0 dias",
+      'Loja cadastrada no sistema'
+    ];
+
+    const linhaInserir = ultimaLinha + 1;
+    aba.getRange(linhaInserir, 1, 1, linhaDados.length).setValues([linhaDados]);
+
+    // ⬇️ CORREÇÃO: Formatar adesão como moeda ⬇️
+    aba.getRange(linhaInserir, 9).setNumberFormat('"R$"#,##0.00'); // Adesão
+    aba.getRange(linhaInserir, 13).setNumberFormat('"R$"#,##0.00'); // Plano
+    aba.getRange(linhaInserir, 2).setNumberFormat('dd/mm/yyyy hh:mm'); // Data registro
+    aba.getRange(linhaInserir, 18).setNumberFormat('dd/mm/yyyy hh:mm'); // Data último evento
+
+    // Registrar evento
+    registrarEventoCompleto({
+      ...dados,
+      id: proximoID,
+      status: 'Em andamento',
+      evento: 'Cadastro inicial',
+      observacao: 'Loja cadastrada no sistema'
+    }, dataHoraAtual, "Cadastro inicial");
+
+    console.log("✅ Loja cadastrada - ID:", proximoID);
+    return { 
+      success: true, 
+      message: `✅ Loja "${dados.loja}" cadastrada com sucesso! ID: ${proximoID}` 
+    };
+
+  } catch (error) {
+    console.log("❌ Erro cadastrarNovaLoja:", error);
+    return { success: false, message: "Erro ao cadastrar: " + error.message };
+  }
+}
+function atualizarLojaExistente(aba, dados, dataHoraAtual) {
+  try {
+    console.log("🔄 INICIANDO ATUALIZAÇÃO - ID:", dados.id);
+    console.log("Dados recebidos:", dados);
+
+    const ultimaLinha = aba.getLastRow();
+    if (ultimaLinha < 4) {
+      console.log("❌ Planilha vazia");
+      return { success: false, message: "Planilha vazia" };
+    }
+
+    // 🔥 BUSCAR TODOS OS DADOS
+    const dadosPlanilha = aba.getRange(4, 1, ultimaLinha - 3, 20).getValues();
+    console.log("Total de linhas na base:", dadosPlanilha.length);
+    
+    // 🔥 ENCONTRAR LINHA PELO ID - BUSCA ROBUSTA
+    let linhaEncontrada = -1;
+    let dadosAntigos = null;
+    
+    for (let i = 0; i < dadosPlanilha.length; i++) {
+      const idNaLinha = dadosPlanilha[i][0];
+      console.log(`Linha ${i + 4}: ID=${idNaLinha}, Buscando ID=${dados.id}`);
+      
+      if (String(idNaLinha) === String(dados.id)) {
+        linhaEncontrada = i + 4;
+        dadosAntigos = dadosPlanilha[i];
+        console.log("✅ LINHA ENCONTRADA:", linhaEncontrada);
+        console.log("Dados antigos:", dadosAntigos);
+        break;
+      }
+    }
+
+    if (linhaEncontrada === -1) {
+      console.log("❌ ID NÃO ENCONTRADO NA BASE");
+      return { success: false, message: "Registro não encontrado para ID: " + dados.id };
+    }
+
+    // 🔥 VERIFICAR DADOS ANTIGOS
+    console.log("STATUS ANTIGO:", dadosAntigos[15]);
+    console.log("EVENTO ANTIGO:", dadosAntigos[16]);
+    console.log("OBSERVAÇÃO ANTIGA:", dadosAntigos[19]);
+
+    // 🔥 PREPARAR NOVOS DADOS - ORDEM CORRETA CONFIRMADA
+    const novosDados = [
+      dados.id,                                           // A - ID
+      dadosAntigos[1],                                   // B - Data registro (mantém original)
+      dados.loja,                                        // C - Loja
+      dados.segmento,                                    // D - Segmento
+      dados.telefone,                                    // E - Telefone
+      dados.fornecedor,                                  // F - Fornecedor
+      dados.trafego,                                     // G - Tráfego
+      parseInt(dados.quantidade_lojas) || 1,             // H - Quantidade de lojas
+      parseFloat(dados.adesao) || 0,                     // I - Adesão
+      dados.data_pagamento_adesao ? new Date(dados.data_pagamento_adesao) : '', // J - Data pagamento
+      dados.forma_pagamento,                             // K - Forma de pagamento
+      dados.parcelas,                                    // L - Parcelas
+      converterMoedaParaNumero(dados.plano_assinatura),  // M - Plano de assinatura
+      dados.usuario,                                     // N - Usuário
+      dados.representante || '',                         // O - Representante
+      dados.status,                                      // P - Status ⭐ CAMPO CRÍTICO
+      dados.evento,                                      // Q - Evento ⭐ CAMPO CRÍTICO
+      dataHoraAtual,                                     // R - Data último evento
+      "0 dias",                                          // S - Defasagem
+      dados.observacao                                   // T - Observação ⭐ CAMPO CRÍTICO
+    ];
+
+    console.log("📝 NOVOS DADOS PREPARADOS:");
+    console.log("Novo Status:", novosDados[15]);
+    console.log("Novo Evento:", novosDados[16]);
+    console.log("Nova Observação:", novosDados[19]);
+
+    // 🔥 ATUALIZAR DIRETAMENTE NA PLANILHA
+    console.log("💾 SALVANDO NA LINHA:", linhaEncontrada);
+    aba.getRange(linhaEncontrada, 1, 1, 20).setValues([novosDados]);
+
+    // 🔥 APLICAR FORMATAÇÃO
+    aba.getRange(linhaEncontrada, 2).setNumberFormat('dd/mm/yyyy hh:mm');  // Data registro
+    aba.getRange(linhaEncontrada, 9).setNumberFormat('"R$"#,##0.00');      // Adesão
+    aba.getRange(linhaEncontrada, 13).setNumberFormat('"R$"#,##0.00');     // Plano
+    aba.getRange(linhaEncontrada, 18).setNumberFormat('dd/mm/yyyy hh:mm'); // Data último evento
+
+    // 🔥 VERIFICAR SE SALVOU CORRETAMENTE
+    const dadosVerificados = aba.getRange(linhaEncontrada, 1, 1, 20).getValues()[0];
+    console.log("✅ DADOS APÓS ATUALIZAÇÃO:");
+    console.log("Status salvo:", dadosVerificados[15]);
+    console.log("Evento salvo:", dadosVerificados[16]);
+    console.log("Observação salva:", dadosVerificados[19]);
+
+    // 🔥 REGISTRAR EVENTO
+    const mudancas = identificarMudancas(dadosAntigos, novosDados);
+    console.log("Mudanças identificadas:", mudancas);
+    
+    const eventoId = registrarEventoCompleto(dados, dataHoraAtual, mudancas);
+    console.log("📋 Evento registrado com ID:", eventoId);
+
+    return { 
+      success: true, 
+      message: `✅ Loja "${dados.loja}" atualizada com sucesso! Status: ${dados.status} | Evento: ${dados.evento} | Evento ID: ${eventoId}`,
+      eventoId: eventoId
+    };
+
+  } catch (error) {
+    console.log("❌ ERRO CRÍTICO NA ATUALIZAÇÃO:", error);
+    console.log("Stack trace:", error.stack);
+    return { success: false, message: "Erro ao atualizar: " + error.message };
+  }
+}
+function verificarEstruturaPlanilha() {
+  try {
+    const ss = SpreadsheetApp.openById(ID_PLANILHA_PROSPECCOES);
+    const abaBase = ss.getSheetByName(ABA_PRINCIPAL);
+    const abaEventos = ss.getSheetByName(ABA_EVENTOS);
+    
+    console.log("=== ESTRUTURA BASE PROSPECÇÕES ===");
+    if (abaBase) {
+      const cabecalhoBase = abaBase.getRange(3, 1, 1, 20).getValues()[0];
+      console.log("Cabeçalho Base:", cabecalhoBase.map(h => h.toString().trim()));
+    }
+    
+    console.log("=== ESTRUTURA EVENTOS PROSPECÇÕES ===");
+    if (abaEventos) {
+      const cabecalhoEventos = abaEventos.getRange(3, 1, 1, 20).getValues()[0];
+      console.log("Cabeçalho Eventos:", cabecalhoEventos.map(h => h.toString().trim()));
+    }
+    
+    return "Estrutura verificada - veja os logs";
+  } catch (error) {
+    console.log("Erro verificarEstrutura:", error);
+    return "Erro: " + error.message;
+  }
+}
+
+/**************************
+ * FUNÇÕES DE EVENTOS *
+ **************************/
+
+function identificarMudancas(antigos, novos) {
+  const mudancas = [];
+  
+  console.log("🔍 COMPARANDO MUDANÇAS:");
+  console.log("Status:", antigos[15], "→", novos[15]);
+  console.log("Evento:", antigos[16], "→", novos[16]);
+  console.log("Observação:", antigos[19], "→", novos[19]);
+  
+  if (String(antigos[15]) !== String(novos[15])) {
+    mudancas.push(`Status: ${antigos[15]} → ${novos[15]}`);
+  }
+  
+  if (String(antigos[16]) !== String(novos[16])) {
+    mudancas.push(`Evento: ${antigos[16]} → ${novos[16]}`);
+  }
+  
+  if (String(antigos[19] || '') !== String(novos[19] || '')) {
+    mudancas.push(`Observação atualizada`);
+  }
+  
+  console.log("Mudanças encontradas:", mudancas);
+  return mudancas.length > 0 ? mudancas.join(' | ') : 'Dados mantidos';
+}
+
+/**************************
+ * FUNÇÕES DE TESTE *
+ **************************/
+
+function testarSistema() {
+  console.log("🧪 INICIANDO TESTES DO SISTEMA");
+  
+  const lojas = buscarTodasLojas();
+  console.log("Lojas encontradas:", lojas.length);
+  
+  if (lojas.length > 0) {
+    console.log("Primeira loja:", lojas[0]);
+    const resultado = buscarDadosLoja(lojas[0]);
+    console.log("Busca primeira loja:", resultado.encontrado ? "✅ Encontrada" : "❌ Não encontrada");
+  }
+  
+  return { 
+    success: true, 
+    message: `Testes executados! ${lojas.length} lojas encontradas.`,
+    totalLojas: lojas.length
+  };
+}
+
+function debugLojas() {
+  try {
+    const lojas = buscarTodasLojas();
+    console.log("=== DEBUG LOJAS ===");
+    console.log("Total de lojas:", lojas.length);
+    console.log("Lojas encontradas:", lojas);
+    
+    const ss = SpreadsheetApp.openById(ID_PLANILHA_PROSPECCOES);
+    const aba = ss.getSheetByName(ABA_PRINCIPAL);
+    const dados = aba.getRange(4, 3, aba.getLastRow() - 3, 1).getValues();
+    
+    console.log("Dados brutos da coluna C:");
+    dados.forEach((linha, index) => {
+      console.log(`Linha ${index + 4}: "${linha[0]}"`);
+    });
+    
+    return {
+      total: lojas.length,
+      lojas: lojas,
+      status: lojas.length > 0 ? "✅ Lojas carregadas" : "❌ Nenhuma loja encontrada"
+    };
+  } catch (error) {
+    console.log("Erro debugLojas:", error);
+    return { error: error.message };
+  }
+}
+
+/**************************
+ * FUNÇÃO DE REGISTRO DE EVENTOS - CORRIGIDA *
+ **************************/
+
+function registrarEventoCompleto(dados, dataHoraAtual, mudancas) {
+  try {
+    console.log("📝 Registrando evento - Mudanças:", mudancas);
+    
+    const ss = SpreadsheetApp.openById(ID_PLANILHA_PROSPECCOES);
+    const abaEventos = ss.getSheetByName(ABA_EVENTOS);
+    
+    if (!abaEventos) {
+      console.log("❌ Aba de eventos não encontrada");
+      return null;
+    }
+
+    const ultimaLinha = abaEventos.getLastRow();
+    let proximoIDEvento = 1;
+    
+    if (ultimaLinha > 3) {
+      const ids = abaEventos.getRange(4, 1, ultimaLinha - 3, 1).getValues().flat();
+      const numerosIds = ids.filter(id => id !== '' && !isNaN(id)).map(Number);
+      if (numerosIds.length > 0) proximoIDEvento = Math.max(...numerosIds) + 1;
+    }
+
+    // 🔥 CORREÇÃO DEFINITIVA: MESMA ESTRUTURA DA BASE
+    const linhaEvento = [
+      proximoIDEvento,                                    // A - ID
+      dataHoraAtual,                                      // B - Data registro ⭐
+      dados.loja,                                        // C - Loja ⭐
+      dados.segmento,                                    // D - Segmento
+      dados.telefone,                                    // E - Telefone
+      dados.fornecedor,                                  // F - Fornecedor
+      dados.trafego,                                     // G - Tráfego
+      parseInt(dados.quantidade_lojas) || 1,             // H - Quantidade de lojas
+      parseFloat(dados.adesao) || 0,                     // I - Adesão
+      dados.data_pagamento_adesao ? new Date(dados.data_pagamento_adesao) : '', // J
+      dados.forma_pagamento,                             // K - Forma de pagamento
+      dados.parcelas,                                    // L - Parcelas
+      converterMoedaParaNumero(dados.plano_assinatura),  // M - Plano de assinatura
+      dados.usuario,                                     // N - Usuário
+      dados.representante || '',                         // O - Representante
+      dados.status,                                      // P - Status
+      dados.evento,                                      // Q - Evento
+      dataHoraAtual,                                     // R - Data último evento
+      "0 dias",                                          // S - Defasagem
+      mudancas + (dados.observacao ? ` | ${dados.observacao}` : '') // T - Observação
+    ];
+
+    console.log("📋 VERIFICAÇÃO DOS DADOS:");
+    console.log("Coluna A (ID):", linhaEvento[0]);
+    console.log("Coluna B (Data registro):", linhaEvento[1]);
+    console.log("Coluna C (Loja):", linhaEvento[2]);
+    console.log("Coluna P (Status):", linhaEvento[15]);
+    console.log("Coluna Q (Evento):", linhaEvento[16]);
+    console.log("Coluna R (Data último evento):", linhaEvento[17]);
+
+    const linhaInserir = Math.max(4, ultimaLinha + 1);
+    abaEventos.getRange(linhaInserir, 1, 1, linhaEvento.length).setValues([linhaEvento]);
+    
+    // 🔥 FORMATAÇÃO CORRETA
+    abaEventos.getRange(linhaInserir, 2).setNumberFormat('dd/mm/yyyy hh:mm'); // Data registro
+    abaEventos.getRange(linhaInserir, 9).setNumberFormat('"R$"#,##0.00'); // Adesão
+    abaEventos.getRange(linhaInserir, 13).setNumberFormat('"R$"#,##0.00'); // Plano
+    abaEventos.getRange(linhaInserir, 18).setNumberFormat('dd/mm/yyyy hh:mm'); // Data último evento
+
+    console.log("✅ Evento registrado CORRETAMENTE - ID:", proximoIDEvento);
+    return proximoIDEvento;
+
+  } catch (error) {
+    console.log("❌ Erro registrarEventoCompleto:", error);
+    return null;
+  }
+}
+
+function debugLojasCompleto() {
+  console.log("=== 🐛 DEBUG COMPLETO DAS LOJAS ===");
+  
+  // Testar buscar lojas
+  var lojas = buscarTodasLojas();
+  console.log("Total de lojas encontradas:", lojas.length);
+  console.log("Lista de lojas:", lojas);
+  
+  // Testar estrutura da planilha
+  var ss = SpreadsheetApp.openById(ID_PLANILHA_PROSPECCOES);
+  var aba = ss.getSheetByName(ABA_PRINCIPAL);
+  
+  console.log("Última linha na planilha:", aba.getLastRow());
+  
+  if (aba.getLastRow() >= 4) {
+    var dados = aba.getRange(4, 3, aba.getLastRow() - 3, 1).getValues();
+    console.log("Dados brutos da coluna C (Loja):");
+    for (var i = 0; i < dados.length; i++) {
+      console.log("Linha " + (i + 4) + ": '" + dados[i][0] + "'");
+    }
+  }
+  
+  return {
+    success: true,
+    totalLojas: lojas.length,
+    lojas: lojas,
+    mensagem: "Debug completo executado - Verifique os logs (Ver > Logs)"
+  };
+}
+
+function debugLojasSimples() {
+  try {
+    const ID_PLANILHA_PROSPECCOES = "1mzrjeofqODZmyFf1bmspqyyB2pXhK7FuEL75wKyoiIg";
+    const ABA_PRINCIPAL = "base prospecções";
+    
+    const ss = SpreadsheetApp.openById(ID_PLANILHA_PROSPECCOES);
+    const aba = ss.getSheetByName(ABA_PRINCIPAL);
+    
+    console.log("=== 🐛 DEBUG SIMPLES ===");
+    console.log("Planilha encontrada:", ss.getName());
+    console.log("Aba encontrada:", aba ? "SIM" : "NÃO");
+    
+    if (!aba) {
+      return { error: "Aba não encontrada: " + ABA_PRINCIPAL };
+    }
+    
+    const ultimaLinha = aba.getLastRow();
+    console.log("Última linha:", ultimaLinha);
+    
+    if (ultimaLinha < 4) {
+      return { lojas: [], mensagem: "Planilha vazia" };
+    }
+    
+    // PEGAR LOJAS DA COLUNA C (índice 3)
+    const dados = aba.getRange(4, 3, ultimaLinha - 3, 1).getValues();
+    console.log("Dados brutos coluna C:", dados);
+    
+    const lojas = [];
+    for (let i = 0; i < dados.length; i++) {
+      const loja = dados[i][0];
+      if (loja && loja.toString().trim() !== '') {
+        lojas.push(loja.toString().trim());
+      }
+    }
+    
+    console.log("Lojas extraídas:", lojas);
+    console.log("Total de lojas únicas:", lojas.length);
+    
+    return {
+      success: true,
+      lojas: lojas,
+      total: lojas.length,
+      mensagem: "✅ " + lojas.length + " lojas encontradas"
+    };
+    
+  } catch (error) {
+    console.log("❌ ERRO:", error);
+    return { error: error.toString() };
+  }
+}
+
+/**************************
+ * FUNÇÃO OBRIGATÓRIA *
+ **************************/
+
+function doGet() {
+  return HtmlService.createHtmlOutputFromFile('index')
+    .setTitle("Sistema de Prospecções - SIM CRED")
+    .setXFrameOptionsMode(HtmlService.XFrameOptionsMode.ALLOWALL);
+}
