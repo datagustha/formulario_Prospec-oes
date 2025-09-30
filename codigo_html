@@ -483,7 +483,7 @@
 
     .loja-header {
       display: flex;
-      justify-content: between;
+      justify-content: space-between;
       align-items: flex-start;
       margin-bottom: 15px;
     }
@@ -547,6 +547,18 @@
       padding-top: 10px;
       border-top: 1px solid var(--border);
     }
+
+    .data-retorno-info {
+      background: #E7F3FF;
+      color: #0D6EFD;
+      padding: 4px 10px;
+      border-radius: 15px;
+      font-size: 0.8rem;
+      font-weight: 600;
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+    }
     
     @media (max-width: 768px) {
       .content {
@@ -587,23 +599,25 @@
         <img src="https://i.ibb.co/B2r5xtbS/sim-cred-5.png" class="logo" alt="SIM CRED">
         <div class="header-content">
           <h1>Sistema de Prospecções</h1>
-          <!-- ⭐⭐ MUDANÇA 1: TÍTULO ALTERADO ⭐⭐ -->
-          <div class="subtitle">Representante / Comercial Interno</div>
+          <div class="subtitle">Cadastro e Acompanhamento de Lojas</div>
           <div class="version">
             <i class="fas fa-rocket"></i>
-            Versão 2.0 - Sistema de Eventos
+            Versão 2.1 - Sistema de Eventos com Data de Retorno
           </div>
         </div>
       </div>
     </div>
     
     <div class="content">
-      <!-- ⭐⭐ MUDANÇA 3: BOTÃO VER LOJA ⭐⭐ -->
+      <!-- ⭐⭐ BOTÃO VER LOJA ⭐⭐ -->
       <div class="action-buttons" style="margin-bottom: 20px;">
         <button type="button" class="btn btn-ver-loja" onclick="mostrarTodasLojas()" id="btnVerLojas">
           <i class="fas fa-store"></i>
-          Ver Loja
+          Ver Lojas
         </button>
+
+ 
+</div>
       </div>
 
       <div class="card">
@@ -805,7 +819,6 @@
               <i class="fas fa-user"></i>
               Usuário
             </label>
-            <!-- ⭐⭐ MUDANÇA 2: ADICIONAR LUANA ⭐⭐ -->
             <select id="usuario" class="form-control" required>
               <option value="">-- Selecione --</option>
               <option value="João">João</option>
@@ -815,12 +828,25 @@
             <div class="error-message" id="erro-usuario">Campo obrigatório</div>
           </div>
           
+          <!-- ⭐⭐ MUDANÇA 1: REPRESENTANTE / COMERCIAL INTERNO ⭐⭐ -->
           <div class="form-group">
             <label class="form-label">
               <i class="fas fa-user-tie"></i>
-              Representante
+              Representante / Comercial Interno
             </label>
             <input type="text" id="representante" class="form-control" placeholder="Nome do representante (opcional)">
+          </div>
+
+          <!-- ⭐⭐ NOVO CAMPO: DATA RETORNO CLIENTE ⭐⭐ -->
+          <div class="form-group">
+            <label class="form-label">
+              <i class="fas fa-calendar-check"></i>
+              Data retorno cliente
+            </label>
+            <input type="date" id="data_retorno_cliente" class="form-control">
+            <small style="color: var(--gray); font-size: 0.85rem; margin-top: 5px; display: block;">
+              Data que o cliente disse que retornaria o contato
+            </small>
           </div>
         </div>
       </div>
@@ -852,6 +878,14 @@
             </label>
             <select id="evento" class="form-control" required>
               <option value="">-- Selecione --</option>
+              <!-- ⭐⭐ NOVOS EVENTOS DO FUNIL ⭐⭐ -->
+              <option value="Marco zero - Cadastro no formulário de prospecção e envio da proposta">Marco zero - Cadastro no formulário de prospecção e envio da proposta</option>
+              <option value="Dia 01 - Prova social + conceito">Dia 01 - Prova social + conceito</option>
+              <option value="Dia 03 - Ligação direta">Dia 03 - Ligação direta</option>
+              <option value="Dia 05 - Mensagem de persistência">Dia 05 - Mensagem de persistência</option>
+              <option value="Dia 07 - Encerramento elegante">Dia 07 - Encerramento elegante</option>
+              <option value="" disabled>─── Eventos Antigos ───</option>
+              <!-- EVENTOS ANTIGOS MANTIDOS -->
               <option value="Cadastro inicial">Cadastro inicial</option>
               <option value="Envio de WhatsApp">Envio de WhatsApp</option>
               <option value="Envio de boleto">Envio de boleto</option>
@@ -893,13 +927,25 @@
             <span id="defasagem-dias">0</span> dias sem contato
           </div>
         </div>
+
+        <!-- ⭐⭐ NOVA INFO: DATA RETORNO CLIENTE ⭐⭐ -->
+        <div class="form-group" id="data-retorno-info" style="display: none;">
+          <label class="form-label">
+            <i class="fas fa-calendar-day"></i>
+            Data retorno cliente
+          </label>
+          <div class="data-retorno-info">
+            <i class="fas fa-calendar"></i>
+            <span id="data-retorno-dias">Não informada</span>
+          </div>
+        </div>
       </div>
       
-      <!-- ⭐⭐ MUDANÇA 3: SEÇÃO DE LOJAS CADASTRADAS ⭐⭐ -->
+      <!-- ⭐⭐ SEÇÃO DE LOJAS CADASTRADAS ⭐⭐ -->
       <div class="lojas-container" id="secaoLojas" style="display: none;">
         <div class="card-header">
           <i class="fas fa-store"></i>
-          <h2 class="card-title">Lojas Cadastradas</h2>
+          <h2 class="card-title">Lojas com Defasagem</h2>
         </div>
         <div class="lojas-grid" id="gridLojas">
           <!-- As lojas serão carregadas aqui dinamicamente -->
@@ -947,9 +993,9 @@
       inicializarMultiSelect();
     });
 
-    // ⭐⭐ NOVA FUNÇÃO: MOSTRAR TODAS AS LOJAS ⭐⭐
+    // ⭐⭐ NOVA FUNÇÃO: MOSTRAR TODAS AS LOJAS (APENAS > 2 DIAS) ⭐⭐
     function mostrarTodasLojas() {
-      console.log("🏪 Buscando todas as lojas...");
+      console.log("🏪 Buscando lojas com defasagem > 2 dias...");
       
       const btnVerLojas = document.getElementById('btnVerLojas');
       btnVerLojas.innerHTML = '<div class="loading"><div class="spinner"></div> Carregando...</div>';
@@ -957,7 +1003,7 @@
 
       google.script.run
         .withSuccessHandler(function(lojasComDados) {
-          btnVerLojas.innerHTML = '<i class="fas fa-store"></i> Ver Loja';
+          btnVerLojas.innerHTML = '<i class="fas fa-store"></i> Ver Lojas';
           btnVerLojas.disabled = false;
           
           if (lojasComDados && lojasComDados.length > 0) {
@@ -969,13 +1015,14 @@
               block: 'start' 
             });
             
-            showMessage('success', `✅ ${lojasComDados.length} lojas carregadas com sucesso!`);
+            showMessage('success', `✅ ${lojasComDados.length} lojas com defasagem > 2 dias carregadas!`);
           } else {
-            showMessage('info', '📝 Nenhuma loja encontrada na base de dados.');
+            showMessage('info', '🎉 Nenhuma loja com defasagem maior que 2 dias encontrada!');
+            document.getElementById('secaoLojas').style.display = 'none';
           }
         })
         .withFailureHandler(function(error) {
-          btnVerLojas.innerHTML = '<i class="fas fa-store"></i> Ver Loja';
+          btnVerLojas.innerHTML = '<i class="fas fa-store"></i> Ver Lojas';
           btnVerLojas.disabled = false;
           showMessage('error', '❌ Erro ao carregar lojas: ' + error.message);
         })
@@ -1053,6 +1100,16 @@
             ${defasagemNumero} dias
           </span>
         </div>
+        
+        ${loja.data_retorno_cliente && loja.data_retorno_cliente !== 'N/A' ? `
+        <div class="loja-info">
+          <strong>Data retorno:</strong> 
+          <span class="data-retorno-info">
+            <i class="fas fa-calendar"></i>
+            ${loja.data_retorno_cliente}
+          </span>
+        </div>
+        ` : ''}
         
         <div class="loja-info">
           <strong>Último Evento:</strong> ${loja.evento || 'N/A'}
@@ -1185,6 +1242,7 @@
         document.getElementById('btnCadastrar').style.display = 'block';
         document.getElementById('btnAtualizar').style.display = 'none';
         document.getElementById('defasagem-info').style.display = 'none';
+        document.getElementById('data-retorno-info').style.display = 'none';
         
         // ⬇️ MOSTRAR MENSAGEM DE LOJA NÃO ENCONTRADA ⬇️
         const nomeLoja = document.getElementById('loja').value.trim();
@@ -1213,7 +1271,7 @@
       document.getElementById('trafego').value = dados.trafego || '';
       document.getElementById('quantidade_lojas').value = dados.quantidade_lojas || '';
       
-      // ⬇️ CORREÇÃO: ADESÃO COMO NÚMERO PARA O SELECT ⬇️
+      // ⬇️ CORREÇÃO: ADESÃO COMO NÚMERO PARA O SELECT
       document.getElementById('adesao').value = dados.adesao || '0';
       
       if (dados.data_pagamento_adesao) {
@@ -1224,7 +1282,14 @@
       document.getElementById('parcelas').value = dados.parcelas || '';
       document.getElementById('plano_assinatura').value = dados.plano_assinatura || '';
       document.getElementById('usuario').value = dados.usuario || '';
+      
+      // ⬇️ NOVOS CAMPOS
       document.getElementById('representante').value = dados.representante || '';
+      
+      if (dados.data_retorno_cliente) {
+        document.getElementById('data_retorno_cliente').value = dados.data_retorno_cliente;
+      }
+      
       document.getElementById('status').value = dados.status || 'Em andamento';
       document.getElementById('evento').value = dados.evento || '';
       document.getElementById('observacao').value = dados.observacao || '';
@@ -1234,6 +1299,11 @@
         document.getElementById('defasagem-info').style.display = 'block';
       }
 
+      if (dados.data_retorno_cliente && dados.data_retorno_cliente !== 'N/A') {
+        document.getElementById('data-retorno-dias').textContent = dados.data_retorno_cliente;
+        document.getElementById('data-retorno-info').style.display = 'block';
+      }
+
       document.getElementById('secaoAtualizacao').style.display = 'block';
       document.getElementById('btnCadastrar').style.display = 'none';
       document.getElementById('btnAtualizar').style.display = 'block';
@@ -1241,39 +1311,40 @@
       showMessage('success', '✅ Loja encontrada! Modo de atualização ativado.');
     }
 
-    // ⭐⭐ CADASTRAR LOJA ⭐⭐
-    function cadastrarLoja() {
-      if (!validarFormulario()) return;
+    // ⭐⭐ CADASTRAR LOJA - VERSÃO CORRIGIDA ⭐⭐
+function cadastrarLoja() {
+  if (!validarFormulario()) return;
 
-      const dados = coletarDadosFormulario();
-      dados.acao = 'cadastrar';
+  const dados = coletarDadosFormulario();
+  dados.acao = 'cadastrar';
 
-      const btnCadastrar = document.getElementById('btnCadastrar');
-      btnCadastrar.innerHTML = '<div class="loading"><div class="spinner"></div> Cadastrando...</div>';
-      btnCadastrar.disabled = true;
+  const btnCadastrar = document.getElementById('btnCadastrar');
+  btnCadastrar.innerHTML = '<div class="loading"><div class="spinner"></div> Salvando...</div>';
+  btnCadastrar.disabled = true;
 
-      google.script.run
-        .withSuccessHandler(function(res) {
-          btnCadastrar.innerHTML = '<i class="fas fa-plus-circle"></i> Cadastrar Loja';
-          btnCadastrar.disabled = false;
-          
-          if(res && res.success) {
-            // ⬇️ CORREÇÃO: MENSAGEM PERSONALIZADA ⬇️
-            const nomeLoja = document.getElementById('loja').value.trim();
-            showMessage('success', `✅ Loja "${nomeLoja}" cadastrada com sucesso!`);
-            limparDados();
-            carregarLojasParaAutocomplete();
-          } else {
-            showMessage('error', res.message || 'Erro ao cadastrar');
-          }
-        })
-        .withFailureHandler(function(error) {
-          btnCadastrar.innerHTML = '<i class="fas fa-plus-circle"></i> Cadastrar Loja';
-          btnCadastrar.disabled = false;
-          showMessage('error', '❌ Erro: ' + error.message);
-        })
-        .salvarProspeccao(dados);
-    }
+  google.script.run
+    .withSuccessHandler(function(res) {
+      btnCadastrar.innerHTML = '<i class="fas fa-plus-circle"></i> Cadastrar Loja';
+      btnCadastrar.disabled = false;
+      
+      if(res && res.success) {
+        // ⬇️ MENSAGEM COMPLETA COM ID ⬇️
+        const nomeLoja = document.getElementById('loja').value.trim();
+        const mensagem = `✅ Loja "${nomeLoja}" cadastrada com sucesso! ${res.message || ''}`;
+        showMessage('success', mensagem);
+        limparDados();
+        carregarLojasParaAutocomplete();
+      } else {
+        showMessage('error', res.message || 'Erro ao cadastrar');
+      }
+    })
+    .withFailureHandler(function(error) {
+      btnCadastrar.innerHTML = '<i class="fas fa-plus-circle"></i> Cadastrar Loja';
+      btnCadastrar.disabled = false;
+      showMessage('error', '❌ Erro: ' + error.message);
+    })
+    .salvarProspeccao(dados);
+}
 
     // ⭐⭐ ATUALIZAR REGISTRO ⭐⭐
     function atualizarRegistro() {
@@ -1402,6 +1473,7 @@
         plano_assinatura: document.getElementById('plano_assinatura').value,
         usuario: document.getElementById('usuario').value,
         representante: document.getElementById('representante').value,
+        data_retorno_cliente: document.getElementById('data_retorno_cliente').value,
         status: document.getElementById('status').value,
         evento: document.getElementById('evento').value,
         observacao: document.getElementById('observacao').value
@@ -1412,7 +1484,7 @@
     function limparDados() {
       console.log("🧹 Limpando todos os dados...");
 
-      // ⬇️ ESCONDER MENSAGENS ⬇️
+      // ⬇️ ESCONDER MENSAGENS
       document.getElementById('messageLojaNaoEncontrada').style.display = 'none';
       document.getElementById('messageSuccess').style.display = 'none';
       document.getElementById('messageError').style.display = 'none';
@@ -1432,6 +1504,7 @@
       document.getElementById('plano_assinatura').value = '';
       document.getElementById('usuario').value = '';
       document.getElementById('representante').value = '';
+      document.getElementById('data_retorno_cliente').value = '';
       document.getElementById('status').value = 'Em andamento';
       document.getElementById('evento').value = '';
       document.getElementById('observacao').value = '';
@@ -1453,6 +1526,7 @@
       document.getElementById('btnCadastrar').style.display = 'block';
       document.getElementById('btnAtualizar').style.display = 'none';
       document.getElementById('defasagem-info').style.display = 'none';
+      document.getElementById('data-retorno-info').style.display = 'none';
       
       // Fechar sugestões
       document.getElementById('suggestions').style.display = 'none';
