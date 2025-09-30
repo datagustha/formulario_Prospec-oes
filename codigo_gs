@@ -807,6 +807,93 @@ function debugLojasSimples() {
   }
 }
 
+// ⭐⭐ NOVA FUNÇÃO: BUSCAR TODAS AS LOJAS COM DADOS COMPLETOS ⭐⭐
+function buscarTodasLojasComDados() {
+  try {
+    console.log("🏪 Buscando todas as lojas com dados completos...");
+    
+    const ss = SpreadsheetApp.openById(ID_PLANILHA_PROSPECCOES);
+    const aba = ss.getSheetByName(ABA_PRINCIPAL);
+    
+    if (!aba) {
+      console.log("❌ Aba não encontrada");
+      return [];
+    }
+
+    const ultimaLinha = aba.getLastRow();
+    if (ultimaLinha < 4) {
+      console.log("📝 Nenhum dado encontrado");
+      return [];
+    }
+
+    const dados = aba.getRange(4, 1, ultimaLinha - 3, 20).getValues();
+    const lojasComDados = [];
+
+    for (let i = 0; i < dados.length; i++) {
+      const linha = dados[i];
+      const nomeLoja = linha[2]; // Coluna C - Nome da Loja
+      
+      if (nomeLoja && nomeLoja.toString().trim() !== '') {
+        // ⬇️ CALCULAR DEFASAGEM ⬇️
+        let defasagemDias = 0;
+        const dataUltimoEvento = linha[17]; // Coluna R - Data último evento
+        
+        if (dataUltimoEvento && dataUltimoEvento instanceof Date && !isNaN(dataUltimoEvento.getTime())) {
+          const hoje = new Date();
+          const dataEvento = new Date(dataUltimoEvento);
+          dataEvento.setHours(0, 0, 0, 0);
+          const hojeZerado = new Date(hoje);
+          hojeZerado.setHours(0, 0, 0, 0);
+          
+          const diffMs = hojeZerado - dataEvento;
+          defasagemDias = Math.floor(diffMs / (1000 * 60 * 60 * 24));
+        } else {
+          defasagemDias = 999;
+        }
+
+        // ⬇️ FORMATAR DEFASAGEM COM "DIAS" ⬇️
+        let defasagemFormatada = "";
+        if (defasagemDias === 0) {
+          defasagemFormatada = "0 dias";
+        } else if (defasagemDias === 1) {
+          defasagemFormatada = "1 dia";
+        } else if (defasagemDias > 1) {
+          defasagemFormatada = defasagemDias + " dias";
+        } else {
+          defasagemFormatada = "999 dias";
+        }
+
+        const loja = {
+          id: linha[0] || '',
+          loja: nomeLoja.toString().trim(),
+          segmento: linha[3] || '',
+          telefone: linha[4] || '',
+          fornecedor: linha[5] || '',
+          trafego: linha[6] || '',
+          quantidade_lojas: linha[7] || '',
+          adesao: linha[8] || 0,
+          usuario: linha[13] || '',
+          representante: linha[14] || '',
+          status: linha[15] || 'Em andamento',
+          evento: linha[16] || '',
+          data_ultimo_evento: linha[17] ? formatarData(linha[17]) : '',
+          defasagem: defasagemFormatada,
+          observacao: linha[19] || ''
+        };
+        
+        lojasComDados.push(loja);
+      }
+    }
+
+    console.log("✅ Lojas processadas:", lojasComDados.length);
+    return lojasComDados;
+
+  } catch (error) {
+    console.log("❌ Erro buscarTodasLojasComDados:", error);
+    return [];
+  }
+}
+
 /**************************
  * FUNÇÃO OBRIGATÓRIA *
  **************************/
