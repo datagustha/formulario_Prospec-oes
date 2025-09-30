@@ -1,0 +1,1258 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Sistema de Prospecções - SIM CRED</title>
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+    }
+    
+    :root {
+      --primary: #7E3E9A;
+      --secondary: #A1CC4C;
+      --accent: #FF6B35;
+      --dark: #2D3047;
+      --light: #FFFFFF;
+      --success: #28A745;
+      --warning: #FFC107;
+      --danger: #DC3545;
+      --gray: #6C757D;
+      --border: #E0E0E0;
+      --background: #F8F9FA;
+    }
+    
+    body {
+      background: var(--background);
+      min-height: 100vh;
+      padding: 20px;
+      color: var(--dark);
+    }
+    
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+      background: var(--light);
+      border-radius: 15px;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+      overflow: hidden;
+    }
+    
+    .header {
+      background: var(--primary);
+      padding: 30px 40px;
+      color: white;
+      text-align: center;
+      position: relative;
+    }
+    
+    .logo-container {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 15px;
+      margin-bottom: 10px;
+    }
+    
+    .logo {
+      width: 120px;
+      height: 120px;
+      background: white;
+      padding: 15px;
+      border-radius: 20px;
+      box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+      object-fit: contain;
+    }
+    
+    .header-content {
+      text-align: center;
+    }
+    
+    h1 {
+      font-size: 2.8rem;
+      font-weight: 700;
+      margin-bottom: 10px;
+      color: white;
+    }
+    
+    .subtitle {
+      font-size: 1.3rem;
+      opacity: 0.9;
+      margin-bottom: 15px;
+      color: white;
+    }
+    
+    .version {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      background: rgba(255, 255, 255, 0.2);
+      padding: 10px 20px;
+      border-radius: 25px;
+      font-size: 1rem;
+      backdrop-filter: blur(10px);
+      color: white;
+    }
+    
+    .content {
+      padding: 40px;
+    }
+    
+    .card {
+      background: var(--light);
+      border-radius: 12px;
+      padding: 30px;
+      margin-bottom: 25px;
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+      border: 1px solid var(--border);
+    }
+    
+    .card-header {
+      display: flex;
+      align-items: center;
+      gap: 15px;
+      margin-bottom: 25px;
+      padding-bottom: 15px;
+      border-bottom: 3px solid var(--primary);
+    }
+    
+    .card-header i {
+      color: var(--primary);
+      font-size: 1.8rem;
+    }
+    
+    .card-title {
+      font-size: 1.6rem;
+      font-weight: 600;
+      color: var(--primary);
+      margin: 0;
+    }
+    
+    .form-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+      gap: 25px;
+      margin-bottom: 25px;
+    }
+    
+    .form-group {
+      margin-bottom: 25px;
+      position: relative;
+    }
+    
+    .form-label {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 10px;
+      font-weight: 600;
+      color: var(--dark);
+      font-size: 1.1rem;
+    }
+    
+    .form-label i {
+      color: var(--primary);
+      width: 20px;
+      text-align: center;
+    }
+    
+    .required::after {
+      content: " *";
+      color: var(--danger);
+    }
+    
+    .form-control {
+      width: 100%;
+      padding: 14px 16px;
+      border: 2px solid var(--border);
+      border-radius: 10px;
+      font-size: 1.05rem;
+      transition: all 0.3s ease;
+      background: var(--light);
+    }
+    
+    .form-control:focus {
+      outline: none;
+      border-color: var(--primary);
+      box-shadow: 0 0 0 3px rgba(126, 62, 154, 0.1);
+    }
+    
+    .form-control.error {
+      border-color: var(--danger);
+      box-shadow: 0 0 0 3px rgba(220, 53, 69, 0.1);
+    }
+    
+    textarea.form-control {
+      min-height: 120px;
+      resize: vertical;
+      line-height: 1.5;
+    }
+    
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      padding: 14px 28px;
+      border: none;
+      border-radius: 10px;
+      font-size: 1.1rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      text-decoration: none;
+      min-width: 140px;
+      justify-content: center;
+    }
+    
+    .btn-primary {
+      background: var(--primary);
+      color: white;
+    }
+    
+    .btn-primary:hover {
+      background: #6a2e82;
+      transform: translateY(-2px);
+      box-shadow: 0 8px 20px rgba(126, 62, 154, 0.3);
+    }
+    
+    .btn-secondary {
+      background: var(--secondary);
+      color: white;
+    }
+    
+    .btn-secondary:hover {
+      background: #8fb83a;
+      transform: translateY(-2px);
+    }
+    
+    .btn-warning {
+      background: var(--warning);
+      color: var(--dark);
+    }
+    
+    .btn-warning:hover {
+      background: #e0a800;
+      transform: translateY(-2px);
+    }
+    
+    .btn-danger {
+      background: var(--danger);
+      color: white;
+    }
+    
+    .btn-danger:hover {
+      background: #c82333;
+      transform: translateY(-2px);
+    }
+    
+    .btn-info {
+      background: #17a2b8;
+      color: white;
+    }
+    
+    .btn-info:hover {
+      background: #138496;
+      transform: translateY(-2px);
+    }
+    
+    .btn-group {
+      display: flex;
+      gap: 15px;
+      margin-top: 30px;
+      flex-wrap: wrap;
+    }
+    
+    .btn-group .btn {
+      flex: 1;
+      min-width: 200px;
+    }
+    
+    .message {
+      padding: 18px 24px;
+      border-radius: 10px;
+      margin: 20px 0;
+      display: none;
+      align-items: center;
+      gap: 15px;
+      font-weight: 600;
+      font-size: 1.1rem;
+    }
+    
+    .message i {
+      font-size: 1.4rem;
+    }
+    
+    .success {
+      background: #d4edda;
+      color: var(--success);
+      border: 1px solid #c3e6cb;
+    }
+    
+    .error {
+      background: #f8d7da;
+      color: var(--danger);
+      border: 1px solid #f5c6cb;
+    }
+    
+    .info {
+      background: #d1ecf1;
+      color: #0c5460;
+      border: 1px solid #bee5eb;
+    }
+    
+    .loading {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      color: var(--primary);
+    }
+    
+    .spinner {
+      width: 18px;
+      height: 18px;
+      border: 2px solid #f3f3f3;
+      border-top: 2px solid var(--primary);
+      border-radius: 50%;
+      animation: spin 1s linear infinite;
+    }
+    
+    @keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+    
+    .loja-exists {
+      border-color: var(--warning);
+      background: #fffbf0;
+    }
+    
+    .defasagem-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 6px 16px;
+      background: var(--danger);
+      color: white;
+      border-radius: 20px;
+      font-size: 0.9rem;
+      font-weight: 600;
+      margin-left: 15px;
+    }
+    
+    .search-container {
+      position: relative;
+    }
+
+    .suggestions {
+      position: absolute;
+      top: 100%;
+      left: 0;
+      right: 0;
+      background: white;
+      border: 1px solid var(--primary);
+      border-top: none;
+      border-radius: 0 0 10px 10px;
+      z-index: 1000;
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+      margin-top: -2px;
+    }
+
+    .suggestion-item {
+      padding: 12px 16px;
+      cursor: pointer;
+      border-bottom: 1px solid var(--border);
+      transition: all 0.2s ease;
+      font-size: 1rem;
+      font-weight: 500;
+    }
+
+    .suggestion-item:hover {
+      background: var(--primary);
+      color: white;
+      font-weight: 600;
+    }
+
+    .suggestion-item:last-child {
+      border-bottom: none;
+    }
+    
+    .action-buttons {
+      display: flex;
+      gap: 15px;
+      margin-top: 20px;
+      flex-wrap: wrap;
+    }
+    
+    .multi-select {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-top: 5px;
+    }
+    
+    .multi-select-option {
+      display: flex;
+      align-items: center;
+      gap: 5px;
+      padding: 8px 12px;
+      background: #f8f9fa;
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+    
+    .multi-select-option.selected {
+      background: var(--primary);
+      color: white;
+      border-color: var(--primary);
+    }
+    
+    .multi-select-option input {
+      display: none;
+    }
+    
+    .error-message {
+      color: var(--danger);
+      font-size: 0.9rem;
+      margin-top: 5px;
+      display: none;
+      font-weight: 500;
+    }
+    
+    @media (max-width: 768px) {
+      .content {
+        padding: 20px;
+      }
+      
+      .form-grid {
+        grid-template-columns: 1fr;
+      }
+      
+      .btn-group {
+        flex-direction: column;
+      }
+      
+      .header {
+        padding: 20px;
+      }
+      
+      h1 {
+        font-size: 2.2rem;
+      }
+      
+      .logo {
+        width: 80px;
+        height: 80px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="header">
+      <div class="logo-container">
+        <img src="https://i.ibb.co/B2r5xtbS/sim-cred-5.png" class="logo" alt="SIM CRED">
+        <div class="header-content">
+          <h1>Sistema de Prospecções</h1>
+          <div class="subtitle">Cadastro e Acompanhamento de Lojas</div>
+          <div class="version">
+            <i class="fas fa-rocket"></i>
+            Versão 2.0 - Sistema de Eventos
+          </div>
+        </div>
+      </div>
+    </div>
+    
+    <div class="content">
+      <div class="card">
+        <div class="card-header">
+          <i class="fas fa-search"></i>
+          <h2 class="card-title">Busca de Loja</h2>
+        </div>
+        
+        <div class="form-group">
+          <label class="form-label required">
+            <i class="fas fa-store"></i>
+            Loja
+          </label>
+          <div class="search-container">
+            <input type="text" id="loja" class="form-control" 
+                   placeholder="Digite o nome da loja..."
+                   autocomplete="off"
+                   oninput="filtrarLojas(this.value)"
+                   onfocus="filtrarLojas(this.value)">
+            <div class="suggestions" id="suggestions">
+              <!-- Sugestões aparecerão aqui automaticamente -->
+            </div>
+          </div>
+          <div class="error-message" id="erro-loja">Campo obrigatório</div>
+        </div>
+        
+        <div class="action-buttons">
+          <button type="button" class="btn btn-secondary" onclick="buscarLoja()" id="btnBuscar">
+            <i class="fas fa-search"></i>
+            Buscar Loja
+          </button>
+          <button type="button" class="btn btn-danger" onclick="limparDados()" id="btnLimpar">
+            <i class="fas fa-broom"></i>
+            Limpar Dados
+          </button>
+        </div>
+        
+        <div id="messageLojaNaoEncontrada" class="message info" style="display: none;">
+          <i class="fas fa-info-circle"></i>
+          <span>Loja não encontrada! Você pode cadastrá-la agora.</span>
+        </div>
+      </div>
+      
+      <div class="card">
+        <div class="card-header">
+          <i class="fas fa-info-circle"></i>
+          <h2 class="card-title">Dados da Loja</h2>
+        </div>
+        
+        <div class="form-grid">
+          <div class="form-group">
+            <label class="form-label required">
+              <i class="fas fa-tag"></i>
+              Segmento
+            </label>
+            <select id="segmento" class="form-control" required>
+              <option value="">-- Selecione --</option>
+              <option value="Atacadista">Atacadista</option>
+              <option value="Ótica">Ótica</option>
+              <option value="Material de construção">Material de construção</option>
+              <option value="Telefonia">Telefonia</option>
+              <option value="Vestuário">Vestuário</option>
+              <option value="Móveis e eletros">Móveis e eletros</option>
+              <option value="Auto Peças">Auto Peças</option>
+              <option value="Calçados">Calçados</option>
+              <option value="Construções">Construções</option>
+              <option value="Eletrônicos">Eletrônicos</option>
+              <option value="Confecções">Confecções</option>
+              <option value="Cosméticos">Cosméticos</option>
+              <option value="Postos de combustível">Postos de combustível</option>
+              <option value="Supermercado">Supermercado</option>
+              <option value="Drogarias Individuas e por rede">Drogarias Individuas e por rede</option>
+              <option value="Materiais de contrações">Materiais de contrações</option>
+              <option value="Piscinas(exceto RJ)">Piscinas(exceto RJ)</option>
+            </select>
+            <div class="error-message" id="erro-segmento">Campo obrigatório</div>
+          </div>
+          
+          <div class="form-group">
+            <label class="form-label required">
+              <i class="fas fa-phone"></i>
+              Telefone
+            </label>
+            <input type="text" id="telefone" class="form-control" required placeholder="(21) 99596-8380" oninput="formatarTelefone(this)">
+            <div class="error-message" id="erro-telefone">Campo obrigatório</div>
+          </div>
+          
+          <div class="form-group">
+            <label class="form-label required">
+              <i class="fas fa-truck"></i>
+              Fornecedor
+            </label>
+            <div class="multi-select" id="fornecedor-container">
+              <label class="multi-select-option">
+                <input type="checkbox" value="BC"> BC
+              </label>
+              <label class="multi-select-option">
+                <input type="checkbox" value="Ágil"> Ágil
+              </label>
+              <label class="multi-select-option">
+                <input type="checkbox" value="Jeitoo"> Jeitoo
+              </label>
+              <label class="multi-select-option">
+                <input type="checkbox" value="crefaz"> crefaz
+              </label>
+            </div>
+            <input type="hidden" id="fornecedor">
+            <div class="error-message" id="erro-fornecedor">Selecione pelo menos um fornecedor</div>
+          </div>
+          
+          <div class="form-group">
+            <label class="form-label required">
+              <i class="fas fa-car"></i>
+              Tráfego apenas
+            </label>
+            <select id="trafego" class="form-control" required>
+              <option value="">-- Selecione --</option>
+              <option value="Sim">Sim</option>
+              <option value="Não">Não</option>
+            </select>
+            <div class="error-message" id="erro-trafego">Campo obrigatório</div>
+          </div>
+          
+          <div class="form-group">
+            <label class="form-label required">
+              <i class="fas fa-building"></i>
+              Quantidade de lojas
+            </label>
+            <input type="number" id="quantidade_lojas" class="form-control" required min="1" placeholder="Apenas números">
+            <div class="error-message" id="erro-quantidade_lojas">Campo obrigatório</div>
+          </div>
+          
+          <div class="form-group">
+            <label class="form-label required">
+              <i class="fas fa-money-bill-wave"></i>
+              Adesão
+            </label>
+            <select id="adesao" class="form-control" required>
+              <option value="0">R$ 0,00</option>
+              <option value="499">R$ 499,00</option>
+              <option value="599">R$ 599,00</option>
+              <option value="699">R$ 699,00</option>
+              <option value="799">R$ 799,00</option>
+              <option value="899">R$ 899,00</option>
+              <option value="999">R$ 999,00</option>
+              <option value="1299">R$ 1.299,00</option>
+            </select>
+            <div class="error-message" id="erro-adesao">Campo obrigatório</div>
+          </div>
+          
+          <div class="form-group">
+            <label class="form-label">
+              <i class="fas fa-calendar-day"></i>
+              Data pagamento adesão
+            </label>
+            <input type="date" id="data_pagamento_adesao" class="form-control">
+          </div>
+          
+          <div class="form-group">
+            <label class="form-label required">
+              <i class="fas fa-credit-card"></i>
+              Forma de pagamento
+            </label>
+            <select id="forma_pagamento" class="form-control" required>
+              <option value="">-- Selecione --</option>
+              <option value="Pix">Pix</option>
+              <option value="Cartão">Cartão</option>
+              <option value="Boleto">Boleto</option>
+            </select>
+            <div class="error-message" id="erro-forma_pagamento">Campo obrigatório</div>
+          </div>
+          
+          <div class="form-group">
+            <label class="form-label required">
+              <i class="fas fa-calendar-alt"></i>
+              Parcelas
+            </label>
+            <select id="parcelas" class="form-control" required>
+              <option value="">-- Selecione --</option>
+              <option value="1x">1x</option>
+              <option value="2x">2x</option>
+              <option value="3x">3x</option>
+              <option value="4x">4x</option>
+            </select>
+            <div class="error-message" id="erro-parcelas">Campo obrigatório</div>
+          </div>
+          
+          <div class="form-group">
+            <label class="form-label required">
+              <i class="fas fa-chart-line"></i>
+              Plano de assinatura
+            </label>
+            <input type="text" id="plano_assinatura" class="form-control" required placeholder="R$ 0,00" oninput="formatarMoeda(this)">
+            <div class="error-message" id="erro-plano_assinatura">Campo obrigatório</div>
+          </div>
+          
+          <div class="form-group">
+            <label class="form-label required">
+              <i class="fas fa-user"></i>
+              Usuário
+            </label>
+            <select id="usuario" class="form-control" required>
+              <option value="">-- Selecione --</option>
+              <option value="João">João</option>
+              <option value="Ana">Ana</option>
+            </select>
+            <div class="error-message" id="erro-usuario">Campo obrigatório</div>
+          </div>
+          
+          <div class="form-group">
+            <label class="form-label">
+              <i class="fas fa-user-tie"></i>
+              Representante
+            </label>
+            <input type="text" id="representante" class="form-control" placeholder="Nome do representante (opcional)">
+          </div>
+        </div>
+      </div>
+      
+      <div class="card" id="secaoAtualizacao" style="display: none;">
+        <div class="card-header">
+          <i class="fas fa-sync-alt"></i>
+          <h2 class="card-title">Atualização de Registro</h2>
+        </div>
+        
+        <div class="form-grid">
+          <div class="form-group">
+            <label class="form-label required">
+              <i class="fas fa-tasks"></i>
+              Status
+            </label>
+            <select id="status" class="form-control" required>
+              <option value="Em andamento">Em andamento</option>
+              <option value="Concluído">Concluído</option>
+              <option value="Não Concluído">Não Concluído</option>
+            </select>
+            <div class="error-message" id="erro-status">Campo obrigatório</div>
+          </div>
+          
+          <div class="form-group">
+            <label class="form-label required">
+              <i class="fas fa-calendar-check"></i>
+              Evento
+            </label>
+            <select id="evento" class="form-control" required>
+              <option value="">-- Selecione --</option>
+              <option value="Cadastro inicial">Cadastro inicial</option>
+              <option value="Envio de WhatsApp">Envio de WhatsApp</option>
+              <option value="Envio de boleto">Envio de boleto</option>
+              <option value="Ligação realizada">Ligação realizada</option>
+              <option value="Reunião agendada">Reunião agendada</option>
+              <option value="Proposta enviada">Proposta enviada</option>
+              <option value="Aguardando retorno">Aguardando retorno</option>
+              <option value="Negociação em andamento">Negociação em andamento</option>
+              <option value="Contrato assinado">Contrato assinado</option>
+              <option value="Cliente interessado">Cliente interessado</option>
+              <option value="Cliente não interessado">Cliente não interessado</option>
+              <option value="Solicitou mais informações">Solicitou mais informações</option>
+              <option value="Agendamento de demonstração">Agendamento de demonstração</option>
+              <option value="Follow-up necessário">Follow-up necessário</option>
+              <option value="Telefone alterado">Telefone alterado</option>
+              <option value="Fornecedor alterado">Fornecedor alterado</option>
+              <option value="Quantidade de lojas alterada">Quantidade de lojas alterada</option>
+            </select>
+            <div class="error-message" id="erro-evento">Campo obrigatório</div>
+          </div>
+        </div>
+        
+        <div class="form-group">
+          <label class="form-label required">
+            <i class="fas fa-sticky-note"></i>
+            Observação
+          </label>
+          <textarea id="observacao" class="form-control" required placeholder="Descreva detalhadamente a tratativa realizada..."></textarea>
+          <div class="error-message" id="erro-observacao">Campo obrigatório</div>
+        </div>
+        
+        <div class="form-group" id="defasagem-info" style="display: none;">
+          <label class="form-label">
+            <i class="fas fa-clock"></i>
+            Defasagem
+          </label>
+          <div class="defasagem-badge">
+            <i class="fas fa-exclamation-triangle"></i>
+            <span id="defasagem-dias">0</span> dias sem contato
+          </div>
+        </div>
+      </div>
+      
+      <div class="btn-group">
+        <button type="button" class="btn btn-primary" onclick="cadastrarLoja()" id="btnCadastrar">
+          <i class="fas fa-plus-circle"></i>
+          Cadastrar Loja
+        </button>
+        <button type="button" class="btn btn-warning" onclick="atualizarRegistro()" id="btnAtualizar" style="display: none;">
+          <i class="fas fa-save"></i>
+          Atualizar Registro
+        </button>
+      </div>
+      
+      <div id="messageSuccess" class="message success" style="display: none;">
+        <i class="fas fa-check-circle"></i>
+        <span></span>
+      </div>
+      
+      <div id="messageError" class="message error" style="display: none;">
+        <i class="fas fa-exclamation-circle"></i>
+        <span></span>
+      </div>
+      
+      <div id="messageInfo" class="message info" style="display: none;">
+        <i class="fas fa-info-circle"></i>
+        <span></span>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // Variáveis globais
+    let lojaExiste = false;
+    let registroId = null;
+    let todasLojas = [];
+
+    // Quando a página carrega
+    document.addEventListener("DOMContentLoaded", function() {
+      console.log("🚀 Página carregada!");
+      carregarLojasParaAutocomplete();
+      inicializarMultiSelect();
+    });
+
+    // ⭐⭐ CARREGAR LOJAS DO GOOGLE SHEETS ⭐⭐
+    function carregarLojasParaAutocomplete() {
+      console.log("📋 Carregando lojas para autocomplete...");
+      
+      google.script.run
+        .withSuccessHandler(function(lojas) {
+          console.log("✅ Lojas recebidas:", lojas);
+          todasLojas = lojas || [];
+          
+          if (todasLojas.length > 0) {
+            console.log("🎯 " + todasLojas.length + " lojas carregadas automaticamente");
+          } else {
+            console.log("📝 Nenhuma loja encontrada na planilha");
+          }
+        })
+        .withFailureHandler(function(error) {
+          console.error("❌ Erro ao carregar lojas:", error);
+        })
+        .buscarTodasLojas();
+    }
+
+    // ⭐⭐ FILTRAR LOJAS DINAMICAMENTE ⭐⭐
+    function filtrarLojas(valorDigitado) {
+      const suggestions = document.getElementById('suggestions');
+      
+      console.log("🔍 Digitando:", valorDigitado);
+      console.log("📋 Total de lojas:", todasLojas.length);
+      
+      if (!valorDigitado || valorDigitado.length < 1) {
+        suggestions.style.display = 'none';
+        return;
+      }
+      
+      const valor = valorDigitado.toLowerCase();
+      const lojasFiltradas = todasLojas.filter(loja => 
+        loja && loja.toLowerCase().includes(valor)
+      );
+      
+      console.log("🎯 Lojas filtradas:", lojasFiltradas);
+      
+      if (lojasFiltradas.length === 0) {
+        suggestions.style.display = 'none';
+        return;
+      }
+      
+      // Mostrar sugestões
+      suggestions.innerHTML = '';
+      suggestions.style.display = 'block';
+      
+      lojasFiltradas.forEach(loja => {
+        const div = document.createElement('div');
+        div.className = 'suggestion-item';
+        div.textContent = loja;
+        div.onclick = function() {
+          document.getElementById('loja').value = loja;
+          suggestions.style.display = 'none';
+          buscarLoja(); // Busca automaticamente os dados da loja
+        };
+        suggestions.appendChild(div);
+      });
+    }
+
+    // ⭐⭐ BUSCAR LOJA AUTOMATICAMENTE ⭐⭐
+    function buscarLoja() {
+      const nomeLoja = document.getElementById('loja').value.trim();
+      
+      if (!nomeLoja) {
+        return;
+      }
+      
+      console.log("🔍 Buscando:", nomeLoja);
+      
+      google.script.run
+        .withSuccessHandler(function(dados) {
+          preencherDadosLoja(dados);
+        })
+        .withFailureHandler(function(error) {
+          console.error("❌ Erro ao buscar loja:", error);
+        })
+        .buscarDadosLoja(nomeLoja);
+    }
+
+    // Fechar sugestões quando clicar fora
+    document.addEventListener('click', function(e) {
+      if (!e.target.closest('.search-container')) {
+        document.getElementById('suggestions').style.display = 'none';
+      }
+    });
+
+    // ⭐⭐ PREENCHER DADOS DA LOJA ⭐⭐
+    function preencherDadosLoja(dados) {
+      console.log("📊 Dados recebidos:", dados);
+      
+      // Esconder todas as mensagens primeiro
+      document.getElementById('messageLojaNaoEncontrada').style.display = 'none';
+      document.getElementById('messageSuccess').style.display = 'none';
+
+      if (!dados || !dados.encontrado) {
+        lojaExiste = false;
+        registroId = null;
+        document.getElementById('secaoAtualizacao').style.display = 'none';
+        document.getElementById('btnCadastrar').style.display = 'block';
+        document.getElementById('btnAtualizar').style.display = 'none';
+        document.getElementById('defasagem-info').style.display = 'none';
+        
+        // ⬇️ MOSTRAR MENSAGEM DE LOJA NÃO ENCONTRADA ⬇️
+        const nomeLoja = document.getElementById('loja').value.trim();
+        if (nomeLoja) {
+          document.getElementById('messageLojaNaoEncontrada').style.display = 'flex';
+        }
+        return;
+      }
+
+      lojaExiste = true;
+      registroId = dados.id;
+      
+      document.getElementById('segmento').value = dados.segmento || '';
+      document.getElementById('telefone').value = dados.telefone || '';
+      
+      if (dados.fornecedor) {
+        const fornecedores = dados.fornecedor.split(',').map(f => f.trim());
+        const checkboxes = document.querySelectorAll('#fornecedor-container input');
+        checkboxes.forEach(checkbox => {
+          checkbox.checked = fornecedores.includes(checkbox.value);
+          checkbox.parentElement.classList.toggle('selected', checkbox.checked);
+        });
+        atualizarFornecedorSelecionado();
+      }
+      
+      document.getElementById('trafego').value = dados.trafego || '';
+      document.getElementById('quantidade_lojas').value = dados.quantidade_lojas || '';
+      
+      // ⬇️ CORREÇÃO: ADESÃO COMO NÚMERO PARA O SELECT ⬇️
+      document.getElementById('adesao').value = dados.adesao || '0';
+      
+      if (dados.data_pagamento_adesao) {
+        document.getElementById('data_pagamento_adesao').value = dados.data_pagamento_adesao;
+      }
+      
+      document.getElementById('forma_pagamento').value = dados.forma_pagamento || '';
+      document.getElementById('parcelas').value = dados.parcelas || '';
+      document.getElementById('plano_assinatura').value = dados.plano_assinatura || '';
+      document.getElementById('usuario').value = dados.usuario || '';
+      document.getElementById('representante').value = dados.representante || '';
+      document.getElementById('status').value = dados.status || 'Em andamento';
+      document.getElementById('evento').value = dados.evento || '';
+      document.getElementById('observacao').value = dados.observacao || '';
+
+      if (dados.defasagem !== undefined) {
+        document.getElementById('defasagem-dias').textContent = dados.defasagem;
+        document.getElementById('defasagem-info').style.display = 'block';
+      }
+
+      document.getElementById('secaoAtualizacao').style.display = 'block';
+      document.getElementById('btnCadastrar').style.display = 'none';
+      document.getElementById('btnAtualizar').style.display = 'block';
+      
+      showMessage('success', '✅ Loja encontrada! Modo de atualização ativado.');
+    }
+
+    // ⭐⭐ CADASTRAR LOJA ⭐⭐
+    function cadastrarLoja() {
+  if (!validarFormulario()) return;
+
+  const dados = coletarDadosFormulario();
+  dados.acao = 'cadastrar';
+
+  const btnCadastrar = document.getElementById('btnCadastrar');
+  btnCadastrar.innerHTML = '<div class="loading"><div class="spinner"></div> Cadastrando...</div>';
+  btnCadastrar.disabled = true;
+
+  google.script.run
+    .withSuccessHandler(function(res) {
+      btnCadastrar.innerHTML = '<i class="fas fa-plus-circle"></i> Cadastrar Loja';
+      btnCadastrar.disabled = false;
+      
+      if(res && res.success) {
+        // ⬇️ CORREÇÃO: MENSAGEM PERSONALIZADA ⬇️
+        const nomeLoja = document.getElementById('loja').value.trim();
+        showMessage('success', `✅ Loja "${nomeLoja}" cadastrada com sucesso!`);
+        limparDados();
+        carregarLojasParaAutocomplete();
+      } else {
+        showMessage('error', res.message || 'Erro ao cadastrar');
+      }
+    })
+    .withFailureHandler(function(error) {
+      btnCadastrar.innerHTML = '<i class="fas fa-plus-circle"></i> Cadastrar Loja';
+      btnCadastrar.disabled = false;
+      showMessage('error', '❌ Erro: ' + error.message);
+    })
+    .salvarProspeccao(dados);
+}
+    // ⭐⭐ ATUALIZAR REGISTRO ⭐⭐
+    function atualizarRegistro() {
+      if (!validarFormulario()) return;
+
+      const dados = coletarDadosFormulario();
+      dados.acao = 'atualizar';
+      dados.id = registroId;
+
+      const btnAtualizar = document.getElementById('btnAtualizar');
+      btnAtualizar.innerHTML = '<div class="loading"><div class="spinner"></div> Atualizando...</div>';
+      btnAtualizar.disabled = true;
+
+      google.script.run
+        .withSuccessHandler(function(res) {
+          btnAtualizar.innerHTML = '<i class="fas fa-save"></i> Atualizar Registro';
+          btnAtualizar.disabled = false;
+          
+          if(res && res.success) {
+            showMessage('success', res.message);
+          } else {
+            showMessage('error', res.message || 'Erro ao atualizar');
+          }
+        })
+        .withFailureHandler(function(error) {
+          btnAtualizar.innerHTML = '<i class="fas fa-save"></i> Atualizar Registro';
+          btnAtualizar.disabled = false;
+          showMessage('error', '❌ Erro: ' + error.message);
+        })
+        .salvarProspeccao(dados);
+    }
+
+    // ⭐⭐ VALIDAÇÃO DE FORMULÁRIO ⭐⭐
+    function validarFormulario() { 
+      let isValid = true;
+      
+      // Lista de campos obrigatórios
+      const requiredFields = [
+        'loja', 'segmento', 'telefone', 'trafego', 
+        'quantidade_lojas', 'adesao', 'forma_pagamento', 
+        'parcelas', 'plano_assinatura', 'usuario'
+      ];
+
+      // Limpar mensagens de erro anteriores
+      requiredFields.forEach(field => {
+        const element = document.getElementById(field);
+        const errorElement = document.getElementById(`erro-${field}`);
+        element.classList.remove('error');
+        errorElement.style.display = 'none';
+      });
+
+      // Validar cada campo
+      requiredFields.forEach(field => {
+        const element = document.getElementById(field);
+        const errorElement = document.getElementById(`erro-${field}`);
+        const value = element.value.trim();
+        
+        if (!value) {
+          element.classList.add('error');
+          errorElement.style.display = 'block';
+          isValid = false;
+          
+          // Scroll para o primeiro campo com erro
+          if (isValid === false) {
+            element.scrollIntoView({ behavior: 'smooth', block: 'center' });
+            element.focus();
+          }
+        }
+      });
+
+      // Validar fornecedor (campo especial)
+      const fornecedorCheckboxes = document.querySelectorAll('#fornecedor-container input:checked');
+      const fornecedorError = document.getElementById('erro-fornecedor');
+      if (fornecedorCheckboxes.length === 0) {
+        document.getElementById('fornecedor-container').style.border = '2px solid var(--danger)';
+        document.getElementById('fornecedor-container').style.borderRadius = '10px';
+        document.getElementById('fornecedor-container').style.padding = '10px';
+        fornecedorError.style.display = 'block';
+        isValid = false;
+      } else {
+        document.getElementById('fornecedor-container').style.border = '';
+        document.getElementById('fornecedor-container').style.padding = '';
+        fornecedorError.style.display = 'none';
+      }
+
+      // Validar seção de atualização (se visível)
+      if (document.getElementById('secaoAtualizacao').style.display !== 'none') {
+        const updateFields = ['status', 'evento', 'observacao'];
+        updateFields.forEach(field => {
+          const element = document.getElementById(field);
+          const errorElement = document.getElementById(`erro-${field}`);
+          const value = element.value.trim();
+          
+          if (!value) {
+            element.classList.add('error');
+            errorElement.style.display = 'block';
+            isValid = false;
+          }
+        });
+      }
+
+      if (!isValid) {
+        showMessage('error', '⚠️ Preencha todos os campos obrigatórios!');
+        return false;
+      }
+
+      return true;
+    }
+
+    // ⭐⭐ COLETAR DADOS DO FORMULÁRIO ⭐⭐
+    function coletarDadosFormulario() { 
+      const fornecedorCheckboxes = document.querySelectorAll('#fornecedor-container input:checked');
+      const fornecedores = Array.from(fornecedorCheckboxes).map(cb => cb.value);
+      
+      return {
+        loja: document.getElementById('loja').value.trim(),
+        segmento: document.getElementById('segmento').value,
+        telefone: document.getElementById('telefone').value,
+        fornecedor: fornecedores.join(', '),
+        trafego: document.getElementById('trafego').value,
+        quantidade_lojas: document.getElementById('quantidade_lojas').value,
+        adesao: document.getElementById('adesao').value,
+        data_pagamento_adesao: document.getElementById('data_pagamento_adesao').value,
+        forma_pagamento: document.getElementById('forma_pagamento').value,
+        parcelas: document.getElementById('parcelas').value,
+        plano_assinatura: document.getElementById('plano_assinatura').value,
+        usuario: document.getElementById('usuario').value,
+        representante: document.getElementById('representante').value,
+        status: document.getElementById('status').value,
+        evento: document.getElementById('evento').value,
+        observacao: document.getElementById('observacao').value
+      };
+    }
+
+    // ⭐⭐ LIMPAR DADOS ⭐⭐
+    function limparDados() {
+      console.log("🧹 Limpando todos os dados...");
+
+      // ⬇️ ESCONDER MENSAGENS ⬇️
+      document.getElementById('messageLojaNaoEncontrada').style.display = 'none';
+      document.getElementById('messageSuccess').style.display = 'none';
+      document.getElementById('messageError').style.display = 'none';
+      
+      // Limpar campo principal
+      document.getElementById('loja').value = '';
+      
+      // Limpar todos os campos do formulário
+      document.getElementById('segmento').value = '';
+      document.getElementById('telefone').value = '';
+      document.getElementById('trafego').value = '';
+      document.getElementById('quantidade_lojas').value = '';
+      document.getElementById('adesao').value = '0';
+      document.getElementById('data_pagamento_adesao').value = '';
+      document.getElementById('forma_pagamento').value = '';
+      document.getElementById('parcelas').value = '';
+      document.getElementById('plano_assinatura').value = '';
+      document.getElementById('usuario').value = '';
+      document.getElementById('representante').value = '';
+      document.getElementById('status').value = 'Em andamento';
+      document.getElementById('evento').value = '';
+      document.getElementById('observacao').value = '';
+      
+      // Limpar checkboxes de fornecedor
+      const checkboxes = document.querySelectorAll('#fornecedor-container input');
+      checkboxes.forEach(checkbox => {
+        checkbox.checked = false;
+        checkbox.parentElement.classList.remove('selected');
+      });
+      document.getElementById('fornecedor').value = '';
+      
+      // Resetar variáveis globais
+      lojaExiste = false;
+      registroId = null;
+      
+      // Resetar interface
+      document.getElementById('secaoAtualizacao').style.display = 'none';
+      document.getElementById('btnCadastrar').style.display = 'block';
+      document.getElementById('btnAtualizar').style.display = 'none';
+      document.getElementById('defasagem-info').style.display = 'none';
+      
+      // Fechar sugestões
+      document.getElementById('suggestions').style.display = 'none';
+      
+      // Limpar mensagens de erro
+      const errorMessages = document.querySelectorAll('.error-message');
+      errorMessages.forEach(msg => msg.style.display = 'none');
+      
+      const errorFields = document.querySelectorAll('.form-control.error');
+      errorFields.forEach(field => field.classList.remove('error'));
+      
+      // Focar no campo loja
+      document.getElementById('loja').focus();
+      
+      showMessage('success', '🧹 Todos os dados foram limpos!');
+      
+      console.log("✅ Dados limpos com sucesso!");
+    }
+
+    // ⭐⭐ FUNÇÕES AUXILIARES ⭐⭐
+    function inicializarMultiSelect() { 
+      const options = document.querySelectorAll('.multi-select-option');
+      options.forEach(option => {
+        option.addEventListener('click', function() {
+          const checkbox = this.querySelector('input');
+          checkbox.checked = !checkbox.checked;
+          this.classList.toggle('selected', checkbox.checked);
+          atualizarFornecedorSelecionado();
+        });
+      });
+    }
+
+    function atualizarFornecedorSelecionado() { 
+      const selected = document.querySelectorAll('#fornecedor-container input:checked');
+      const values = Array.from(selected).map(cb => cb.value);
+      document.getElementById('fornecedor').value = values.join(', ');
+    }
+
+    function formatarTelefone(input) { 
+      let value = input.value.replace(/\D/g, '');
+      if (value.length > 10) {
+        value = value.replace(/^(\d{2})(\d{5})(\d{4})/, '($1) $2-$3');
+      } else if (value.length > 5) {
+        value = value.replace(/^(\d{2})(\d{4})(\d{0,4})/, '($1) $2-$3');
+      } else if (value.length > 2) {
+        value = value.replace(/^(\d{2})(\d{0,5})/, '($1) $2');
+      }
+      input.value = value;
+    }
+
+    function formatarMoeda(input) { 
+      let value = input.value.replace(/\D/g, '');
+      value = (value / 100).toFixed(2);
+      value = value.replace('.', ',');
+      value = value.replace(/(\d)(?=(\d{3})+\,)/g, "$1.");
+      input.value = 'R$ ' + value;
+    }
+
+    function showMessage(type, text) {
+      const successEl = document.getElementById('messageSuccess');
+      const errorEl = document.getElementById('messageError');
+      const infoEl = document.getElementById('messageInfo');
+
+      successEl.style.display = 'none';
+      errorEl.style.display = 'none';
+      infoEl.style.display = 'none';
+
+      switch(type) {
+        case 'success':
+          successEl.querySelector('span').textContent = text;
+          successEl.style.display = 'flex';
+          break;
+        case 'error':
+          errorEl.querySelector('span').textContent = text;
+          errorEl.style.display = 'flex';
+          setTimeout(() => errorEl.style.display = 'none', 5000);
+          break;
+        case 'info':
+          infoEl.querySelector('span').textContent = text;
+          infoEl.style.display = 'flex';
+          setTimeout(() => infoEl.style.display = 'none', 5000);
+          break;
+      }
+    }
+  </script>
+</body>
+</html>
