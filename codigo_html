@@ -424,6 +424,129 @@
       display: none;
       font-weight: 500;
     }
+
+    /* ⭐⭐ NOVOS ESTILOS PARA A SEÇÃO DE LOJAS ⭐⭐ */
+    .btn-ver-loja {
+      background: #FFD700 !important;
+      color: #333 !important;
+      border: 2px solid #FFC107 !important;
+      font-weight: 700 !important;
+    }
+
+    .btn-ver-loja:hover {
+      background: #FFC107 !important;
+      transform: translateY(-2px) !important;
+      box-shadow: 0 8px 20px rgba(255, 193, 7, 0.3) !important;
+    }
+
+    .lojas-container {
+      margin-top: 30px;
+      padding: 25px;
+      background: white;
+      border-radius: 12px;
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+      border: 2px solid var(--primary);
+    }
+
+    .lojas-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+      gap: 20px;
+      margin-top: 20px;
+    }
+
+    .loja-card {
+      background: white;
+      border-radius: 10px;
+      padding: 20px;
+      border: 2px solid var(--border);
+      transition: all 0.3s ease;
+      position: relative;
+    }
+
+    .loja-card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+    }
+
+    .loja-card.em-andamento {
+      border-left: 5px solid var(--warning);
+    }
+
+    .loja-card.concluido {
+      border-left: 5px solid var(--success);
+    }
+
+    .loja-card.nao-concluido {
+      border-left: 5px solid var(--danger);
+    }
+
+    .loja-header {
+      display: flex;
+      justify-content: between;
+      align-items: flex-start;
+      margin-bottom: 15px;
+    }
+
+    .loja-nome {
+      font-size: 1.2rem;
+      font-weight: 700;
+      color: var(--dark);
+      margin-bottom: 5px;
+    }
+
+    .loja-status {
+      padding: 4px 12px;
+      border-radius: 20px;
+      font-size: 0.8rem;
+      font-weight: 600;
+      text-transform: uppercase;
+    }
+
+    .status-em-andamento {
+      background: #FFF3CD;
+      color: #856404;
+    }
+
+    .status-concluido {
+      background: #D1E7DD;
+      color: #0F5132;
+    }
+
+    .status-nao-concluido {
+      background: #F8D7DA;
+      color: #721C24;
+    }
+
+    .loja-info {
+      margin-bottom: 10px;
+      font-size: 0.95rem;
+    }
+
+    .loja-info strong {
+      color: var(--primary);
+    }
+
+    .loja-defasagem {
+      background: var(--danger);
+      color: white;
+      padding: 4px 10px;
+      border-radius: 15px;
+      font-size: 0.8rem;
+      font-weight: 600;
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+    }
+
+    .loja-ultimo-evento {
+      font-style: italic;
+      color: var(--gray);
+      font-size: 0.9rem;
+      margin-top: 10px;
+      padding-top: 10px;
+      border-top: 1px solid var(--border);
+    }
     
     @media (max-width: 768px) {
       .content {
@@ -450,6 +573,10 @@
         width: 80px;
         height: 80px;
       }
+
+      .lojas-grid {
+        grid-template-columns: 1fr;
+      }
     }
   </style>
 </head>
@@ -460,7 +587,8 @@
         <img src="https://i.ibb.co/B2r5xtbS/sim-cred-5.png" class="logo" alt="SIM CRED">
         <div class="header-content">
           <h1>Sistema de Prospecções</h1>
-          <div class="subtitle">Cadastro e Acompanhamento de Lojas</div>
+          <!-- ⭐⭐ MUDANÇA 1: TÍTULO ALTERADO ⭐⭐ -->
+          <div class="subtitle">Representante / Comercial Interno</div>
           <div class="version">
             <i class="fas fa-rocket"></i>
             Versão 2.0 - Sistema de Eventos
@@ -470,6 +598,14 @@
     </div>
     
     <div class="content">
+      <!-- ⭐⭐ MUDANÇA 3: BOTÃO VER LOJA ⭐⭐ -->
+      <div class="action-buttons" style="margin-bottom: 20px;">
+        <button type="button" class="btn btn-ver-loja" onclick="mostrarTodasLojas()" id="btnVerLojas">
+          <i class="fas fa-store"></i>
+          Ver Loja
+        </button>
+      </div>
+
       <div class="card">
         <div class="card-header">
           <i class="fas fa-search"></i>
@@ -669,10 +805,12 @@
               <i class="fas fa-user"></i>
               Usuário
             </label>
+            <!-- ⭐⭐ MUDANÇA 2: ADICIONAR LUANA ⭐⭐ -->
             <select id="usuario" class="form-control" required>
               <option value="">-- Selecione --</option>
               <option value="João">João</option>
               <option value="Ana">Ana</option>
+              <option value="Luana">Luana</option>
             </select>
             <div class="error-message" id="erro-usuario">Campo obrigatório</div>
           </div>
@@ -757,6 +895,17 @@
         </div>
       </div>
       
+      <!-- ⭐⭐ MUDANÇA 3: SEÇÃO DE LOJAS CADASTRADAS ⭐⭐ -->
+      <div class="lojas-container" id="secaoLojas" style="display: none;">
+        <div class="card-header">
+          <i class="fas fa-store"></i>
+          <h2 class="card-title">Lojas Cadastradas</h2>
+        </div>
+        <div class="lojas-grid" id="gridLojas">
+          <!-- As lojas serão carregadas aqui dinamicamente -->
+        </div>
+      </div>
+      
       <div class="btn-group">
         <button type="button" class="btn btn-primary" onclick="cadastrarLoja()" id="btnCadastrar">
           <i class="fas fa-plus-circle"></i>
@@ -797,6 +946,140 @@
       carregarLojasParaAutocomplete();
       inicializarMultiSelect();
     });
+
+    // ⭐⭐ NOVA FUNÇÃO: MOSTRAR TODAS AS LOJAS ⭐⭐
+    function mostrarTodasLojas() {
+      console.log("🏪 Buscando todas as lojas...");
+      
+      const btnVerLojas = document.getElementById('btnVerLojas');
+      btnVerLojas.innerHTML = '<div class="loading"><div class="spinner"></div> Carregando...</div>';
+      btnVerLojas.disabled = true;
+
+      google.script.run
+        .withSuccessHandler(function(lojasComDados) {
+          btnVerLojas.innerHTML = '<i class="fas fa-store"></i> Ver Loja';
+          btnVerLojas.disabled = false;
+          
+          if (lojasComDados && lojasComDados.length > 0) {
+            exibirLojas(lojasComDados);
+            
+            // Scroll para a seção de lojas
+            document.getElementById('secaoLojas').scrollIntoView({ 
+              behavior: 'smooth', 
+              block: 'start' 
+            });
+            
+            showMessage('success', `✅ ${lojasComDados.length} lojas carregadas com sucesso!`);
+          } else {
+            showMessage('info', '📝 Nenhuma loja encontrada na base de dados.');
+          }
+        })
+        .withFailureHandler(function(error) {
+          btnVerLojas.innerHTML = '<i class="fas fa-store"></i> Ver Loja';
+          btnVerLojas.disabled = false;
+          showMessage('error', '❌ Erro ao carregar lojas: ' + error.message);
+        })
+        .buscarTodasLojasComDados();
+    }
+
+    // ⭐⭐ NOVA FUNÇÃO: EXIBIR LOJAS EM GRID ⭐⭐
+    function exibirLojas(lojas) {
+      const gridLojas = document.getElementById('gridLojas');
+      const secaoLojas = document.getElementById('secaoLojas');
+      
+      // Ordenar lojas por defasagem (maior para menor)
+      lojas.sort((a, b) => {
+        const defasagemA = parseInt(a.defasagem) || 0;
+        const defasagemB = parseInt(b.defasagem) || 0;
+        return defasagemB - defasagemA;
+      });
+      
+      gridLojas.innerHTML = '';
+      
+      lojas.forEach(loja => {
+        const card = criarCardLoja(loja);
+        gridLojas.appendChild(card);
+      });
+      
+      secaoLojas.style.display = 'block';
+    }
+
+    // ⭐⭐ NOVA FUNÇÃO: CRIAR CARD DA LOJA ⭐⭐
+    function criarCardLoja(loja) {
+      const card = document.createElement('div');
+      
+      // Determinar classe CSS baseada no status
+      let statusClass = '';
+      let statusText = '';
+      
+      switch(loja.status) {
+        case 'Em andamento':
+          statusClass = 'em-andamento';
+          statusText = 'Em Andamento';
+          break;
+        case 'Concluído':
+          statusClass = 'concluido';
+          statusText = 'Concluído';
+          break;
+        case 'Não Concluído':
+          statusClass = 'nao-concluido';
+          statusText = 'Não Concluído';
+          break;
+        default:
+          statusClass = 'em-andamento';
+          statusText = loja.status || 'Em Andamento';
+      }
+      
+      card.className = `loja-card ${statusClass}`;
+      
+      // Extrair apenas o número da defasagem (remover "dias")
+      const defasagemNumero = loja.defasagem ? loja.defasagem.toString().replace(' dias', '').replace(' dia', '') : '0';
+      
+      card.innerHTML = `
+        <div class="loja-header">
+          <div style="flex: 1;">
+            <div class="loja-nome">${loja.loja || 'N/A'}</div>
+            <div class="loja-info">
+              <strong>Representante:</strong> ${loja.representante || 'N/A'}
+            </div>
+          </div>
+          <span class="loja-status status-${statusClass.replace('-', '-')}">${statusText}</span>
+        </div>
+        
+        <div class="loja-info">
+          <strong>Defasagem:</strong> 
+          <span class="loja-defasagem">
+            <i class="fas fa-clock"></i>
+            ${defasagemNumero} dias
+          </span>
+        </div>
+        
+        <div class="loja-info">
+          <strong>Último Evento:</strong> ${loja.evento || 'N/A'}
+        </div>
+        
+        <div class="loja-info">
+          <strong>Usuário:</strong> ${loja.usuario || 'N/A'}
+        </div>
+        
+        <div class="loja-ultimo-evento">
+          <i class="fas fa-calendar"></i>
+          Último acionamento: ${loja.data_ultimo_evento || 'N/A'}
+        </div>
+      `;
+      
+      // Adicionar clique para carregar dados da loja
+      card.style.cursor = 'pointer';
+      card.addEventListener('click', function() {
+        document.getElementById('loja').value = loja.loja;
+        buscarLoja();
+        
+        // Scroll para o topo
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      });
+      
+      return card;
+    }
 
     // ⭐⭐ CARREGAR LOJAS DO GOOGLE SHEETS ⭐⭐
     function carregarLojasParaAutocomplete() {
@@ -960,37 +1243,38 @@
 
     // ⭐⭐ CADASTRAR LOJA ⭐⭐
     function cadastrarLoja() {
-  if (!validarFormulario()) return;
+      if (!validarFormulario()) return;
 
-  const dados = coletarDadosFormulario();
-  dados.acao = 'cadastrar';
+      const dados = coletarDadosFormulario();
+      dados.acao = 'cadastrar';
 
-  const btnCadastrar = document.getElementById('btnCadastrar');
-  btnCadastrar.innerHTML = '<div class="loading"><div class="spinner"></div> Cadastrando...</div>';
-  btnCadastrar.disabled = true;
+      const btnCadastrar = document.getElementById('btnCadastrar');
+      btnCadastrar.innerHTML = '<div class="loading"><div class="spinner"></div> Cadastrando...</div>';
+      btnCadastrar.disabled = true;
 
-  google.script.run
-    .withSuccessHandler(function(res) {
-      btnCadastrar.innerHTML = '<i class="fas fa-plus-circle"></i> Cadastrar Loja';
-      btnCadastrar.disabled = false;
-      
-      if(res && res.success) {
-        // ⬇️ CORREÇÃO: MENSAGEM PERSONALIZADA ⬇️
-        const nomeLoja = document.getElementById('loja').value.trim();
-        showMessage('success', `✅ Loja "${nomeLoja}" cadastrada com sucesso!`);
-        limparDados();
-        carregarLojasParaAutocomplete();
-      } else {
-        showMessage('error', res.message || 'Erro ao cadastrar');
-      }
-    })
-    .withFailureHandler(function(error) {
-      btnCadastrar.innerHTML = '<i class="fas fa-plus-circle"></i> Cadastrar Loja';
-      btnCadastrar.disabled = false;
-      showMessage('error', '❌ Erro: ' + error.message);
-    })
-    .salvarProspeccao(dados);
-}
+      google.script.run
+        .withSuccessHandler(function(res) {
+          btnCadastrar.innerHTML = '<i class="fas fa-plus-circle"></i> Cadastrar Loja';
+          btnCadastrar.disabled = false;
+          
+          if(res && res.success) {
+            // ⬇️ CORREÇÃO: MENSAGEM PERSONALIZADA ⬇️
+            const nomeLoja = document.getElementById('loja').value.trim();
+            showMessage('success', `✅ Loja "${nomeLoja}" cadastrada com sucesso!`);
+            limparDados();
+            carregarLojasParaAutocomplete();
+          } else {
+            showMessage('error', res.message || 'Erro ao cadastrar');
+          }
+        })
+        .withFailureHandler(function(error) {
+          btnCadastrar.innerHTML = '<i class="fas fa-plus-circle"></i> Cadastrar Loja';
+          btnCadastrar.disabled = false;
+          showMessage('error', '❌ Erro: ' + error.message);
+        })
+        .salvarProspeccao(dados);
+    }
+
     // ⭐⭐ ATUALIZAR REGISTRO ⭐⭐
     function atualizarRegistro() {
       if (!validarFormulario()) return;
