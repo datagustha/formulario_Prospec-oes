@@ -12,6 +12,25 @@
       padding: 0;
       font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
     }
+
+    /* 🔥 SUBSTITUA POR: */
+#loadingOverlay {
+  display: none;
+  flex-direction: column;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0,0,0,0.7);
+  z-index: 9999;
+  justify-content: center;
+  align-items: center;
+}
+
+    #loadingOverlay.show {
+      display: flex !important;
+    }
     
     :root {
       --primary: #7E3E9A;
@@ -22,6 +41,7 @@
       --success: #28A745;
       --warning: #FFC107;
       --danger: #DC3545;
+      --info: #17A2B8;
       --gray: #6C757D;
       --border: #E0E0E0;
       --background: #F8F9FA;
@@ -32,6 +52,7 @@
       min-height: 100vh;
       padding: 20px;
       color: var(--dark);
+      overflow-y: auto; /* 🔄 ADICIONANDO SCROLL */
     }
     
     .container {
@@ -44,12 +65,12 @@
     }
     
     .header {
-      background: var(--primary);
-      padding: 30px 40px;
-      color: white;
-      text-align: center;
-      position: relative;
-    }
+  background: var(--primary);
+  padding: 30px 40px;
+  color: white;
+  text-align: center;
+  
+}
     
     .logo-container {
       display: flex;
@@ -134,11 +155,12 @@
     }
     
     .form-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
-      gap: 25px;
-      margin-bottom: 25px;
-    }
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); /* Reduzido de 320px para 250px */
+  gap: 15px; /* Reduzido de 25px para 15px */
+  margin-bottom: 25px;
+}
+
     
     .form-group {
       margin-bottom: 25px;
@@ -185,6 +207,12 @@
     .form-control.error {
       border-color: var(--danger);
       box-shadow: 0 0 0 3px rgba(220, 53, 69, 0.1);
+    }
+    
+    .form-control:disabled {
+      background-color: #f8f9fa;
+      opacity: 0.7;
+      cursor: not-allowed;
     }
     
     textarea.form-control {
@@ -251,12 +279,23 @@
     }
     
     .btn-info {
-      background: #17a2b8;
+      background: var(--info);
       color: white;
     }
     
     .btn-info:hover {
       background: #138496;
+      transform: translateY(-2px);
+      box-shadow: 0 8px 20px rgba(23, 162, 184, 0.3);
+    }
+    
+    .btn-success {
+      background: var(--success);
+      color: white;
+    }
+    
+    .btn-success:hover {
+      background: #218838;
       transform: translateY(-2px);
     }
     
@@ -360,6 +399,8 @@
       z-index: 1000;
       box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
       margin-top: -2px;
+      max-height: 300px;
+      overflow-y: auto;
     }
 
     .suggestion-item {
@@ -381,6 +422,15 @@
       border-bottom: none;
     }
     
+    .suggestion-section {
+      background: var(--primary);
+      color: white;
+      font-weight: 700;
+      padding: 10px 16px;
+      font-size: 0.9rem;
+      border-bottom: 1px solid var(--border);
+    }
+    
     .action-buttons {
       display: flex;
       gap: 15px;
@@ -391,7 +441,7 @@
     .multi-select {
       display: flex;
       flex-wrap: wrap;
-      gap: 10px;
+      gap: 8px; /* ✅ DIMINUÍDO O ESPAÇAMENTO */
       margin-top: 5px;
     }
     
@@ -399,12 +449,13 @@
       display: flex;
       align-items: center;
       gap: 5px;
-      padding: 8px 12px;
+      padding: 6px 10px; /* ✅ DIMINUÍDO O PADDING */
       background: #f8f9fa;
       border: 1px solid var(--border);
       border-radius: 6px;
       cursor: pointer;
       transition: all 0.3s ease;
+      font-size: 0.9rem; /* ✅ DIMINUÍDO A FONTE */
     }
     
     .multi-select-option.selected {
@@ -425,19 +476,56 @@
       font-weight: 500;
     }
 
-    /* ⭐⭐ NOVOS ESTILOS PARA A SEÇÃO DE LOJAS ⭐⭐ */
-    .btn-ver-loja {
+    /* ⭐⭐ NOVOS ESTILOS PARA AS SEÇÕES DE LOJAS ⭐⭐ */
+    .btn-ver-defasagem {
       background: #FFD700 !important;
       color: #333 !important;
       border: 2px solid #FFC107 !important;
       font-weight: 700 !important;
     }
 
-    .btn-ver-loja:hover {
+    .btn-ver-defasagem:hover {
       background: #FFC107 !important;
       transform: translateY(-2px) !important;
       box-shadow: 0 8px 20px rgba(255, 193, 7, 0.3) !important;
     }
+
+    .btn-ver-agendadas {
+      background: #20C997 !important;
+      color: white !important;
+      border: 2px solid #198754 !important;
+      font-weight: 700 !important;
+    }
+
+    .btn-ver-agendadas:hover {
+      background: #198754 !important;
+      transform: translateY(-2px) !important;
+      box-shadow: 0 8px 20px rgba(25, 135, 84, 0.3) !important;
+    }
+
+    .btn-ver-todas {
+      background: #7E3E9A !important;
+      color: white !important;
+      border: 2px solid #6a2e82 !important;
+      font-weight: 700 !important;
+    }
+
+    .btn-ver-todas:hover {
+      background: #6a2e82 !important;
+      transform: translateY(-2px) !important;
+      box-shadow: 0 8px 20px rgba(126, 62, 154, 0.3) !important;
+    }
+
+    /* 🔄 ESTILO ESPECÍFICO APENAS PARA O BOTÃO "VER TODAS AS LOJAS" */
+.btn-ver-todas .loading {
+    color: white !important;
+    font-weight: 600;
+}
+
+.btn-ver-todas .spinner {
+    border: 2px solid rgba(255, 255, 255, 0.3);
+    border-top: 2px solid white;
+}
 
     .lojas-container {
       margin-top: 30px;
@@ -448,12 +536,25 @@
       border: 2px solid var(--primary);
     }
 
-    .lojas-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
-      gap: 20px;
-      margin-top: 20px;
+    .lojas-container.defasagem {
+      border-color: #FFC107;
     }
+
+    .lojas-container.agendadas {
+      border-color: #20C997;
+    }
+
+    .lojas-container.todas {
+      border-color: #7E3E9A;
+    }
+
+    .lojas-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+  gap: 20px;
+  margin-top: 20px;
+}
+
 
     .loja-card {
       background: white;
@@ -481,6 +582,14 @@
       border-left: 5px solid var(--danger);
     }
 
+    .loja-card.agendada {
+      border-left: 5px solid var(--info);
+    }
+
+    .loja-card.todas {
+      border-left: 5px solid #7E3E9A;
+    }
+
     .loja-header {
       display: flex;
       justify-content: space-between;
@@ -504,19 +613,24 @@
     }
 
     .status-em-andamento {
-      background: #FFF3CD;
-      color: #856404;
-    }
+    background: #FFF3CD;  /* AMARELO */
+    color: #856404;
+}
 
     .status-concluido {
       background: #D1E7DD;
       color: #0F5132;
     }
 
-    .status-nao-concluido {
-      background: #F8D7DA;
-      color: #721C24;
-    }
+.status-nao-concluido {
+    background: #F8D7DA;  /* VERMELHO */
+    color: #721C24;
+}
+
+    .status-agendada {
+    background: #CCE7FF;  /* AZUL */
+    color: #084298;
+}
 
     .loja-info {
       margin-bottom: 10px;
@@ -529,6 +643,18 @@
 
     .loja-defasagem {
       background: var(--danger);
+      color: white;
+      padding: 4px 10px;
+      border-radius: 15px;
+      font-size: 0.8rem;
+      font-weight: 600;
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+    }
+
+    .loja-agendamento {
+      background: var(--info);
       color: white;
       padding: 4px 10px;
       border-radius: 15px;
@@ -559,37 +685,300 @@
       align-items: center;
       gap: 5px;
     }
-    
-    @media (max-width: 768px) {
-      .content {
-        padding: 20px;
-      }
-      
-      .form-grid {
-        grid-template-columns: 1fr;
-      }
-      
-      .btn-group {
-        flex-direction: column;
-      }
-      
-      .header {
-        padding: 20px;
-      }
-      
-      h1 {
-        font-size: 2.2rem;
-      }
-      
-      .logo {
-        width: 80px;
-        height: 80px;
-      }
 
-      .lojas-grid {
-        grid-template-columns: 1fr;
-      }
+    .tipo-calculo {
+      font-size: 0.75rem;
+      color: var(--gray);
+      font-style: italic;
+      margin-top: 5px;
     }
+
+    /* ⭐⭐ NOVOS ESTILOS PARA OS FILTROS DE PESQUISA ⭐⭐ */
+    .filtro-container {
+      background: #f8f9fa;
+      padding: 20px;
+      border-radius: 10px;
+      margin-bottom: 20px;
+      border: 1px solid var(--border);
+    }
+
+    .filtro-header {
+      display: flex;
+      justify-content: between;
+      align-items: center;
+      margin-bottom: 15px;
+      flex-wrap: wrap;
+      gap: 15px;
+    }
+
+    .filtro-title {
+      font-size: 1.2rem;
+      font-weight: 600;
+      color: var(--primary);
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .filtro-pesquisa {
+      display: flex;
+      gap: 10px;
+      align-items: center;
+      flex: 1;
+      min-width: 300px;
+    }
+
+    .filtro-pesquisa input {
+      flex: 1;
+      padding: 10px 15px;
+      border: 2px solid var(--border);
+      border-radius: 8px;
+      font-size: 1rem;
+    }
+
+    .filtro-pesquisa input:focus {
+      outline: none;
+      border-color: var(--primary);
+    }
+
+    .filtro-ordenacao {
+      display: flex;
+      gap: 10px;
+      align-items: center;
+    }
+
+    .filtro-ordenacao select {
+  padding: 10px 15px;
+  border: 2px solid var(--border);
+  border-radius: 8px;
+  font-size: 1rem;
+  background: white;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.filtro-ordenacao select:focus {
+  outline: none;
+  border-color: var(--primary);
+  box-shadow: 0 0 0 3px rgba(126, 62, 154, 0.1);
+}
+
+.filtro-ordenacao select option {
+  padding: 10px;
+  font-size: 1rem;
+}
+
+    .contador-lojas {
+      background: var(--primary);
+      color: white;
+      padding: 6px 12px;
+      border-radius: 20px;
+      font-size: 0.9rem;
+      font-weight: 600;
+    }
+
+        .contador-lojas {
+      background: var(--primary);
+      color: white;
+      padding: 6px 12px;
+      border-radius: 20px;
+      font-size: 0.9rem;
+      font-weight: 600;
+    }
+
+    /* 🔥🔥🔥 COLE O CSS DO MODAL AQUI 🔥🔥🔥 */
+    .modal-detalhes {
+        display: none;
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(0,0,0,0.7);
+        z-index: 10000;
+        justify-content: center;
+        align-items: center;
+        animation: fadeIn 0.3s ease;
+    }
+
+    .modal-detalhes-content {
+        background: white;
+        padding: 30px;
+        border-radius: 15px;
+        max-width: 90%;
+        max-height: 90vh;
+        overflow-y: auto;
+        width: 800px;
+        box-shadow: 0 20px 40px rgba(0,0,0,0.3);
+        position: relative;
+        animation: slideUp 0.3s ease;
+    }
+
+    .modal-detalhes-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 25px;
+        padding-bottom: 15px;
+        border-bottom: 3px solid var(--primary);
+    }
+
+    .modal-detalhes-title {
+        color: var(--primary);
+        margin: 0;
+        font-size: 1.8rem;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+    }
+
+    .btn-fechar-modal {
+        background: none;
+        border: none;
+        font-size: 24px;
+        cursor: pointer;
+        color: var(--danger);
+        padding: 5px;
+        border-radius: 50%;
+        transition: all 0.3s ease;
+    }
+
+    .btn-fechar-modal:hover {
+        background: var(--danger);
+        color: white;
+        transform: rotate(90deg);
+    }
+
+    .detalhes-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+        gap: 15px;
+        margin-bottom: 20px;
+    }
+
+    .detalhe-item {
+        display: flex;
+        flex-direction: column;
+        gap: 5px;
+        padding: 12px;
+        background: #f8f9fa;
+        border-radius: 8px;
+        border-left: 4px solid var(--primary);
+    }
+
+    .detalhe-label {
+        font-weight: 600;
+        color: var(--dark);
+        font-size: 0.9rem;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+    }
+
+    .detalhe-valor {
+        color: var(--gray);
+        font-size: 1rem;
+        word-break: break-word;
+    }
+
+    .status-badge {
+        padding: 4px 12px;
+        border-radius: 20px;
+        font-size: 0.8rem;
+        font-weight: 600;
+        text-transform: uppercase;
+    }
+
+    .status-novo {
+        background: #E7F3FF;
+        color: #0D6EFD;
+    }
+
+    .status-andamento {
+        background: #FFF3CD;
+        color: #856404;
+    }
+
+    .status-concluido {
+        background: #D1E7DD;
+        color: #0F5132;
+    }
+
+    .status-cancelado {
+        background: #F8D7DA;
+        color: #721C24;
+    }
+
+    .modal-detalhes-actions {
+        display: flex;
+        gap: 15px;
+        justify-content: center;
+        margin-top: 25px;
+        padding-top: 20px;
+        border-top: 1px solid var(--border);
+    }
+
+    @keyframes fadeIn {
+        from { opacity: 0; }
+        to { opacity: 1; }
+    }
+
+    @keyframes slideUp {
+        from { 
+            opacity: 0;
+            transform: translateY(30px);
+        }
+        to { 
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+    
+    
+@media (max-width: 768px) {
+  .form-grid {
+    grid-template-columns: 1fr;
+    gap: 10px;
+  }
+}
+  .form-grid {
+    grid-template-columns: 1fr;
+  }
+  
+  .btn-group {
+    flex-direction: column;
+  }
+  
+  .header {
+    padding: 20px;
+  }
+  
+  h1 {
+    font-size: 2.2rem;
+  }
+  
+  .logo {
+    width: 80px;
+    height: 80px;
+  }
+
+  .lojas-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .action-buttons {
+    flex-direction: column;
+  }
+
+  .filtro-header {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .filtro-pesquisa {
+    min-width: auto;
+  }
+} /* 🔥 IMPORTANTE: FECHAR A CHAVE AQUI */
   </style>
 </head>
 <body>
@@ -602,24 +991,41 @@
           <div class="subtitle">Cadastro e Acompanhamento de Lojas</div>
           <div class="version">
             <i class="fas fa-rocket"></i>
-            Versão 2.1 - Sistema de Eventos com Data de Retorno
+            Versão 3.0 - Sistema com Agendamentos
           </div>
         </div>
       </div>
     </div>
     
     <div class="content">
-      <!-- ⭐⭐ BOTÃO VER LOJA ⭐⭐ -->
+      <!-- ⭐⭐ BOTÕES PRINCIPAIS ⭐⭐ -->
       <div class="action-buttons" style="margin-bottom: 20px;">
-        <button type="button" class="btn btn-ver-loja" onclick="mostrarTodasLojas()" id="btnVerLojas">
-          <i class="fas fa-store"></i>
-          Ver Lojas
+        <!-- BOTÃO 1: VER LOJAS COM DEFASAGEM -->
+        <button type="button" class="btn btn-ver-defasagem" onclick="mostrarLojasDefasagem()" id="btnVerDefasagem">
+          <i class="fas fa-clock"></i>
+          Ver Lojas com Defasagem
+        </button>
+        
+        <!-- BOTÃO 2: VER LOJAS AGENDADAS -->
+        <button type="button" class="btn btn-ver-agendadas" onclick="mostrarLojasAgendadas()" id="btnVerAgendadas">
+          <i class="fas fa-calendar-check"></i>
+          Ver Lojas Agendadas
         </button>
 
- 
-</div>
+        <!-- BOTÃO 3: VER TODAS AS LOJAS (NOVO) -->
+        <button type="button" class="btn btn-ver-todas" onclick="mostrarTodasLojas()" id="btnVerTodas">
+          <i class="fas fa-store"></i>
+          Ver Todas as Lojas
+        </button>
+        
+        <!-- BOTÃO 4: FORÇAR ATUALIZAÇÃO -->
+        <button type="button" class="btn btn-info" onclick="forcarAtualizacaoDefasagens()" id="btnForcarAtualizacao">
+          <i class="fas fa-sync-alt"></i>
+          Forçar Atualização
+        </button>
       </div>
 
+      <!-- CARD BUSCA DE LOJA -->
       <div class="card">
         <div class="card-header">
           <i class="fas fa-search"></i>
@@ -661,308 +1067,409 @@
         </div>
       </div>
       
-      <div class="card">
-        <div class="card-header">
-          <i class="fas fa-info-circle"></i>
-          <h2 class="card-title">Dados da Loja</h2>
+      <!-- CARD DADOS DA LOJA -->
+<div class="card">
+  <div class="card-header">
+    <i class="fas fa-info-circle"></i>
+    <h2 class="card-title">Dados da Loja</h2>
+  </div>
+  
+  <!-- 🔥 LINHA 1: SEGMENTO, TELEFONE, FORNECEDOR -->
+  <div class="form-grid" style="grid-template-columns: 1fr 1fr 1fr; gap: 15px; margin-bottom: 15px;">
+    
+    <!-- SEGMENTO -->
+    <div class="form-group">
+      <label class="form-label required">
+        <i class="fas fa-tag"></i>
+        Segmento
+      </label>
+      <select id="segmento" class="form-control" required>
+        <option value="">-- SELECIONE --</option>
+        <option value="ATACADISTA">ATACADISTA</option>
+        <option value="OTICA">OTICA</option>
+        <option value="MATERIAL DE CONSTRUCAO">MATERIAL DE CONSTRUCAO</option>
+        <option value="TELEFONIA">TELEFONIA</option>
+        <option value="VESTUARIO">VESTUARIO</option>
+        <option value="MOVEIS E ELETROS">MOVEIS E ELETROS</option>
+        <option value="AUTO PECAS">AUTO PECAS</option>
+        <option value="CALCADOS">CALCADOS</option>
+        <option value="CONSTRUCOES">CONSTRUCOES</option>
+        <option value="ELETRONICOS">ELETRONICOS</option>
+        <option value="CONFECCOES">CONFECCOES</option>
+        <option value="COSMETICOS">COSMETICOS</option>
+        <option value="POSTOS DE COMBUSTIVEL">POSTOS DE COMBUSTIVEL</option>
+        <option value="SUPERMERCADO">SUPERMERCADO</option>
+        <option value="DROGARIAS INDIVIDUAS E POR REDE">DROGARIAS INDIVIDUAS E POR REDE</option>
+        <option value="MATERIAIS DE CONTRACOES">MATERIAIS DE CONTRACOES</option>
+        <option value="PISCINAS(EXCETO RJ)">PISCINAS(EXCETO RJ)</option>
+      </select>
+      <div class="error-message" id="erro-segmento">Campo obrigatório</div>
+    </div>
+
+    <!-- TELEFONE -->
+    <div class="form-group">
+      <label class="form-label required">
+        <i class="fas fa-phone"></i>
+        Telefone
+      </label>
+      <input type="text" id="telefone" class="form-control" required placeholder="(21) 99596-8380" oninput="formatarTelefone(this)">
+      <div class="error-message" id="erro-telefone">Campo obrigatório</div>
+    </div>
+
+    <!-- FORNECEDOR -->
+    <div class="form-group">
+      <label class="form-label required">
+        <i class="fas fa-truck"></i>
+        Fornecedor
+      </label>
+      <div class="multi-select" id="fornecedor-container">
+        <label class="multi-select-option">
+          <input type="checkbox" value="AFINZ"> AFINZ
+        </label>
+        <label class="multi-select-option">
+          <input type="checkbox" value="BC"> BC
+        </label>
+        <label class="multi-select-option">
+          <input type="checkbox" value="AGIL"> AGIL
+        </label>
+        <label class="multi-select-option">
+          <input type="checkbox" value="JEITTO"> JEITTO
+        </label>
+        <label class="multi-select-option">
+          <input type="checkbox" value="CREFAZ"> CREFAZ
+        </label>
+      </div>
+      <input type="hidden" id="fornecedor">
+      <div class="error-message" id="erro-fornecedor">Selecione pelo menos um fornecedor</div>
+    </div>
+  </div>
+
+  <!-- 🔥 LINHA 2: TRÁFEGO, QUANTIDADE LOJAS, ADESÃO -->
+  <div class="form-grid" style="grid-template-columns: 1fr 1fr 1fr; gap: 15px; margin-bottom: 15px;">
+    
+    <!-- TRÁFEGO -->
+    <div class="form-group">
+      <label class="form-label required">
+        <i class="fas fa-car"></i>
+        Tráfego apenas
+      </label>
+      <select id="trafego" class="form-control" required>
+        <option value="">-- Selecione --</option>
+        <option value="SIM">SIM</option>
+        <option value="NAO">NAO</option>
+      </select>
+      <div class="error-message" id="erro-trafego">Campo obrigatório</div>
+    </div>
+
+    <!-- QUANTIDADE DE LOJAS -->
+    <div class="form-group">
+      <label class="form-label required">
+        <i class="fas fa-building"></i>
+        Quantidade de lojas
+      </label>
+      <input type="number" id="quantidade_lojas" class="form-control" required min="1" placeholder="Apenas números">
+      <div class="error-message" id="erro-quantidade_lojas">Campo obrigatório</div>
+    </div>
+
+    <!-- ADESÃO -->
+    <div class="form-group">
+      <label class="form-label required">
+        <i class="fas fa-money-bill-wave"></i>
+        Adesão
+      </label>
+      <select id="adesao" class="form-control" required onchange="validarAdesao()">
+        <option value="0">R$ 0,00</option>
+        <option value="499">R$ 499,00</option>
+        <option value="599">R$ 599,00</option>
+        <option value="699">R$ 699,00</option>
+        <option value="799">R$ 799,00</option>
+        <option value="899">R$ 899,00</option>
+        <option value="999">R$ 999,00</option>
+        <option value="1299">R$ 1.299,00</option>
+      </select>
+      <div class="error-message" id="erro-adesao">Campo obrigatório</div>
+    </div>
+  </div>
+
+  <!-- 🔥 LINHA 3: FORMA PAGAMENTO, PARCELAS, USUÁRIO -->
+  <div class="form-grid" style="grid-template-columns: 1fr 1fr 1fr; gap: 15px; margin-bottom: 15px;">
+    
+    <!-- FORMA DE PAGAMENTO -->
+    <div class="form-group">
+      <label class="form-label required">
+        <i class="fas fa-credit-card"></i>
+        Forma de pagamento
+      </label>
+      <select id="forma_pagamento" class="form-control" required>
+        <option value="">-- SELECIONE --</option>
+        <option value="PIX">PIX</option>
+        <option value="CARTAO">CARTAO</option>
+        <option value="BOLETO">BOLETO</option>
+        <option value="ISENTO">ISENTO</option>
+      </select>
+      <div class="error-message" id="erro-forma_pagamento">Campo obrigatório</div>
+    </div>
+
+    <!-- PARCELAS -->
+    <div class="form-group">
+      <label class="form-label required">
+        <i class="fas fa-calendar-alt"></i>
+        Parcelas
+      </label>
+      <select id="parcelas" class="form-control" required>
+        <option value="">-- SELECIONE --</option>
+        <option value="1X">1X</option>
+        <option value="2X">2X</option>
+        <option value="3X">3X</option>
+        <option value="4X">4X</option>
+        <option value="ISENTO">ISENTO</option>
+      </select>
+      <div class="error-message" id="erro-parcelas">Campo obrigatório</div>
+    </div>
+
+    <!-- USUÁRIO -->
+    <div class="form-group">
+      <label class="form-label required">
+        <i class="fas fa-user"></i>
+        Usuário
+      </label>
+      <select id="usuario" class="form-control" required>
+        <option value="">-- SELECIONE --</option>
+        <option value="JOAO">JOAO</option>
+        <option value="ANA">ANA</option>
+        <option value="LUANA">LUANA</option>
+      </select>
+      <div class="error-message" id="erro-usuario">Campo obrigatório</div>
+    </div>
+  </div>
+
+  <!-- 🔥 LINHA 4: DATA PAGAMENTO ADESÃO, PLANO ASSINATURA, REPRESENTANTE -->
+  <div class="form-grid" style="grid-template-columns: 1fr 1fr 1fr; gap: 15px; margin-bottom: 15px;">
+    
+    <!-- DATA PAGAMENTO ADESÃO -->
+    <div class="form-group">
+      <label class="form-label" id="label-data-pagamento-adesao">
+        <i class="fas fa-calendar-day"></i>
+        Data pagamento adesão
+      </label>
+      <input type="date" id="data_pagamento_adesao" class="form-control">
+      <div class="error-message" id="erro-data_pagamento_adesao">Campo obrigatório para adesão maior que R$ 0,00</div>
+    </div>
+
+    <!-- PLANO ASSINATURA -->
+    <div class="form-group">
+      <label class="form-label required">
+        <i class="fas fa-chart-line"></i>
+        Plano de assinatura
+      </label>
+      <input type="text" id="plano_assinatura" class="form-control" required placeholder="R$ 0,00" oninput="formatarMoeda(this)">
+      <div class="error-message" id="erro-plano_assinatura">Campo obrigatório</div>
+    </div>
+
+    <!-- REPRESENTANTE -->
+    <div class="form-group">
+      <label class="form-label">
+        <i class="fas fa-user-tie"></i>
+        Representante / Comercial Interno
+      </label>
+      <input type="text" id="representante" class="form-control" placeholder="Nome do representante (opcional)">
+    </div>
+  </div>
+
+  <!-- 🔥 LINHA 5: DATA RETORNO CLIENTE (OCUPA LINHA INTEIRA) -->
+  <div class="form-grid" style="grid-template-columns: 1fr; gap: 15px;">
+    
+    <!-- DATA RETORNO CLIENTE -->
+    <div class="form-group">
+      <label class="form-label">
+        <i class="fas fa-calendar-check"></i>
+        Data retorno cliente
+      </label>
+      <input type="date" id="data_retorno_cliente" class="form-control">
+      <small style="color: var(--gray); font-size: 0.85rem; margin-top: 5px; display: block;">
+        Data que o cliente disse que retornaria o contato
+      </small>
+    </div>
+  </div>
+</div>
+      
+<!-- CARD ATUALIZAÇÃO DE REGISTRO -->
+<div class="card" id="secaoAtualizacao" style="display: none;">
+  <div class="card-header">
+    <i class="fas fa-sync-alt"></i>
+    <h2 class="card-title">Atualização de Registro</h2>
+  </div>
+  
+  <!-- 🔥 ESTRUTURA CORRIGIDA DO FORM-GRID -->
+  <div class="form-grid">
+    <div class="form-group">
+      <label class="form-label required">
+        <i class="fas fa-tasks"></i>
+        Status
+      </label>
+      <select id="status" class="form-control" required onchange="validarStatus()">
+        <option value="EM ANDAMENTO">EM ANDAMENTO</option>
+        <option value="CONCLUIDO">CONCLUIDO</option>
+        <option value="NAO CONCLUIDO">NAO CONCLUIDO</option>
+      </select>
+      <div class="error-message" id="erro-status">Campo obrigatório</div>
+    </div>
+    
+    <div class="form-group">
+      <label class="form-label required">
+        <i class="fas fa-calendar-check"></i>
+        Evento
+      </label>
+      <div class="search-container">
+        <input type="text" id="evento" class="form-control" 
+               placeholder="Digite para buscar ou selecione um evento..."
+               autocomplete="off"
+               oninput="filtrarEventos(this.value)"
+               onfocus="filtrarEventos(this.value)">
+        <div class="suggestions" id="suggestions-evento">
+          <!-- Sugestões de eventos aparecerão aqui automaticamente -->
+        </div>
+      </div>
+      <div class="error-message" id="erro-evento">Campo obrigatório</div>
+    </div>
+  </div> <!-- 🔥 FECHAR form-grid CORRETAMENTE -->
+  
+  <div class="form-group">
+    <label class="form-label required">
+      <i class="fas fa-sticky-note"></i>
+      Observação
+    </label>
+    <textarea id="observacao" class="form-control" required placeholder="Descreva detalhadamente a tratativa realizada..."></textarea>
+    <div class="error-message" id="erro-observacao">Campo obrigatório</div>
+  </div>
+
+  <div class="form-group" id="defasagem-info" style="display: none;">
+    <label class="form-label">
+      <i class="fas fa-clock"></i>
+      Defasagem
+    </label>
+    <div class="defasagem-badge">
+      <i class="fas fa-exclamation-triangle"></i>
+      <span id="defasagem-dias">0</span> dias sem contato
+    </div>
+  </div>
+
+  
+<div class="form-group" id="tipo-calculo-info" style="display: none; padding: 15px; background: #f8f9fa; border-radius: 10px; border-left: 4px solid #17a2b8;">
+    <label class="form-label" style="font-size: 1.1em; color: #17a2b8;">
+        <i class="fas fa-calculator"></i>
+        📊 INFORMAÇÕES DE CÁLCULO
+    </label>
+    
+    <div style="margin-top: 10px;">
+        <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 8px;">
+            <span style="font-weight: 600; color: #495057; min-width: 120px;">Data base:</span>
+            <span id="data-base-calculo" style="color: #28a745; font-weight: 500;">--/--/----</span>
         </div>
         
-        <div class="form-grid">
-          <div class="form-group">
-            <label class="form-label required">
-              <i class="fas fa-tag"></i>
-              Segmento
-            </label>
-            <select id="segmento" class="form-control" required>
-              <option value="">-- Selecione --</option>
-              <option value="Atacadista">Atacadista</option>
-              <option value="Ótica">Ótica</option>
-              <option value="Material de construção">Material de construção</option>
-              <option value="Telefonia">Telefonia</option>
-              <option value="Vestuário">Vestuário</option>
-              <option value="Móveis e eletros">Móveis e eletros</option>
-              <option value="Auto Peças">Auto Peças</option>
-              <option value="Calçados">Calçados</option>
-              <option value="Construções">Construções</option>
-              <option value="Eletrônicos">Eletrônicos</option>
-              <option value="Confecções">Confecções</option>
-              <option value="Cosméticos">Cosméticos</option>
-              <option value="Postos de combustível">Postos de combustível</option>
-              <option value="Supermercado">Supermercado</option>
-              <option value="Drogarias Individuas e por rede">Drogarias Individuas e por rede</option>
-              <option value="Materiais de contrações">Materiais de contrações</option>
-              <option value="Piscinas(exceto RJ)">Piscinas(exceto RJ)</option>
-            </select>
-            <div class="error-message" id="erro-segmento">Campo obrigatório</div>
-          </div>
-          
-          <div class="form-group">
-            <label class="form-label required">
-              <i class="fas fa-phone"></i>
-              Telefone
-            </label>
-            <input type="text" id="telefone" class="form-control" required placeholder="(21) 99596-8380" oninput="formatarTelefone(this)">
-            <div class="error-message" id="erro-telefone">Campo obrigatório</div>
-          </div>
-          
-          <div class="form-group">
-            <label class="form-label required">
-              <i class="fas fa-truck"></i>
-              Fornecedor
-            </label>
-            <div class="multi-select" id="fornecedor-container">
-              <label class="multi-select-option">
-                <input type="checkbox" value="BC"> BC
-              </label>
-              <label class="multi-select-option">
-                <input type="checkbox" value="Ágil"> Ágil
-              </label>
-              <label class="multi-select-option">
-                <input type="checkbox" value="Jeitoo"> Jeitoo
-              </label>
-              <label class="multi-select-option">
-                <input type="checkbox" value="crefaz"> crefaz
-              </label>
+        <div style="display: flex; align-items: center; gap: 10px;">
+            <span style="font-weight: 600; color: #495057; min-width: 120px;">Tipo de cálculo:</span>
+            <span id="tipo-calculo-text" style="color: #dc3545; font-weight: 500; background: #fff; padding: 4px 8px; border-radius: 5px; border: 1px solid #dee2e6;">
+                <!-- Será preenchido dinamicamente -->
+            </span>
+        </div>
+    </div>
+</div>
+
+  <div class="btn-group" style="margin-top: 20px;">
+    <button type="button" class="btn btn-warning" onclick="atualizarRegistro()" id="btnAtualizar" style="display: none;">
+      <i class="fas fa-save"></i>
+      Atualizar Registro
+    </button>
+  </div>
+</div> <!-- 🔥 FECHAR card da seção de atualização -->
+      <!-- SEÇÃO: LOJAS COM DEFASAGEM -->
+      <div class="lojas-container defasagem" id="secaoDefasagem" style="display: none;">
+        <div class="filtro-container">
+          <div class="filtro-header">
+            <div class="filtro-title">
+              <i class="fas fa-clock"></i>
+              Lojas com Defasagem (≥ 2 dias)
             </div>
-            <input type="hidden" id="fornecedor">
-            <div class="error-message" id="erro-fornecedor">Selecione pelo menos um fornecedor</div>
+            <div class="filtro-pesquisa">
+              <input type="text" id="pesquisaDefasagem" placeholder="Pesquisar lojas..." oninput="filtrarLojasDefasagem()">
+              <span class="contador-lojas" id="contadorDefasagem">0 lojas</span>
+            </div>
+            <div class="filtro-ordenacao">
+              <select id="ordenacaoDefasagem" onchange="ordenarLojasDefasagem()">
+                <option value="defasagem">Ordenar por Defasagem</option>
+                <option value="alfabetica">Ordenar Alfabeticamente</option>
+              </select>
+            </div>
           </div>
-          
-          <div class="form-group">
-            <label class="form-label required">
-              <i class="fas fa-car"></i>
-              Tráfego apenas
-            </label>
-            <select id="trafego" class="form-control" required>
-              <option value="">-- Selecione --</option>
-              <option value="Sim">Sim</option>
-              <option value="Não">Não</option>
-            </select>
-            <div class="error-message" id="erro-trafego">Campo obrigatório</div>
-          </div>
-          
-          <div class="form-group">
-            <label class="form-label required">
-              <i class="fas fa-building"></i>
-              Quantidade de lojas
-            </label>
-            <input type="number" id="quantidade_lojas" class="form-control" required min="1" placeholder="Apenas números">
-            <div class="error-message" id="erro-quantidade_lojas">Campo obrigatório</div>
-          </div>
-          
-          <div class="form-group">
-            <label class="form-label required">
-              <i class="fas fa-money-bill-wave"></i>
-              Adesão
-            </label>
-            <select id="adesao" class="form-control" required>
-              <option value="0">R$ 0,00</option>
-              <option value="499">R$ 499,00</option>
-              <option value="599">R$ 599,00</option>
-              <option value="699">R$ 699,00</option>
-              <option value="799">R$ 799,00</option>
-              <option value="899">R$ 899,00</option>
-              <option value="999">R$ 999,00</option>
-              <option value="1299">R$ 1.299,00</option>
-            </select>
-            <div class="error-message" id="erro-adesao">Campo obrigatório</div>
-          </div>
-          
-          <div class="form-group">
-            <label class="form-label">
-              <i class="fas fa-calendar-day"></i>
-              Data pagamento adesão
-            </label>
-            <input type="date" id="data_pagamento_adesao" class="form-control">
-          </div>
-          
-          <div class="form-group">
-            <label class="form-label required">
-              <i class="fas fa-credit-card"></i>
-              Forma de pagamento
-            </label>
-            <select id="forma_pagamento" class="form-control" required>
-              <option value="">-- Selecione --</option>
-              <option value="Pix">Pix</option>
-              <option value="Cartão">Cartão</option>
-              <option value="Boleto">Boleto</option>
-            </select>
-            <div class="error-message" id="erro-forma_pagamento">Campo obrigatório</div>
-          </div>
-          
-          <div class="form-group">
-            <label class="form-label required">
-              <i class="fas fa-calendar-alt"></i>
-              Parcelas
-            </label>
-            <select id="parcelas" class="form-control" required>
-              <option value="">-- Selecione --</option>
-              <option value="1x">1x</option>
-              <option value="2x">2x</option>
-              <option value="3x">3x</option>
-              <option value="4x">4x</option>
-            </select>
-            <div class="error-message" id="erro-parcelas">Campo obrigatório</div>
-          </div>
-          
-          <div class="form-group">
-            <label class="form-label required">
-              <i class="fas fa-chart-line"></i>
-              Plano de assinatura
-            </label>
-            <input type="text" id="plano_assinatura" class="form-control" required placeholder="R$ 0,00" oninput="formatarMoeda(this)">
-            <div class="error-message" id="erro-plano_assinatura">Campo obrigatório</div>
-          </div>
-          
-          <div class="form-group">
-            <label class="form-label required">
-              <i class="fas fa-user"></i>
-              Usuário
-            </label>
-            <select id="usuario" class="form-control" required>
-              <option value="">-- Selecione --</option>
-              <option value="João">João</option>
-              <option value="Ana">Ana</option>
-              <option value="Luana">Luana</option>
-            </select>
-            <div class="error-message" id="erro-usuario">Campo obrigatório</div>
-          </div>
-          
-          <!-- ⭐⭐ MUDANÇA 1: REPRESENTANTE / COMERCIAL INTERNO ⭐⭐ -->
-          <div class="form-group">
-            <label class="form-label">
-              <i class="fas fa-user-tie"></i>
-              Representante / Comercial Interno
-            </label>
-            <input type="text" id="representante" class="form-control" placeholder="Nome do representante (opcional)">
-          </div>
+        </div>
+        <div class="lojas-grid" id="gridDefasagem">
+          <!-- As lojas com defasagem serão carregadas aqui -->
+        </div>
+      </div>
 
-          <!-- ⭐⭐ NOVO CAMPO: DATA RETORNO CLIENTE ⭐⭐ -->
-          <div class="form-group">
-            <label class="form-label">
+      <!-- SEÇÃO: LOJAS AGENDADAS -->
+      <div class="lojas-container agendadas" id="secaoAgendadas" style="display: none;">
+        <div class="filtro-container">
+          <div class="filtro-header">
+            <div class="filtro-title">
               <i class="fas fa-calendar-check"></i>
-              Data retorno cliente
-            </label>
-            <input type="date" id="data_retorno_cliente" class="form-control">
-            <small style="color: var(--gray); font-size: 0.85rem; margin-top: 5px; display: block;">
-              Data que o cliente disse que retornaria o contato
-            </small>
+              Lojas Agendadas
+            </div>
+            <div class="filtro-pesquisa">
+              <input type="text" id="pesquisaAgendadas" placeholder="Pesquisar lojas..." oninput="filtrarLojasAgendadas()">
+              <span class="contador-lojas" id="contadorAgendadas">0 lojas</span>
+            </div>
+            <div class="filtro-ordenacao">
+              <select id="ordenacaoAgendadas" onchange="ordenarLojasAgendadas()">
+                <option value="data">Ordenar por Data</option>
+                <option value="alfabetica">Ordenar Alfabeticamente</option>
+              </select>
+            </div>
           </div>
+        </div>
+        <div class="lojas-grid" id="gridAgendadas">
+          <!-- As lojas agendadas serão carregadas aqui -->
         </div>
       </div>
-      
-      <div class="card" id="secaoAtualizacao" style="display: none;">
-        <div class="card-header">
-          <i class="fas fa-sync-alt"></i>
-          <h2 class="card-title">Atualização de Registro</h2>
-        </div>
-        
-        <div class="form-grid">
-          <div class="form-group">
-            <label class="form-label required">
-              <i class="fas fa-tasks"></i>
-              Status
-            </label>
-            <select id="status" class="form-control" required>
-              <option value="Em andamento">Em andamento</option>
-              <option value="Concluído">Concluído</option>
-              <option value="Não Concluído">Não Concluído</option>
-            </select>
-            <div class="error-message" id="erro-status">Campo obrigatório</div>
-          </div>
-          
-          <div class="form-group">
-            <label class="form-label required">
-              <i class="fas fa-calendar-check"></i>
-              Evento
-            </label>
-            <select id="evento" class="form-control" required>
-              <option value="">-- Selecione --</option>
-              <!-- ⭐⭐ NOVOS EVENTOS DO FUNIL ⭐⭐ -->
-              <option value="Marco zero - Cadastro no formulário de prospecção e envio da proposta">Marco zero - Cadastro no formulário de prospecção e envio da proposta</option>
-              <option value="Dia 01 - Prova social + conceito">Dia 01 - Prova social + conceito</option>
-              <option value="Dia 03 - Ligação direta">Dia 03 - Ligação direta</option>
-              <option value="Dia 05 - Mensagem de persistência">Dia 05 - Mensagem de persistência</option>
-              <option value="Dia 07 - Encerramento elegante">Dia 07 - Encerramento elegante</option>
-              <option value="" disabled>─── Eventos Antigos ───</option>
-              <!-- EVENTOS ANTIGOS MANTIDOS -->
-              <option value="Cadastro inicial">Cadastro inicial</option>
-              <option value="Envio de WhatsApp">Envio de WhatsApp</option>
-              <option value="Envio de boleto">Envio de boleto</option>
-              <option value="Ligação realizada">Ligação realizada</option>
-              <option value="Reunião agendada">Reunião agendada</option>
-              <option value="Proposta enviada">Proposta enviada</option>
-              <option value="Aguardando retorno">Aguardando retorno</option>
-              <option value="Negociação em andamento">Negociação em andamento</option>
-              <option value="Contrato assinado">Contrato assinado</option>
-              <option value="Cliente interessado">Cliente interessado</option>
-              <option value="Cliente não interessado">Cliente não interessado</option>
-              <option value="Solicitou mais informações">Solicitou mais informações</option>
-              <option value="Agendamento de demonstração">Agendamento de demonstração</option>
-              <option value="Follow-up necessário">Follow-up necessário</option>
-              <option value="Telefone alterado">Telefone alterado</option>
-              <option value="Fornecedor alterado">Fornecedor alterado</option>
-              <option value="Quantidade de lojas alterada">Quantidade de lojas alterada</option>
-            </select>
-            <div class="error-message" id="erro-evento">Campo obrigatório</div>
-          </div>
-        </div>
-        
-        <div class="form-group">
-          <label class="form-label required">
-            <i class="fas fa-sticky-note"></i>
-            Observação
-          </label>
-          <textarea id="observacao" class="form-control" required placeholder="Descreva detalhadamente a tratativa realizada..."></textarea>
-          <div class="error-message" id="erro-observacao">Campo obrigatório</div>
-        </div>
-        
-        <div class="form-group" id="defasagem-info" style="display: none;">
-          <label class="form-label">
-            <i class="fas fa-clock"></i>
-            Defasagem
-          </label>
-          <div class="defasagem-badge">
-            <i class="fas fa-exclamation-triangle"></i>
-            <span id="defasagem-dias">0</span> dias sem contato
-          </div>
-        </div>
 
-        <!-- ⭐⭐ NOVA INFO: DATA RETORNO CLIENTE ⭐⭐ -->
-        <div class="form-group" id="data-retorno-info" style="display: none;">
-          <label class="form-label">
-            <i class="fas fa-calendar-day"></i>
-            Data retorno cliente
-          </label>
-          <div class="data-retorno-info">
-            <i class="fas fa-calendar"></i>
-            <span id="data-retorno-dias">Não informada</span>
+      <!-- SEÇÃO: TODAS AS LOJAS (NOVA) -->
+      <div class="lojas-container todas" id="secaoTodas" style="display: none;">
+        <div class="filtro-container">
+          <div class="filtro-header">
+            <div class="filtro-title">
+              <i class="fas fa-store"></i>
+              Todas as Lojas
+            </div>
+            <div class="filtro-pesquisa">
+              <input type="text" id="pesquisaTodas" placeholder="Pesquisar lojas..." oninput="filtrarTodasLojas()">
+              <span class="contador-lojas" id="contadorTodas">0 lojas</span>
+            </div>
+            <div class="filtro-ordenacao">
+  <select id="ordenacaoTodas" onchange="filtrarPorStatus()">
+    <option value="todas">Todas as Lojas</option>
+    <option value="alfabetica">Ordenar Alfabeticamente</option>
+    <option value="Em andamento">Em andamento</option>
+    <option value="Concluído">Concluído</option>
+    <option value="Não Concluído">Não Concluído</option>
+  </select>
+</div>
           </div>
         </div>
-      </div>
-      
-      <!-- ⭐⭐ SEÇÃO DE LOJAS CADASTRADAS ⭐⭐ -->
-      <div class="lojas-container" id="secaoLojas" style="display: none;">
-        <div class="card-header">
-          <i class="fas fa-store"></i>
-          <h2 class="card-title">Lojas com Defasagem</h2>
-        </div>
-        <div class="lojas-grid" id="gridLojas">
-          <!-- As lojas serão carregadas aqui dinamicamente -->
+        <div class="lojas-grid" id="gridTodas">
+          <!-- Todas as lojas serão carregadas aqui -->
         </div>
       </div>
       
+      <!-- BOTÕES DE AÇÃO -->
       <div class="btn-group">
         <button type="button" class="btn btn-primary" onclick="cadastrarLoja()" id="btnCadastrar">
           <i class="fas fa-plus-circle"></i>
           Cadastrar Loja
         </button>
-        <button type="button" class="btn btn-warning" onclick="atualizarRegistro()" id="btnAtualizar" style="display: none;">
-          <i class="fas fa-save"></i>
-          Atualizar Registro
-        </button>
       </div>
       
+      <!-- MENSAGENS DO SISTEMA -->
       <div id="messageSuccess" class="message success" style="display: none;">
         <i class="fas fa-check-circle"></i>
         <span></span>
@@ -985,54 +1492,322 @@
     let lojaExiste = false;
     let registroId = null;
     let todasLojas = [];
+    let lojasDefasagem = [];
+    let lojasAgendadas = [];
+    let todasLojasCompletas = [];
+
+    // ✅ LISTA DE EVENTOS ORGANIZADA POR CATEGORIAS
+    const eventosFunil = [
+      "Dia 01 - Prova social + conceito",
+      "Dia 03 - Ligação direta", 
+      "Dia 05 - Mensagem de persistência",
+      "Dia 07 - Encerramento elegante"
+    ];
+
+    const outrosEventos = [
+      "Aguardando Aceite da Loja",
+      "Aguardando Aceite do Fornecedor", 
+      "Aguardando Documentos",
+      "Aguardando retorno",
+      "Agendamento de demonstração",
+      "Cliente interessado",
+      "Cliente não interessado",
+      "Condição Especial",
+      "Contrato assinado",
+      "Contrato da Sim pendente de assinatura",
+      "Desistiu",
+      "Documentação Incompleta",
+      "Em Implantação",
+      "Em Treinamento",
+      "Envio de boleto",
+      "Envio de WhatsApp",
+      "Follow-up necessário",
+      "Fornecedor alterado",
+      "Ligação realizada",
+      "Negociação em andamento",
+      "Pagamento Efetuado",
+      "Pagamento Pendente",
+      "Proposta enviada",
+      "Quantidade de lojas alterada",
+      "Recado Registrado",
+      "Reunião agendada",
+      "Sem Retorno",
+      "Solicitou mais informações",
+      "Telefone alterado"
+    ].sort(); // Ordena alfabeticamente
 
     // Quando a página carrega
     document.addEventListener("DOMContentLoaded", function() {
       console.log("🚀 Página carregada!");
       carregarLojasParaAutocomplete();
       inicializarMultiSelect();
+      inicializarEventos(); // ✅ INICIALIZA OS EVENTOS
+      validarAdesao(); // ✅ INICIALIZA A VALIDAÇÃO DA ADESÃO
     });
+function validarAdesao() {
+  const adesao = document.getElementById('adesao');
+  const formaPagamento = document.getElementById('forma_pagamento');
+  const parcelas = document.getElementById('parcelas');
+  const dataPagamentoAdesao = document.getElementById('data_pagamento_adesao');
+  const labelDataPagamento = document.getElementById('label-data-pagamento-adesao');
+  
+  const adesaoValor = parseInt(adesao.value);
+  
+  console.log("💰 Validando adesão - Valor:", adesaoValor);
+  
+  if (adesaoValor === 0) {
+    // ✅ ADESÃO = R$ 0,00
+    formaPagamento.value = 'ISENTO';
+    parcelas.value = 'ISENTO';
+    
+    // BLOQUEAR CAMPOS
+    formaPagamento.disabled = true;
+    parcelas.disabled = true;
+    dataPagamentoAdesao.disabled = true;
+    
+    // REMOVER OBRIGATORIEDADE E ERROS
+    labelDataPagamento.classList.remove('required');
+    dataPagamentoAdesao.required = false;
+    
+    // REMOVER MENSAGENS DE ERRO
+    document.getElementById('erro-data_pagamento_adesao').style.display = 'none';
+    document.getElementById('erro-forma_pagamento').style.display = 'none'; 
+    document.getElementById('erro-parcelas').style.display = 'none';
+    
+    // REMOVER ESTILOS DE ERRO
+    dataPagamentoAdesao.classList.remove('error');
+    formaPagamento.classList.remove('error');
+    parcelas.classList.remove('error');
+    
+    // LIMPAR DATA
+    dataPagamentoAdesao.value = '';
+    
+  } else {
+    // ✅ ADESÃO > R$ 0,00
+    // DESBLOQUEAR CAMPOS
+    formaPagamento.disabled = false;
+    parcelas.disabled = false;
+    dataPagamentoAdesao.disabled = false;
+    
+    // ADICIONAR OBRIGATORIEDADE
+    labelDataPagamento.classList.add('required');
+    dataPagamentoAdesao.required = true;
+    
+    // SE ESTAVA "ISENTO", LIMPAR PARA O USUÁRIO SELECIONAR
+    if (formaPagamento.value === 'ISENTO') {
+      formaPagamento.value = '';
+    }
+    if (parcelas.value === 'ISENTO') {
+      parcelas.value = '';
+    }
+  }
+}
 
-    // ⭐⭐ NOVA FUNÇÃO: MOSTRAR TODAS AS LOJAS (APENAS > 2 DIAS) ⭐⭐
-    function mostrarTodasLojas() {
-      console.log("🏪 Buscando lojas com defasagem > 2 dias...");
+    // ✅ FUNÇÃO: INICIALIZAR LISTA DE EVENTOS
+    function inicializarEventos() {
+      const eventoInput = document.getElementById('evento');
+      const suggestionsEvento = document.getElementById('suggestions-evento');
       
-      const btnVerLojas = document.getElementById('btnVerLojas');
-      btnVerLojas.innerHTML = '<div class="loading"><div class="spinner"></div> Carregando...</div>';
-      btnVerLojas.disabled = true;
+      // Preencher sugestões com todos os eventos
+      atualizarSugestoesEventos('');
+      
+      eventoInput.addEventListener('focus', function() {
+        atualizarSugestoesEventos('');
+        suggestionsEvento.style.display = 'block';
+      });
+    }
+
+    // ✅ FUNÇÃO: FILTRAR EVENTOS
+    function filtrarEventos(termo) {
+      atualizarSugestoesEventos(termo);
+    }
+
+    // ✅ FUNÇÃO: ATUALIZAR SUGESTÕES DE EVENTOS COM CATEGORIAS
+    function atualizarSugestoesEventos(termo) {
+      const suggestionsEvento = document.getElementById('suggestions-evento');
+      suggestionsEvento.innerHTML = '';
+      
+      let eventosFunilFiltrados = eventosFunil;
+      let outrosEventosFiltrados = outrosEventos;
+      
+      if (termo.trim() !== '') {
+        eventosFunilFiltrados = eventosFunil.filter(evento => 
+          evento.toLowerCase().includes(termo.toLowerCase())
+        );
+        outrosEventosFiltrados = outrosEventos.filter(evento => 
+          evento.toLowerCase().includes(termo.toLowerCase())
+        );
+      }
+      
+      let temResultados = false;
+      
+      // ✅ EVENTOS DO FUNIL
+      if (eventosFunilFiltrados.length > 0) {
+        temResultados = true;
+        const section = document.createElement('div');
+        section.className = 'suggestion-section';
+        section.textContent = '🎯 EVENTOS DO FUNIL';
+        suggestionsEvento.appendChild(section);
+        
+        eventosFunilFiltrados.forEach(evento => {
+          const item = document.createElement('div');
+          item.className = 'suggestion-item';
+          item.textContent = evento;
+          item.onclick = function() {
+            document.getElementById('evento').value = evento;
+            suggestionsEvento.style.display = 'none';
+          };
+          suggestionsEvento.appendChild(item);
+        });
+      }
+      
+      // ✅ OUTROS EVENTOS
+      if (outrosEventosFiltrados.length > 0) {
+        temResultados = true;
+        const section = document.createElement('div');
+        section.className = 'suggestion-section';
+        section.textContent = '📋 OUTROS EVENTOS';
+        suggestionsEvento.appendChild(section);
+        
+        outrosEventosFiltrados.forEach(evento => {
+          const item = document.createElement('div');
+          item.className = 'suggestion-item';
+          item.textContent = evento;
+          item.onclick = function() {
+            document.getElementById('evento').value = evento;
+            suggestionsEvento.style.display = 'none';
+          };
+          suggestionsEvento.appendChild(item);
+        });
+      }
+      
+      if (!temResultados) {
+        const item = document.createElement('div');
+        item.className = 'suggestion-item';
+        item.textContent = 'Nenhum evento encontrado';
+        suggestionsEvento.appendChild(item);
+      }
+    }
+
+    // ✅ FUNÇÃO: VALIDAR STATUS (PONTO 1)
+    function validarStatus() {
+      const status = document.getElementById('status').value;
+      const defasagemInfo = document.getElementById('defasagem-info');
+      
+      // ✅ PONTO 1: Parar defasagem quando status for "Concluído" ou "Não Concluído"
+      if (status === 'Concluído' || status === 'Não Concluído') {
+        defasagemInfo.style.display = 'none';
+        // Aqui você pode adicionar lógica adicional para parar o cálculo de defasagem
+        console.log("🛑 Defasagem parada - Status:", status);
+      } else {
+        defasagemInfo.style.display = 'block';
+      }
+    }
+
+    // ⭐⭐ FUNÇÃO: CADASTRAR LOJA - ADICIONAR ESTA FUNÇÃO ⭐⭐
+function cadastrarLoja() {
+    console.log("🚀 CLICOU EM CADASTRAR LOJA!");
+    
+    // 🔥 CORREÇÃO: VALIDAR FORMULÁRIO ANTES DE CADASTRAR
+    if (!validarFormulario()) {
+        console.log("❌ Validação do formulário falhou - cadastro bloqueado");
+        return;
+    }
+    
+    console.log("✅ Validação passou - prosseguindo com cadastro...");
+    
+    const dados = coletarDadosFormulario();
+    dados.acao = 'cadastrar';
+    
+    console.log("📤 Dados para cadastro:", dados);
+    
+    // ⬇️ MOSTRAR LOADING
+    showLoading('Cadastrando loja...');
+    
+    const btnCadastrar = document.getElementById('btnCadastrar');
+    btnCadastrar.innerHTML = '<div class="loading"><div class="spinner"></div> Cadastrando...</div>';
+    btnCadastrar.disabled = true;
+    
+    google.script.run
+        .withSuccessHandler(function(res) {
+            hideLoading();
+            
+            btnCadastrar.innerHTML = '<i class="fas fa-plus-circle"></i> Cadastrar Loja';
+            btnCadastrar.disabled = false;
+            
+            console.log("📥 Resposta do cadastro:", res);
+            
+            if(res && res.success) {
+                showMessage('success', res.message);
+                console.log("✅ Cadastro realizado com sucesso!");
+                
+                // Limpar formulário após cadastro bem-sucedido
+                setTimeout(() => {
+                    limparDados();
+                }, 2000);
+                
+            } else {
+                showMessage('error', res?.message || 'Erro ao cadastrar loja');
+                console.log("❌ Erro no cadastro:", res?.message);
+            }
+        })
+        .withFailureHandler(function(error) {
+            hideLoading();
+            
+            btnCadastrar.innerHTML = '<i class="fas fa-plus-circle"></i> Cadastrar Loja';
+            btnCadastrar.disabled = false;
+            
+            console.error("❌ Erro na comunicação:", error);
+            showMessage('error', '❌ Erro ao cadastrar: ' + error.message);
+        })
+        .salvarProspeccao(dados);
+}
+
+    // ⭐⭐ FUNÇÃO: MOSTRAR LOJAS COM DEFASAGEM ⭐⭐
+    function mostrarLojasDefasagem() {
+      console.log("🏪 Buscando lojas com defasagem ≥ 2 dias...");
+      
+      const btnVerDefasagem = document.getElementById('btnVerDefasagem');
+      btnVerDefasagem.innerHTML = '<div class="loading"><div class="spinner"></div> Carregando...</div>';
+      btnVerDefasagem.disabled = true;
+
+      // Ocultar outras seções
+      document.getElementById('secaoAgendadas').style.display = 'none';
+      document.getElementById('secaoTodas').style.display = 'none';
 
       google.script.run
-        .withSuccessHandler(function(lojasComDados) {
-          btnVerLojas.innerHTML = '<i class="fas fa-store"></i> Ver Lojas';
-          btnVerLojas.disabled = false;
+        .withSuccessHandler(function(lojasComDefasagem) {
+          btnVerDefasagem.innerHTML = '<i class="fas fa-clock"></i> Ver Lojas com Defasagem';
+          btnVerDefasagem.disabled = false;
           
-          if (lojasComDados && lojasComDados.length > 0) {
-            exibirLojas(lojasComDados);
+          if (lojasComDefasagem && lojasComDefasagem.length > 0) {
+            lojasDefasagem = lojasComDefasagem;
+            exibirLojasDefasagem(lojasComDefasagem);
             
-            // Scroll para a seção de lojas
-            document.getElementById('secaoLojas').scrollIntoView({ 
+            // Scroll para a seção de defasagem
+            document.getElementById('secaoDefasagem').scrollIntoView({ 
               behavior: 'smooth', 
               block: 'start' 
             });
             
-            showMessage('success', `✅ ${lojasComDados.length} lojas com defasagem > 2 dias carregadas!`);
+            showMessage('success', `✅ ${lojasComDefasagem.length} lojas com defasagem ≥ 2 dias encontradas!`);
           } else {
-            showMessage('info', '🎉 Nenhuma loja com defasagem maior que 2 dias encontrada!');
-            document.getElementById('secaoLojas').style.display = 'none';
+            showMessage('info', '🎉 Nenhuma loja com defasagem ≥ 2 dias encontrada!');
+            document.getElementById('secaoDefasagem').style.display = 'none';
           }
         })
         .withFailureHandler(function(error) {
-          btnVerLojas.innerHTML = '<i class="fas fa-store"></i> Ver Lojas';
-          btnVerLojas.disabled = false;
+          btnVerDefasagem.innerHTML = '<i class="fas fa-clock"></i> Ver Lojas com Defasagem';
+          btnVerDefasagem.disabled = false;
           showMessage('error', '❌ Erro ao carregar lojas: ' + error.message);
         })
-        .buscarTodasLojasComDados();
+        .buscarLojasComDefasagem();
     }
 
-    // ⭐⭐ NOVA FUNÇÃO: EXIBIR LOJAS EM GRID ⭐⭐
-    function exibirLojas(lojas) {
-      const gridLojas = document.getElementById('gridLojas');
-      const secaoLojas = document.getElementById('secaoLojas');
+    // ⭐⭐ FUNÇÃO: EXIBIR LOJAS COM DEFASAGEM ⭐⭐
+    function exibirLojasDefasagem(lojas) {
+      const gridDefasagem = document.getElementById('gridDefasagem');
+      const secaoDefasagem = document.getElementById('secaoDefasagem');
       
       // Ordenar lojas por defasagem (maior para menor)
       lojas.sort((a, b) => {
@@ -1041,101 +1816,733 @@
         return defasagemB - defasagemA;
       });
       
-      gridLojas.innerHTML = '';
+      gridDefasagem.innerHTML = '';
       
       lojas.forEach(loja => {
-        const card = criarCardLoja(loja);
-        gridLojas.appendChild(card);
+        const card = criarCardDefasagem(loja);
+        gridDefasagem.appendChild(card);
       });
       
-      secaoLojas.style.display = 'block';
+      secaoDefasagem.style.display = 'block';
+      atualizarContador('contadorDefasagem', lojas.length);
     }
 
-    // ⭐⭐ NOVA FUNÇÃO: CRIAR CARD DA LOJA ⭐⭐
-    function criarCardLoja(loja) {
-      const card = document.createElement('div');
+    // ⭐⭐ FUNÇÃO: FILTRAR LOJAS COM DEFASAGEM ⭐⭐
+    function filtrarLojasDefasagem() {
+      const termo = document.getElementById('pesquisaDefasagem').value.toLowerCase();
+      const lojasFiltradas = lojasDefasagem.filter(loja => 
+        loja.loja && loja.loja.toLowerCase().includes(termo)
+      );
       
-      // Determinar classe CSS baseada no status
-      let statusClass = '';
-      let statusText = '';
+      const gridDefasagem = document.getElementById('gridDefasagem');
+      gridDefasagem.innerHTML = '';
       
-      switch(loja.status) {
-        case 'Em andamento':
-          statusClass = 'em-andamento';
-          statusText = 'Em Andamento';
-          break;
-        case 'Concluído':
-          statusClass = 'concluido';
-          statusText = 'Concluído';
-          break;
-        case 'Não Concluído':
-          statusClass = 'nao-concluido';
-          statusText = 'Não Concluído';
-          break;
-        default:
-          statusClass = 'em-andamento';
-          statusText = loja.status || 'Em Andamento';
+      lojasFiltradas.forEach(loja => {
+        const card = criarCardDefasagem(loja);
+        gridDefasagem.appendChild(card);
+      });
+      
+      atualizarContador('contadorDefasagem', lojasFiltradas.length);
+    }
+
+    // ⭐⭐ FUNÇÃO: ORDENAR LOJAS COM DEFASAGEM ⭐⭐
+    function ordenarLojasDefasagem() {
+      const criterio = document.getElementById('ordenacaoDefasagem').value;
+      let lojasOrdenadas = [...lojasDefasagem];
+      
+      if (criterio === 'alfabetica') {
+        lojasOrdenadas.sort((a, b) => (a.loja || '').localeCompare(b.loja || ''));
+      } else {
+        lojasOrdenadas.sort((a, b) => {
+          const defasagemA = parseInt(a.defasagem) || 0;
+          const defasagemB = parseInt(b.defasagem) || 0;
+          return defasagemB - defasagemA;
+        });
       }
       
-      card.className = `loja-card ${statusClass}`;
+      const gridDefasagem = document.getElementById('gridDefasagem');
+      gridDefasagem.innerHTML = '';
       
-      // Extrair apenas o número da defasagem (remover "dias")
-      const defasagemNumero = loja.defasagem ? loja.defasagem.toString().replace(' dias', '').replace(' dia', '') : '0';
-      
-      card.innerHTML = `
+      lojasOrdenadas.forEach(loja => {
+        const card = criarCardDefasagem(loja);
+        gridDefasagem.appendChild(card);
+      });
+    }
+
+// ⭐⭐ FUNÇÃO: CRIAR CARD PARA LOJAS COM DEFASAGEM ⭐⭐
+function criarCardDefasagem(loja) {
+    const card = document.createElement('div');
+    
+    // Determinar classe CSS baseada no status
+    let statusClass = '';
+    let statusText = '';
+    
+    switch(loja.status) {
+        case 'Em andamento':
+            statusClass = 'em-andamento';
+            statusText = 'Em Andamento';
+            break;
+        case 'Concluído':
+            statusClass = 'concluido';
+            statusText = 'Concluído';
+            break;
+        case 'Não Concluído':
+            statusClass = 'nao-concluido';
+            statusText = 'Não Concluído';
+            break;
+        default:
+            statusClass = 'em-andamento';
+            statusText = loja.status || 'Em Andamento';
+    }
+    
+    card.className = `loja-card ${statusClass}`;
+    
+    // Extrair apenas o número da defasagem (remover "dias")
+    const defasagemNumero = loja.defasagem ? loja.defasagem.toString().replace(' dias', '').replace(' dia', '') : '0';
+    
+    card.innerHTML = `
         <div class="loja-header">
-          <div style="flex: 1;">
-            <div class="loja-nome">${loja.loja || 'N/A'}</div>
-            <div class="loja-info">
-              <strong>Representante:</strong> ${loja.representante || 'N/A'}
+            <div style="flex: 1;">
+                <div class="loja-nome">${loja.loja || 'N/A'}</div>
+                <div class="loja-info">
+                    <strong>Representante:</strong> ${loja.representante || 'N/A'}
+                </div>
             </div>
-          </div>
-          <span class="loja-status status-${statusClass.replace('-', '-')}">${statusText}</span>
+            <span class="loja-status status-${statusClass.replace('-', '-')}">${statusText}</span>
         </div>
         
         <div class="loja-info">
-          <strong>Defasagem:</strong> 
-          <span class="loja-defasagem">
-            <i class="fas fa-clock"></i>
-            ${defasagemNumero} dias
-          </span>
+            <strong>Defasagem:</strong> 
+            <span class="loja-defasagem">
+                <i class="fas fa-clock"></i>
+                ${defasagemNumero} dias
+            </span>
         </div>
         
         ${loja.data_retorno_cliente && loja.data_retorno_cliente !== 'N/A' ? `
         <div class="loja-info">
-          <strong>Data retorno:</strong> 
-          <span class="data-retorno-info">
-            <i class="fas fa-calendar"></i>
-            ${loja.data_retorno_cliente}
-          </span>
+            <strong>Data retorno:</strong> 
+            <span class="data-retorno-info">
+                <i class="fas fa-calendar"></i>
+                ${loja.data_retorno_cliente}
+            </span>
         </div>
         ` : ''}
         
         <div class="loja-info">
-          <strong>Último Evento:</strong> ${loja.evento || 'N/A'}
+            <strong>Último Evento:</strong> ${loja.evento || 'N/A'}
         </div>
         
         <div class="loja-info">
-          <strong>Usuário:</strong> ${loja.usuario || 'N/A'}
+            <strong>Usuário:</strong> ${loja.usuario || 'N/A'}
         </div>
         
         <div class="loja-ultimo-evento">
-          <i class="fas fa-calendar"></i>
-          Último acionamento: ${loja.data_ultimo_evento || 'N/A'}
+            <i class="fas fa-calendar"></i>
+            Último acionamento: ${loja.data_ultimo_evento || 'N/A'}
         </div>
-      `;
-      
-      // Adicionar clique para carregar dados da loja
-      card.style.cursor = 'pointer';
-      card.addEventListener('click', function() {
-        document.getElementById('loja').value = loja.loja;
-        buscarLoja();
         
-        // Scroll para o topo
-        window.scrollTo({ top: 0, behavior: 'smooth' });
+        ${loja.tipo_calculo ? `
+        <div class="tipo-calculo">
+            Cálculo: ${loja.tipo_calculo === 'data_retorno' ? 'Data retorno cliente' : 'Data último evento'}
+        </div>
+        ` : ''}41 of 91
+
+        
+        <div class="loja-actions" style="margin-top: 15px; display: flex; gap: 10px;">
+            <button type="button" class="btn-visualizar" onclick="visualizarLoja('${loja.id || ''}')" 
+                    style="padding: 8px 12px; background: var(--info); color: white; border: none; border-radius: 5px; cursor: pointer; font-size: 0.9rem;">
+                <i class="fas fa-eye"></i> Visualizar
+            </button>
+            <button type="button" class="btn-editar" onclick="editarLoja('${loja.id || ''}')"
+                    style="padding: 8px 12px; background: var(--warning); color: black; border: none; border-radius: 5px; cursor: pointer; font-size: 0.9rem;">
+                <i class="fas fa-edit"></i> Editar
+            </button>
+        </div>
+    `;
+    
+    // Adicionar clique para carregar dados da loja
+    card.style.cursor = 'pointer';
+    card.addEventListener('click', function(event) {
+        // Impede que o clique no card seja acionado quando clicar nos botões
+        if (!event.target.closest('.loja-actions')) {
+            document.getElementById('loja').value = loja.loja;
+            buscarLoja();
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+    });
+    
+    return card;
+}
+
+    // ⭐⭐ FUNÇÃO: MOSTRAR LOJAS AGENDADAS ⭐⭐
+  // ⭐⭐ FUNÇÃO: MOSTRAR LOJAS AGENDADAS - MELHORADA ⭐⭐
+function mostrarLojasAgendadas() {
+    console.log("📅 Buscando lojas agendadas...");
+
+    const btnVerAgendadas = document.getElementById('btnVerAgendadas');
+    const btnOriginalHTML = btnVerAgendadas.innerHTML;
+    
+    btnVerAgendadas.innerHTML = '<div class="loading"><div class="spinner"></div> Buscando agendamentos...</div>';
+    btnVerAgendadas.disabled = true;
+
+    // Ocultar outras seções
+    document.getElementById('secaoDefasagem').style.display = 'none';
+    document.getElementById('secaoTodas').style.display = 'none';
+
+    google.script.run
+        .withSuccessHandler(function(lojasRecebidas) {
+            console.log("✅ SUCESSO - Lojas agendadas recebidas:", lojasRecebidas);
+            
+            btnVerAgendadas.innerHTML = btnOriginalHTML;
+            btnVerAgendadas.disabled = false;
+
+            // ⚠️ CORREÇÃO: Garantir que a variável global seja atualizada
+            lojasAgendadas = lojasRecebidas && Array.isArray(lojasRecebidas) ? lojasRecebidas : [];
+            
+            if (lojasAgendadas.length > 0) {
+                console.log("🎉 " + lojasAgendadas.length + " lojas agendadas encontradas!");
+                exibirLojasAgendadas(lojasAgendadas);
+                
+                // Scroll para a seção de agendadas
+                document.getElementById('secaoAgendadas').scrollIntoView({ 
+                    behavior: 'smooth', 
+                    block: 'start' 
+                });
+                
+                showMessage('success', `✅ ${lojasAgendadas.length} lojas agendadas encontradas!`);
+            } else {
+                console.log("📝 Nenhuma loja agendada encontrada");
+                exibirLojasAgendadas([]);
+                showMessage('info', '📝 Nenhuma loja agendada encontrada');
+            }
+        })
+        .withFailureHandler(function(error) {
+            console.error("❌ ERRO NA COMUNICAÇÃO:", error);
+            btnVerAgendadas.innerHTML = btnOriginalHTML;
+            btnVerAgendadas.disabled = false;
+            
+            // ⚠️ CORREÇÃO: Resetar variável em caso de erro
+            lojasAgendadas = [];
+            
+            showMessage('error', '❌ Erro ao carregar lojas agendadas: ' + error.message);
+        })
+        .buscarLojasAgendadas();
+}
+
+    // ⭐⭐ FUNÇÃO: EXIBIR LOJAS AGENDADAS ⭐⭐
+    function exibirLojasAgendadas(lojas) {
+      console.log("🎨 Exibindo lojas agendadas:", lojas);
+
+      const gridAgendadas = document.getElementById('gridAgendadas');
+      const secaoAgendadas = document.getElementById('secaoAgendadas');
+
+      // Limpa conteúdo antigo
+      gridAgendadas.innerHTML = '';
+
+      if (!lojas || lojas.length === 0) {
+        gridAgendadas.innerHTML = `
+          <div style="grid-column: 1 / -1; text-align: center; padding: 40px; color: var(--gray);">
+            <i class="fas fa-calendar-times" style="font-size: 3rem; margin-bottom: 15px;"></i>
+            <h3>Nenhuma loja agendada encontrada</h3>
+            <p>Não há lojas com data de retorno cliente definida.</p>
+          </div>
+        `;
+        secaoAgendadas.style.display = 'block';
+        atualizarContador('contadorAgendadas', 0);
+        return;
+      }
+
+      // Preenche o grid com cards
+      lojas.forEach(loja => {
+        const card = criarCardAgendada(loja);
+        gridAgendadas.appendChild(card);
+      });
+
+      secaoAgendadas.style.display = 'block';
+      atualizarContador('contadorAgendadas', lojas.length);
+      console.log("✅ Tabela de lojas agendadas exibida com sucesso!");
+    }
+
+    // ⭐⭐ FUNÇÃO: FILTRAR LOJAS AGENDADAS ⭐⭐
+    // ⭐⭐ FUNÇÃO: FILTRAR LOJAS AGENDADAS - CORRIGIDA ⭐⭐
+function filtrarLojasAgendadas() {
+    const termo = document.getElementById('pesquisaAgendadas').value.toLowerCase();
+    
+    // ⚠️ CORREÇÃO: Verificar se lojasAgendadas existe e é um array
+    if (!lojasAgendadas || !Array.isArray(lojasAgendadas)) {
+        console.log("⚠️ Nenhuma loja agendada carregada para filtrar");
+        return;
+    }
+    
+    const lojasFiltradas = lojasAgendadas.filter(loja => {
+        // ⚠️ CORREÇÃO: Verificar se loja e loja.loja existem
+        if (!loja || !loja.loja) return false;
+        return loja.loja.toLowerCase().includes(termo);
+    });
+    
+    const gridAgendadas = document.getElementById('gridAgendadas');
+    gridAgendadas.innerHTML = '';
+    
+    if (lojasFiltradas.length === 0) {
+        gridAgendadas.innerHTML = `
+            <div style="grid-column: 1 / -1; text-align: center; padding: 40px; color: var(--gray);">
+                <i class="fas fa-search" style="font-size: 3rem; margin-bottom: 15px;"></i>
+                <h3>Nenhuma loja encontrada</h3>
+                <p>Nenhuma loja corresponde ao filtro "${termo}"</p>
+            </div>
+        `;
+    } else {
+        lojasFiltradas.forEach(loja => {
+            const card = criarCardAgendada(loja);
+            gridAgendadas.appendChild(card);
+        });
+    }
+    
+    atualizarContador('contadorAgendadas', lojasFiltradas.length);
+}
+
+    // ⭐⭐ FUNÇÃO: ORDENAR LOJAS AGENDADAS ⭐⭐
+    function ordenarLojasAgendadas() {
+      const criterio = document.getElementById('ordenacaoAgendadas').value;
+      let lojasOrdenadas = [...lojasAgendadas];
+      
+      if (criterio === 'alfabetica') {
+        lojasOrdenadas.sort((a, b) => (a.loja || '').localeCompare(b.loja || ''));
+      } else {
+        // Ordenar por data de retorno (mais próxima primeiro)
+        lojasOrdenadas.sort((a, b) => {
+          const dataA = new Date(a.data_retorno_cliente || '9999-12-31');
+          const dataB = new Date(b.data_retorno_cliente || '9999-12-31');
+          return dataA - dataB;
+        });
+      }
+      
+      const gridAgendadas = document.getElementById('gridAgendadas');
+      gridAgendadas.innerHTML = '';
+      
+      lojasOrdenadas.forEach(loja => {
+        const card = criarCardAgendada(loja);
+        gridAgendadas.appendChild(card);
+      });
+    }
+// ⭐⭐ FUNÇÃO: CRIAR CARD PARA LOJAS AGENDADAS ⭐⭐ - CORES CORRIGIDAS
+function criarCardAgendada(loja) {
+    const card = document.createElement('div');
+    
+    // 🔥🔥🔥 CORREÇÃO: DETERMINAR CLASSE CSS CORRETA BASEADA NO STATUS
+    let statusClass = '';
+    let statusText = '';
+    
+    switch(loja.status) {
+        case 'Em andamento':
+            statusClass = 'em-andamento'; // ✅ AMARELO
+            statusText = 'Em Andamento';
+            break;
+        case 'Concluído':
+            statusClass = 'concluido'; // ✅ VERDE
+            statusText = 'Concluído';
+            break;
+        case 'Não Concluído':
+            statusClass = 'nao-concluido'; // ✅ VERMELHO
+            statusText = 'Não Concluído';
+            break;
+        default:
+            statusClass = 'agendada'; // 🔵 AZUL para agendadas sem status específico
+            statusText = loja.status || 'Agendada';
+    }
+    
+    card.className = `loja-card ${statusClass}`;
+
+    // ⭐⭐ DEFASAGEM: se for <= 0, mostra "0 dias" ⭐⭐
+    const defasagemDisplay = loja.defasagem <= 0 ? 0 : loja.defasagem;
+
+    card.innerHTML = `
+        <div class="loja-header">
+            <div style="flex: 1;">
+                <div class="loja-nome">${loja.loja || 'N/A'}</div>
+                <div class="loja-info">
+                    <strong>Representante:</strong> ${loja.representante || 'N/A'}
+                </div>
+            </div>
+            <span class="loja-status status-${statusClass.replace('-', '-')}">${statusText}</span>
+        </div>
+
+        <div class="loja-info">
+            <strong>Data retorno:</strong> 
+            <span class="data-retorno-info">
+                <i class="fas fa-calendar"></i>
+                ${loja.data_retorno_cliente || 'N/A'}
+            </span>
+        </div>
+
+        <div class="loja-info">
+            <strong>Defasagem:</strong> 
+            <span class="loja-defasagem">
+                <i class="fas fa-clock"></i>
+                ${defasagemDisplay} dias
+            </span>
+        </div>
+
+        <div class="loja-info">
+            <strong>Último Evento:</strong> ${loja.evento || 'N/A'}
+        </div>
+
+        <div class="loja-info">
+            <strong>Usuário:</strong> ${loja.usuario || 'N/A'}
+        </div>
+
+        <div class="loja-ultimo-evento">
+            <i class="fas fa-calendar"></i>
+            Último acionamento: ${loja.data_ultimo_evento || 'N/A'}
+        </div>
+        
+        <div class="loja-actions" style="margin-top: 15px; display: flex; gap: 10px;">
+            <button type="button" class="btn-visualizar" onclick="visualizarLoja('${loja.id || ''}')" 
+                    style="padding: 8px 12px; background: var(--info); color: white; border: none; border-radius: 5px; cursor: pointer; font-size: 0.9rem;">
+                <i class="fas fa-eye"></i> Visualizar
+            </button>
+            <button type="button" class="btn-editar" onclick="editarLoja('${loja.id || ''}')"
+                    style="padding: 8px 12px; background: var(--warning); color: black; border: none; border-radius: 5px; cursor: pointer; font-size: 0.9rem;">
+                <i class="fas fa-edit"></i> Editar
+            </button>
+        </div>
+    `;
+
+    // Adicionar clique para carregar dados da loja
+    card.style.cursor = 'pointer';
+    card.addEventListener('click', function(event) {
+        // Impede que o clique no card seja acionado quando clicar nos botões
+        if (!event.target.closest('.loja-actions')) {
+            document.getElementById('loja').value = loja.loja;
+            buscarLoja();
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+    });
+
+    return card;
+}
+
+
+// ⭐⭐ FUNÇÃO: MOSTRAR TODAS AS LOJAS (NOVA) - CORRIGIDA ⭐⭐
+function mostrarTodasLojas() {
+    console.log("🏪 Buscando todas as lojas...");
+    
+    const btnVerTodas = document.getElementById('btnVerTodas');
+    const btnOriginalHTML = btnVerTodas.innerHTML;
+    
+    btnVerTodas.innerHTML = '<div class="loading"><div class="spinner"></div> Carregando...</div>';
+    btnVerTodas.disabled = true;
+
+    // Ocultar outras seções
+    document.getElementById('secaoDefasagem').style.display = 'none';
+    document.getElementById('secaoAgendadas').style.display = 'none';
+
+    google.script.run
+        .withSuccessHandler(function(todasLojas) {
+            console.log("✅ SUCESSO - Todas as lojas recebidas:", todasLojas);
+            
+            btnVerTodas.innerHTML = btnOriginalHTML;
+            btnVerTodas.disabled = false;
+            
+            if (todasLojas && Array.isArray(todasLojas) && todasLojas.length > 0) {
+                console.log("🎉 " + todasLojas.length + " lojas encontradas!");
+                todasLojasCompletas = todasLojas;
+                exibirTodasLojas(todasLojas);
+                
+                // Scroll para a seção de todas as lojas
+                document.getElementById('secaoTodas').scrollIntoView({ 
+                    behavior: 'smooth', 
+                    block: 'start' 
+                });
+                
+                showMessage('success', `✅ ${todasLojas.length} lojas encontradas!`);
+            } else {
+                console.log("📝 Nenhuma loja encontrada");
+                exibirTodasLojas([]);
+                showMessage('info', '📝 Nenhuma loja encontrada!');
+            }
+        })
+        .withFailureHandler(function(error) {
+            console.error("❌ ERRO NA COMUNICAÇÃO:", error);
+            btnVerTodas.innerHTML = btnOriginalHTML;
+            btnVerTodas.disabled = false;
+            showMessage('error', '❌ Erro ao carregar lojas: ' + error.message);
+        })
+        .buscarTodasLojasCompletas(); // ⭐⭐ AGORA ESTA FUNÇÃO EXISTE! ⭐⭐
+}
+
+    // ⭐⭐ FUNÇÃO: EXIBIR TODAS AS LOJAS ⭐⭐
+    function exibirTodasLojas(lojas) {
+      const gridTodas = document.getElementById('gridTodas');
+      const secaoTodas = document.getElementById('secaoTodas');
+      
+      // Ordenar lojas alfabeticamente por padrão
+      lojas.sort((a, b) => (a.loja || '').localeCompare(b.loja || ''));
+      
+      gridTodas.innerHTML = '';
+      
+      lojas.forEach(loja => {
+        const card = criarCardTodas(loja);
+        gridTodas.appendChild(card);
       });
       
-      return card;
+      secaoTodas.style.display = 'block';
+      atualizarContador('contadorTodas', lojas.length);
+    }
+
+
+  // ⭐⭐ FUNÇÃO: FILTRAR TODAS AS LOJAS - CORRIGIDA ⭐⭐
+function filtrarTodasLojas() {
+    const termo = document.getElementById('pesquisaTodas').value.toLowerCase();
+    const criterioStatus = document.getElementById('ordenacaoTodas').value;
+    
+    let lojasFiltradas = todasLojasCompletas.filter(loja => 
+        loja.loja && loja.loja.toLowerCase().includes(termo)
+    );
+    
+    // 🔥 CORREÇÃO: APLICA FILTRO DE STATUS COM NORMALIZAÇÃO
+    if (criterioStatus !== 'todas' && criterioStatus !== 'alfabetica') {
+        lojasFiltradas = lojasFiltradas.filter(loja => {
+            if (!loja.status) return false;
+            
+            // 🔥 NORMALIZAR STATUS (remove acentos, coloca maiúsculo)
+            const statusLoja = loja.status
+                .normalize('NFD').replace(/[\u0300-\u036f]/g, '') // Remove acentos
+                .toUpperCase()
+                .trim();
+                
+            const criterioNormalizado = criterioStatus
+                .normalize('NFD').replace(/[\u0300-\u036f]/g, '') // Remove acentos  
+                .toUpperCase()
+                .trim();
+            
+            return statusLoja === criterioNormalizado;
+        });
+    }
+    
+    // Ordena alfabeticamente se selecionado
+    if (criterioStatus === 'alfabetica') {
+        lojasFiltradas.sort((a, b) => (a.loja || '').localeCompare(b.loja || ''));
+    }
+    
+    const gridTodas = document.getElementById('gridTodas');
+    gridTodas.innerHTML = '';
+    
+    if (lojasFiltradas.length === 0) {
+        gridTodas.innerHTML = `
+            <div style="grid-column: 1 / -1; text-align: center; padding: 40px; color: var(--gray);">
+                <i class="fas fa-search" style="font-size: 3rem; margin-bottom: 15px;"></i>
+                <h3>Nenhuma loja encontrada</h3>
+                <p>Nenhuma loja corresponde aos filtros aplicados</p>
+            </div>
+        `;
+    } else {
+        lojasFiltradas.forEach(loja => {
+            const card = criarCardTodas(loja);
+            gridTodas.appendChild(card);
+        });
+    }
+    
+    atualizarContador('contadorTodas', lojasFiltradas.length);
+}
+
+// ⭐⭐ FUNÇÃO: FILTRAR POR STATUS - CORRIGIDA ⭐⭐
+function filtrarPorStatus() {
+    const criterio = document.getElementById('ordenacaoTodas').value;
+    let lojasFiltradas = [...todasLojasCompletas];
+    
+    console.log("🎯 Filtrando por:", criterio);
+    
+    if (criterio === 'todas') {
+        // Mostra todas as lojas sem filtro
+        lojasFiltradas = [...todasLojasCompletas];
+    } 
+    else if (criterio === 'alfabetica') {
+        // Ordena alfabeticamente
+        lojasFiltradas.sort((a, b) => (a.loja || '').localeCompare(b.loja || ''));
+    }
+    else {
+        // 🔥 CORREÇÃO: FILTRA POR STATUS COM NORMALIZAÇÃO
+        lojasFiltradas = todasLojasCompletas.filter(loja => {
+            if (!loja.status) return false;
+            
+            // Normaliza ambos os lados para comparação
+            const statusLoja = loja.status
+                .normalize('NFD').replace(/[\u0300-\u036f]/g, '') // Remove acentos
+                .toUpperCase()
+                .trim();
+                
+            const criterioNormalizado = criterio
+                .normalize('NFD').replace(/[\u0300-\u036f]/g, '') // Remove acentos  
+                .toUpperCase()
+                .trim();
+            
+            return statusLoja === criterioNormalizado;
+        });
+    }
+    
+    const gridTodas = document.getElementById('gridTodas');
+    gridTodas.innerHTML = '';
+    
+    if (lojasFiltradas.length === 0) {
+        gridTodas.innerHTML = `
+            <div style="grid-column: 1 / -1; text-align: center; padding: 40px; color: var(--gray);">
+                <i class="fas fa-search" style="font-size: 3rem; margin-bottom: 15px;"></i>
+                <h3>Nenhuma loja encontrada</h3>
+                <p>Não há lojas com status "${criterio}"</p>
+            </div>
+        `;
+    } else {
+        lojasFiltradas.forEach(loja => {
+            const card = criarCardTodas(loja);
+            gridTodas.appendChild(card);
+        });
+    }
+    
+    atualizarContador('contadorTodas', lojasFiltradas.length);
+}
+
+// ⭐⭐ FUNÇÃO: CRIAR CARD PARA TODAS AS LOJAS - CORRIGIDA ⭐⭐
+function criarCardTodas(loja) {
+    const card = document.createElement('div');
+    card.className = 'loja-card todas';
+
+    // 🔥 CORREÇÃO: DETERMINAR CLASSE CSS BASEADA NO STATUS (COM NORMALIZAÇÃO)
+    let statusClass = '';
+    let statusText = '';
+
+    // Normaliza o status para comparação
+    const statusNormalizado = String(loja.status).toUpperCase().trim();
+
+    if (statusNormalizado.includes('CONCLUIDO') && !statusNormalizado.includes('NAO') && !statusNormalizado.includes('NÃO')) {
+        statusClass = 'concluido';
+        statusText = 'Concluído';
+    } else if (statusNormalizado.includes('NAO CONCLUIDO') || statusNormalizado.includes('NÃO CONCLUÍDO')) {
+        statusClass = 'nao-concluido';
+        statusText = 'Não Concluído';
+    } else {
+        statusClass = 'em-andamento';
+        statusText = 'Em Andamento';
+    }
+
+    card.innerHTML = `
+        <div class="loja-header">
+            <div style="flex: 1;">
+                <div class="loja-nome">${loja.loja || 'N/A'}</div>
+                <div class="loja-info">
+                    <strong>Representante:</strong> ${loja.representante || 'N/A'}
+                </div>
+            </div>
+            <span class="loja-status status-${statusClass}">${statusText}</span>
+        </div>
+
+        <div class="loja-info">
+            <strong>Segmento:</strong> ${loja.segmento || 'N/A'}
+        </div>
+
+        <div class="loja-info">
+            <strong>Fornecedor:</strong> ${loja.fornecedor || 'N/A'}
+        </div>
+
+        <div class="loja-info">
+            <strong>Usuário:</strong> ${loja.usuario || 'N/A'}
+        </div>
+
+        ${loja.data_retorno_cliente && loja.data_retorno_cliente !== 'N/A' ? `
+        <div class="loja-info">
+            <strong>Data retorno:</strong> 
+            <span class="data-retorno-info">
+                <i class="fas fa-calendar"></i>
+                ${loja.data_retorno_cliente}
+            </span>
+        </div>
+        ` : ''}
+
+        <div class="loja-info">
+            <strong>Último Evento:</strong> ${loja.evento || 'N/A'}
+        </div>
+
+        <div class="loja-ultimo-evento">
+            <i class="fas fa-calendar"></i>
+            Último acionamento: ${loja.data_ultimo_evento || 'N/A'}
+        </div>
+        
+        <div class="loja-actions" style="margin-top: 15px; display: flex; gap: 10px;">
+            <button type="button" class="btn-visualizar" onclick="visualizarLoja('${loja.id || ''}')" 
+                    style="padding: 8px 12px; background: var(--info); color: white; border: none; border-radius: 5px; cursor: pointer; font-size: 0.9rem;">
+                <i class="fas fa-eye"></i> Visualizar
+            </button>
+            <button type="button" class="btn-editar" onclick="editarLoja('${loja.id || ''}')"
+                    style="padding: 8px 12px; background: var(--warning); color: black; border: none; border-radius: 5px; cursor: pointer; font-size: 0.9rem;">
+                <i class="fas fa-edit"></i> Editar
+            </button>
+        </div>
+    `;
+
+    // Adicionar classe CSS baseada no status para a borda lateral
+    card.classList.add(statusClass);
+
+    // Adicionar clique para carregar dados da loja
+    card.style.cursor = 'pointer';
+    card.addEventListener('click', function(event) {
+        // Impede que o clique no card seja acionado quando clicar nos botões
+        if (!event.target.closest('.loja-actions')) {
+            document.getElementById('loja').value = loja.loja;
+            buscarLoja();
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+    });
+
+    return card;
+}
+
+    // ⭐⭐ FUNÇÃO: ATUALIZAR CONTADOR DE LOJAS ⭐⭐
+    function atualizarContador(elementId, quantidade) {
+      const elemento = document.getElementById(elementId);
+      if (elemento) {
+        elemento.textContent = `${quantidade} loja${quantidade !== 1 ? 's' : ''}`;
+      }
+    }
+
+    // ⭐⭐ FUNÇÃO: FORÇAR ATUALIZAÇÃO DE DEFASAGENS ⭐⭐
+    function forcarAtualizacaoDefasagens() {
+      console.log("🔧 Acionando atualização forçada de defasagens...");
+      
+      const btnForcar = document.getElementById('btnForcarAtualizacao');
+      btnForcar.innerHTML = '<div class="loading"><div class="spinner"></div> Atualizando...</div>';
+      btnForcar.disabled = true;
+
+      google.script.run
+        .withSuccessHandler(function(resultado) {
+          btnForcar.innerHTML = '<i class="fas fa-sync-alt"></i> Forçar Atualização';
+          btnForcar.disabled = false;
+          
+          if (resultado && resultado.success) {
+            showMessage('success', resultado.message);
+            // Recarrega as lojas automaticamente após atualização
+            setTimeout(() => {
+              // Recarrega a seção que estiver visível
+              if (document.getElementById('secaoDefasagem').style.display !== 'none') {
+                mostrarLojasDefasagem();
+              }
+              if (document.getElementById('secaoAgendadas').style.display !== 'none') {
+                mostrarLojasAgendadas();
+              }
+              if (document.getElementById('secaoTodas').style.display !== 'none') {
+                mostrarTodasLojas();
+              }
+            }, 1000);
+          } else {
+            showMessage('error', resultado.message || 'Erro ao atualizar defasagens');
+          }
+        })
+        .withFailureHandler(function(error) {
+          btnForcar.innerHTML = '<i class="fas fa-sync-alt"></i> Forçar Atualização';
+          btnForcar.disabled = false;
+          showMessage('error', '❌ Erro: ' + error.message);
+        })
+        .atualizarDefasagensManual();
     }
 
     // ⭐⭐ CARREGAR LOJAS DO GOOGLE SHEETS ⭐⭐
@@ -1201,258 +2608,571 @@
     }
 
     // ⭐⭐ BUSCAR LOJA AUTOMATICAMENTE ⭐⭐
-    function buscarLoja() {
-      const nomeLoja = document.getElementById('loja').value.trim();
-      
-      if (!nomeLoja) {
-        return;
-      }
-      
-      console.log("🔍 Buscando:", nomeLoja);
-      
-      google.script.run
-        .withSuccessHandler(function(dados) {
-          preencherDadosLoja(dados);
-        })
-        .withFailureHandler(function(error) {
-          console.error("❌ Erro ao buscar loja:", error);
-        })
-        .buscarDadosLoja(nomeLoja);
-    }
-
-    // Fechar sugestões quando clicar fora
-    document.addEventListener('click', function(e) {
-      if (!e.target.closest('.search-container')) {
-        document.getElementById('suggestions').style.display = 'none';
-      }
-    });
-
-    // ⭐⭐ PREENCHER DADOS DA LOJA ⭐⭐
-    function preencherDadosLoja(dados) {
-      console.log("📊 Dados recebidos:", dados);
-      
-      // Esconder todas as mensagens primeiro
-      document.getElementById('messageLojaNaoEncontrada').style.display = 'none';
-      document.getElementById('messageSuccess').style.display = 'none';
-
-      if (!dados || !dados.encontrado) {
-        lojaExiste = false;
-        registroId = null;
-        document.getElementById('secaoAtualizacao').style.display = 'none';
-        document.getElementById('btnCadastrar').style.display = 'block';
-        document.getElementById('btnAtualizar').style.display = 'none';
-        document.getElementById('defasagem-info').style.display = 'none';
-        document.getElementById('data-retorno-info').style.display = 'none';
-        
-        // ⬇️ MOSTRAR MENSAGEM DE LOJA NÃO ENCONTRADA ⬇️
-        const nomeLoja = document.getElementById('loja').value.trim();
-        if (nomeLoja) {
-          document.getElementById('messageLojaNaoEncontrada').style.display = 'flex';
-        }
-        return;
-      }
-
-      lojaExiste = true;
-      registroId = dados.id;
-      
-      document.getElementById('segmento').value = dados.segmento || '';
-      document.getElementById('telefone').value = dados.telefone || '';
-      
-      if (dados.fornecedor) {
-        const fornecedores = dados.fornecedor.split(',').map(f => f.trim());
-        const checkboxes = document.querySelectorAll('#fornecedor-container input');
-        checkboxes.forEach(checkbox => {
-          checkbox.checked = fornecedores.includes(checkbox.value);
-          checkbox.parentElement.classList.toggle('selected', checkbox.checked);
-        });
-        atualizarFornecedorSelecionado();
-      }
-      
-      document.getElementById('trafego').value = dados.trafego || '';
-      document.getElementById('quantidade_lojas').value = dados.quantidade_lojas || '';
-      
-      // ⬇️ CORREÇÃO: ADESÃO COMO NÚMERO PARA O SELECT
-      document.getElementById('adesao').value = dados.adesao || '0';
-      
-      if (dados.data_pagamento_adesao) {
-        document.getElementById('data_pagamento_adesao').value = dados.data_pagamento_adesao;
-      }
-      
-      document.getElementById('forma_pagamento').value = dados.forma_pagamento || '';
-      document.getElementById('parcelas').value = dados.parcelas || '';
-      document.getElementById('plano_assinatura').value = dados.plano_assinatura || '';
-      document.getElementById('usuario').value = dados.usuario || '';
-      
-      // ⬇️ NOVOS CAMPOS
-      document.getElementById('representante').value = dados.representante || '';
-      
-      if (dados.data_retorno_cliente) {
-        document.getElementById('data_retorno_cliente').value = dados.data_retorno_cliente;
-      }
-      
-      document.getElementById('status').value = dados.status || 'Em andamento';
-      document.getElementById('evento').value = dados.evento || '';
-      document.getElementById('observacao').value = dados.observacao || '';
-
-      if (dados.defasagem !== undefined) {
-        document.getElementById('defasagem-dias').textContent = dados.defasagem;
-        document.getElementById('defasagem-info').style.display = 'block';
-      }
-
-      if (dados.data_retorno_cliente && dados.data_retorno_cliente !== 'N/A') {
-        document.getElementById('data-retorno-dias').textContent = dados.data_retorno_cliente;
-        document.getElementById('data-retorno-info').style.display = 'block';
-      }
-
-      document.getElementById('secaoAtualizacao').style.display = 'block';
-      document.getElementById('btnCadastrar').style.display = 'none';
-      document.getElementById('btnAtualizar').style.display = 'block';
-      
-      showMessage('success', '✅ Loja encontrada! Modo de atualização ativado.');
-    }
-
-    // ⭐⭐ CADASTRAR LOJA - VERSÃO CORRIGIDA ⭐⭐
-function cadastrarLoja() {
-  if (!validarFormulario()) return;
-
-  const dados = coletarDadosFormulario();
-  dados.acao = 'cadastrar';
-
-  const btnCadastrar = document.getElementById('btnCadastrar');
-  btnCadastrar.innerHTML = '<div class="loading"><div class="spinner"></div> Salvando...</div>';
-  btnCadastrar.disabled = true;
-
+function buscarLoja() {
+  const nomeLoja = document.getElementById('loja').value.trim();
+  
+  if (!nomeLoja) {
+    return;
+  }
+  
+  console.log("🔍 Buscando:", nomeLoja);
+  
   google.script.run
-    .withSuccessHandler(function(res) {
-      btnCadastrar.innerHTML = '<i class="fas fa-plus-circle"></i> Cadastrar Loja';
-      btnCadastrar.disabled = false;
-      
-      if(res && res.success) {
-        // ⬇️ MENSAGEM COMPLETA COM ID ⬇️
-        const nomeLoja = document.getElementById('loja').value.trim();
-        const mensagem = `✅ Loja "${nomeLoja}" cadastrada com sucesso! ${res.message || ''}`;
-        showMessage('success', mensagem);
-        limparDados();
-        carregarLojasParaAutocomplete();
+    .withSuccessHandler(function(resultado) {
+      // 🔥 AGORA USA A MESMA FUNÇÃO DO BOTÃO EDITAR!
+      if (resultado && resultado.success && resultado.encontrado) {
+        carregarDadosParaEdicao(resultado.dados);
+        showMessage('success', '✅ Loja carregada com sucesso!');
       } else {
-        showMessage('error', res.message || 'Erro ao cadastrar');
+        preencherDadosLoja({ encontrado: false });
       }
     })
     .withFailureHandler(function(error) {
-      btnCadastrar.innerHTML = '<i class="fas fa-plus-circle"></i> Cadastrar Loja';
-      btnCadastrar.disabled = false;
+      console.error("❌ Erro ao buscar loja:", error);
+    })
+    .buscarCadastroPorID(nomeLoja);
+}
+
+function preencherDadosLoja(dados) {
+    console.log("📊📊📊 DADOS COMPLETOS RECEBIDOS:", dados);
+    console.log("🎯 Data pagamento adesão:", dados?.dados?.data_pagamento_adesao);
+    console.log("🎯 Data retorno cliente:", dados?.dados?.data_retorno_cliente);
+    console.log("🎯 Estrutura completa dos dados:", JSON.stringify(dados, null, 2));
+    
+    
+    // Esconder todas as mensagens primeiro
+    document.getElementById('messageLojaNaoEncontrada').style.display = 'none';
+    document.getElementById('messageSuccess').style.display = 'none';
+
+    document.getElementById('btnCadastrar').style.display = 'flex';
+    document.getElementById('btnAtualizar').style.display = 'none';
+
+    // 🔥 CORREÇÃO: LIDAR COM OS DOIS FORMATOS DE DADOS
+    let dadosFormatados = dados;
+    
+    // Se veio de buscarCadastroPorID (com .dados)
+    if (dados && dados.dados) {
+        dadosFormatados = {
+            encontrado: dados.encontrado,
+            id: dados.dados.id,
+            loja: dados.dados.loja,
+            segmento: dados.dados.segmento,
+            telefone: dados.dados.telefone,
+            fornecedor: dados.dados.fornecedor,
+            trafego: dados.dados.trafego,
+            quantidade_lojas: dados.dados.quantidade_lojas,
+            adesao: dados.dados.adesao,
+            data_pagamento_adesao: dados.dados.data_pagamento_adesao,
+            forma_pagamento: dados.dados.forma_pagamento,
+            parcelas: dados.dados.parcelas,
+            plano_assinatura: dados.dados.plano_assinatura,
+            usuario: dados.dados.usuario,
+            representante: dados.dados.representante,
+            data_retorno_cliente: dados.dados.data_retorno_cliente,
+            status: dados.dados.status,
+            evento: dados.dados.evento,
+            data_ultimo_evento: dados.dados.data_ultimo_evento,
+            defasagem: dados.dados.defasagem,
+            tipo_calculo: dados.dados.tipo_calculo,
+            observacao: dados.dados.observacao
+        };
+    }
+
+    if (!dadosFormatados || !dadosFormatados.encontrado) {
+        lojaExiste = false;
+        registroId = null;
+        document.getElementById('secaoAtualizacao').style.display = 'none';
+        document.getElementById('btnCadastrar').style.display = 'flex';
+        document.getElementById('btnAtualizar').style.display = 'none';
+        document.getElementById('defasagem-info').style.display = 'none';
+        document.getElementById('tipo-calculo-info').style.display = 'none';
+        
+        const nomeLoja = document.getElementById('loja').value.trim();
+        if (nomeLoja) {
+            document.getElementById('messageLojaNaoEncontrada').style.display = 'flex';
+        }
+        return;
+    }
+
+    lojaExiste = true;
+    registroId = dadosFormatados.id;
+  
+    // PREENCHER TODOS OS CAMPOS
+    document.getElementById('segmento').value = normalizarNoFrontend(dadosFormatados.segmento) || '';
+    document.getElementById('telefone').value = normalizarNoFrontend(dadosFormatados.telefone) || '';
+    
+    // FORNECEDOR
+    if (dadosFormatados.fornecedor) {
+        const fornecedoresNormalizados = normalizarNoFrontend(dadosFormatados.fornecedor);
+        const fornecedores = fornecedoresNormalizados.split(',').map(f => f.trim());
+        const checkboxes = document.querySelectorAll('#fornecedor-container input');
+        checkboxes.forEach(checkbox => {
+            checkbox.checked = fornecedores.includes(checkbox.value);
+            checkbox.parentElement.classList.toggle('selected', checkbox.checked);
+        });
+        atualizarFornecedorSelecionado();
+    }
+    
+    document.getElementById('trafego').value = normalizarNoFrontend(dadosFormatados.trafego) || '';
+    document.getElementById('quantidade_lojas').value = dadosFormatados.quantidade_lojas || '';
+    document.getElementById('adesao').value = dadosFormatados.adesao || '0';
+    
+    if (dadosFormatados.data_pagamento_adesao) {
+        document.getElementById('data_pagamento_adesao').value = dadosFormatados.data_pagamento_adesao;
+    }
+    
+    document.getElementById('forma_pagamento').value = normalizarNoFrontend(dadosFormatados.forma_pagamento) || '';
+    document.getElementById('parcelas').value = normalizarNoFrontend(dadosFormatados.parcelas) || '';
+    document.getElementById('plano_assinatura').value = dadosFormatados.plano_assinatura || '';
+    document.getElementById('usuario').value = normalizarNoFrontend(dadosFormatados.usuario) || '';
+    document.getElementById('representante').value = normalizarNoFrontend(dadosFormatados.representante) || '';
+    
+    if (dadosFormatados.data_retorno_cliente) {
+        document.getElementById('data_retorno_cliente').value = dadosFormatados.data_retorno_cliente;
+    }
+    
+    document.getElementById('status').value = normalizarNoFrontend(dadosFormatados.status) || 'EM ANDAMENTO';
+    document.getElementById('evento').value = normalizarNoFrontend(dadosFormatados.evento) || '';
+    document.getElementById('observacao').value = normalizarNoFrontend(dadosFormatados.observacao) || '';
+
+    // 🔥 ATUALIZAR DEFASAGEM E CÁLCULO
+    atualizarInformacoesCalculoCompleto(
+        dadosFormatados.data_retorno_cliente, 
+        dadosFormatados.data_ultimo_evento, 
+        dadosFormatados.defasagem,
+        dadosFormatados.status // ⭐⭐ AGORA PASSA O STATUS
+    );
+
+    // MOSTRAR SEÇÃO DE ATUALIZAÇÃO
+    document.getElementById('secaoAtualizacao').style.display = 'block';
+    document.getElementById('btnCadastrar').style.display = 'none';
+    document.getElementById('btnAtualizar').style.display = 'block';
+    
+    validarAdesao();
+    showMessage('success', '✅ Loja encontrada! Modo de atualização ativado.');
+}
+// 🔥 FUNÇÃO CORRIGIDA: ATUALIZAR INFORMAÇÕES DE CÁLCULO COMPLETO
+function atualizarInformacoesCalculoCompleto(dataRetornoCliente, dataUltimoEvento, defasagemExistente, status) {
+    const dataBaseElement = document.getElementById('data-base-calculo');
+    const tipoCalculoElement = document.getElementById('tipo-calculo-text');
+    const tipoCalculoInfo = document.getElementById('tipo-calculo-info');
+    
+    console.log("🔍 ATUALIZANDO INFORMAÇÕES DE CÁLCULO - STATUS:", status);
+    console.log("Data retorno:", dataRetornoCliente);
+    console.log("Data último evento:", dataUltimoEvento);
+    console.log("Defasagem existente:", defasagemExistente);
+    
+    // 🔥🔥🔥 CORREÇÃO: VERIFICA SE STATUS É ENCERRADO
+    const statusNormalizado = String(status).toUpperCase().trim();
+    const statusEncerrado = statusNormalizado.includes('CONCLUIDO') && 
+                           (statusNormalizado.includes('NAO') || statusNormalizado.includes('NÃO') || 
+                            !statusNormalizado.includes('NAO') && !statusNormalizado.includes('NÃO'));
+    
+    let calculoDefasagem;
+    let defasagemCalculada;
+    
+    if (statusEncerrado) {
+        // 🔥 STATUS ENCERRADO - DEFASAGEM ZERO
+        defasagemCalculada = 0;
+        calculoDefasagem = { dias: 0, tipo: 'encerrado' };
+        console.log("✅ Status encerrado - Defasagem forçada para 0");
+    } else {
+        // 🔥 STATUS NORMAL - CALCULA NORMALMENTE
+        calculoDefasagem = calcularDefasagemIgualCards(dataRetornoCliente, dataUltimoEvento, status);
+        defasagemCalculada = calculoDefasagem.dias;
+        console.log("📊 Defasagem calculada:", defasagemCalculada, "dias");
+    }
+    
+    console.log("📊 Tipo de cálculo:", calculoDefasagem.tipo);
+    
+    // ATUALIZAR DEFASAGEM NA TELA
+    document.getElementById('defasagem-dias').textContent = defasagemCalculada;
+    
+    // MOSTRAR/OCULTAR DEFASAGEM
+    if (defasagemCalculada > 0) {
+        document.getElementById('defasagem-info').style.display = 'block';
+        console.log("⚠️ Defasagem mostrada:", defasagemCalculada, "dias");
+    } else {
+        document.getElementById('defasagem-info').style.display = 'none';
+        console.log("✅ Sem defasagem");
+    }
+    
+    // ATUALIZAR INFORMAÇÕES DE CÁLCULO
+    if (calculoDefasagem.tipo === 'data_retorno') {
+        dataBaseElement.textContent = dataRetornoCliente || 'N/A';
+        dataBaseElement.style.color = '#28a745';
+        tipoCalculoElement.textContent = 'Data de retorno do cliente';
+        tipoCalculoElement.style.color = '#28a745';
+    } else if (calculoDefasagem.tipo === 'ultimo_evento') {
+        dataBaseElement.textContent = dataUltimoEvento || 'N/A';
+        dataBaseElement.style.color = '#dc3545';
+        tipoCalculoElement.textContent = 'Data do último evento';
+        tipoCalculoElement.style.color = '#dc3545';
+    } else if (calculoDefasagem.tipo === 'encerrado') {
+        dataBaseElement.textContent = 'Status encerrado';
+        dataBaseElement.style.color = '#6c757d';
+        tipoCalculoElement.textContent = 'Processo finalizado';
+        tipoCalculoElement.style.color = '#6c757d';
+    } else {
+        dataBaseElement.textContent = 'Sem data disponível';
+        dataBaseElement.style.color = '#6c757d';
+        tipoCalculoElement.textContent = 'Sem dados para cálculo';
+        tipoCalculoElement.style.color = '#6c757d';
+    }
+    
+    // MOSTRAR SEÇÃO DE CÁLCULO APENAS SE TIVER DADOS VÁLIDOS
+    const temDataValida = (dataRetornoCliente && dataRetornoCliente !== 'N/A') || 
+                         (dataUltimoEvento && dataUltimoEvento !== 'N/A');
+    
+    if (temDataValida || calculoDefasagem.tipo === 'encerrado') {
+        tipoCalculoInfo.style.display = 'block';
+        console.log("🎯 Seção de cálculo MOSTRADA");
+    } else {
+        tipoCalculoInfo.style.display = 'none';
+        console.log("🚫 Seção de cálculo OCULTADA");
+    }
+}
+
+// 🔥 FUNÇÃO CORRIGIDA: CALCULAR DEFASAGEM CONSISTENTE
+function calcularDefasagemIgualCards(dataRetorno, dataUltimoEvento, status) {
+    const hoje = new Date();
+    hoje.setHours(0, 0, 0, 0);
+    
+    console.log("🔍 CALCULANDO DEFASAGEM UNIFICADA:");
+    console.log("Status recebido:", status);
+    console.log("Data Retorno Recebida:", dataRetorno);
+    console.log("Data Último Evento Recebida:", dataUltimoEvento);
+    
+    // ⭐⭐ CORREÇÃO: VERIFICA TODAS AS VARIAÇÕES POSSÍVEIS DO STATUS ⭐⭐
+    const statusNormalizado = String(status).toUpperCase().trim();
+    
+    if (statusNormalizado === "CONCLUIDO" || 
+        statusNormalizado === "CONCLUÍDO" ||
+        statusNormalizado === "NAO CONCLUIDO" || 
+        statusNormalizado === "NÃO CONCLUÍDO" ||
+        statusNormalizado === "NAO CONCLUÍDO" ||
+        statusNormalizado === "NÃO CONCLUIDO") {
+        
+        console.log("✅ Status encerrado - Defasagem zerada");
+        return { dias: 0, tipo: 'encerrado' };
+    }
+    
+    // PRIORIDADE PARA DATA RETORNO
+    if (dataRetorno && dataRetorno !== 'N/A' && dataRetorno !== '') {
+        try {
+            const partes = dataRetorno.split('/');
+            const dataRetornoObj = new Date(partes[2], partes[1] - 1, partes[0]);
+            dataRetornoObj.setHours(0, 0, 0, 0);
+            
+            console.log("📅 Calculando por DATA RETORNO:", dataRetornoObj.toLocaleDateString('pt-BR'));
+            
+            const diffMs = hoje - dataRetornoObj;
+            const dias = Math.floor(diffMs / (1000 * 60 * 60 * 24));
+            
+            console.log("📊 Dias calculados (data retorno):", dias);
+            
+            return { dias: dias, tipo: 'data_retorno' };
+        } catch (e) {
+            console.log("❌ Erro ao calcular data retorno:", e);
+        }
+    }
+    
+    // FALLBACK: DATA ÚLTIMO EVENTO
+    if (dataUltimoEvento && dataUltimoEvento !== 'N/A' && dataUltimoEvento !== '') {
+        try {
+            const partes = dataUltimoEvento.split('/');
+            const dataEventoObj = new Date(partes[2], partes[1] - 1, partes[0]);
+            dataEventoObj.setHours(0, 0, 0, 0);
+            
+            console.log("🕒 Calculando por ÚLTIMO EVENTO:", dataEventoObj.toLocaleDateString('pt-BR'));
+            
+            const diffMs = hoje - dataEventoObj;
+            const dias = Math.floor(diffMs / (1000 * 60 * 60 * 24));
+            
+            console.log("📊 Dias calculados (último evento):", dias);
+            
+            return { dias: dias, tipo: 'ultimo_evento' };
+        } catch (e) {
+            console.log("❌ Erro ao calcular último evento:", e);
+        }
+    }
+    
+    console.log("📝 Nenhuma data válida para cálculo");
+    return { dias: 0, tipo: 'sem_data' };
+}
+
+function normalizarNoFrontend(texto) {
+    if (!texto || typeof texto !== 'string') return texto;
+    
+    if (!isNaN(texto)) return texto;
+    if (texto.includes('R$')) return texto;
+    if (texto.match(/\d{2}\/\d{2}\/\d{4}/)) return texto;
+    
+    return texto
+        .normalize('NFD')
+        .replace(/[\u0300-\u036f]/g, '')
+        .toUpperCase()
+        .trim();
+}
+
+
+
+
+// 🔥 FUNÇÃO AUXILIAR: NORMALIZAR NO FRONTEND
+function normalizarNoFrontend(texto) {
+    if (!texto || typeof texto !== 'string') return texto;
+    
+    // 🔥 NÃO normalizar se for número, data, ou campo monetário
+    if (!isNaN(texto)) return texto; // Números
+    if (texto.includes('R$')) return texto; // Valores monetários
+    if (texto.match(/\d{2}\/\d{2}\/\d{4}/)) return texto; // Datas DD/MM/AAAA
+    
+    return texto
+        .normalize('NFD')
+        .replace(/[\u0300-\u036f]/g, '') // Remove acentos
+        .toUpperCase()
+        .trim();
+}
+
+function atualizarRegistro() {
+  console.log("🔄 CLICOU EM ATUALIZAR REGISTRO!");
+  console.log("📝 Registro ID:", registroId);
+  console.log("🏪 Loja existe:", lojaExiste);
+  
+  if (!lojaExiste || !registroId) {
+    showMessage('error', '❌ Nenhuma loja carregada para atualizar!');
+    console.log("❌ Loja não carregada ou ID inválido");
+    return;
+  }
+
+  // 🔥 CORREÇÃO: CHAMAR VALIDAÇÃO ANTES DE TUDO
+  if (!validarFormulario()) {
+    console.log("❌ Validação do formulário falhou");
+    // O scroll já foi feito pela função validarFormulario()
+    return;
+  }
+
+  console.log("✅ Validação passou - Chamando GS...");
+  
+  const dados = coletarDadosFormulario();
+  dados.acao = 'atualizar';
+  dados.id = registroId;
+
+  console.log("📤 Dados enviados para atualização:", dados);
+
+  // ⬇️ MOSTRAR LOADING
+  showLoading('Atualizando registro...');
+
+  const btnAtualizar = document.getElementById('btnAtualizar');
+  btnAtualizar.innerHTML = '<div class="loading"><div class="spinner"></div> Atualizando...</div>';
+  btnAtualizar.disabled = true;
+
+  google.script.run
+    .withSuccessHandler(function(res) {
+      hideLoading();
+      
+      btnAtualizar.innerHTML = '<i class="fas fa-save"></i> Atualizar Registro';
+      btnAtualizar.disabled = false;
+      
+      console.log("📥 Resposta do GS:", res);
+      
+      if(res && res.success) {
+        showMessage('success', res.message);
+        console.log("✅ Atualização concluída com sucesso!");
+        
+        // Fechar aba de atualização
+        document.getElementById('secaoAtualizacao').style.display = 'none';
+        document.getElementById('btnCadastrar').style.display = 'block';
+        document.getElementById('btnAtualizar').style.display = 'none';
+        
+      } else {
+        showMessage('error', res?.message || 'Erro ao atualizar');
+        console.log("❌ Erro na atualização:", res?.message);
+      }
+    })
+    .withFailureHandler(function(error) {
+      hideLoading();
+      
+      btnAtualizar.innerHTML = '<i class="fas fa-save"></i> Atualizar Registro';
+      btnAtualizar.disabled = false;
+      
+      console.error("❌ Erro na comunicação:", error);
       showMessage('error', '❌ Erro: ' + error.message);
     })
     .salvarProspeccao(dados);
 }
 
-    // ⭐⭐ ATUALIZAR REGISTRO ⭐⭐
-    function atualizarRegistro() {
-      if (!validarFormulario()) return;
 
-      const dados = coletarDadosFormulario();
-      dados.acao = 'atualizar';
-      dados.id = registroId;
+function validarFormulario() { 
+  let isValid = true;
+  let primeiroErro = null;
+  
+  // Lista de campos obrigatórios
+  const requiredFields = [
+    'loja', 'segmento', 'telefone', 'trafego', 
+    'quantidade_lojas', 'adesao', 'forma_pagamento', 
+    'parcelas', 'plano_assinatura', 'usuario'
+  ];
 
-      const btnAtualizar = document.getElementById('btnAtualizar');
-      btnAtualizar.innerHTML = '<div class="loading"><div class="spinner"></div> Atualizando...</div>';
-      btnAtualizar.disabled = true;
-
-      google.script.run
-        .withSuccessHandler(function(res) {
-          btnAtualizar.innerHTML = '<i class="fas fa-save"></i> Atualizar Registro';
-          btnAtualizar.disabled = false;
-          
-          if(res && res.success) {
-            showMessage('success', res.message);
-          } else {
-            showMessage('error', res.message || 'Erro ao atualizar');
-          }
-        })
-        .withFailureHandler(function(error) {
-          btnAtualizar.innerHTML = '<i class="fas fa-save"></i> Atualizar Registro';
-          btnAtualizar.disabled = false;
-          showMessage('error', '❌ Erro: ' + error.message);
-        })
-        .salvarProspeccao(dados);
+  // Limpar mensagens de erro anteriores
+  requiredFields.forEach(field => {
+    const element = document.getElementById(field);
+    const errorElement = document.getElementById(`erro-${field}`);
+    if (element && errorElement) {
+      element.classList.remove('error');
+      errorElement.style.display = 'none';
     }
+  });
 
-    // ⭐⭐ VALIDAÇÃO DE FORMULÁRIO ⭐⭐
-    function validarFormulario() { 
-      let isValid = true;
+  // ✅ VALIDAÇÃO CORRIGIDA DA ADESÃO
+  const adesaoElement = document.getElementById('adesao');
+  const adesao = adesaoElement ? parseInt(adesaoElement.value) : 0;
+  const dataPagamentoAdesao = document.getElementById('data_pagamento_adesao');
+  const formaPagamento = document.getElementById('forma_pagamento');
+  const parcelas = document.getElementById('parcelas');
+  
+  console.log("💰 Validando adesão - Valor:", adesao);
+  
+  if (adesao > 0) {
+    // ✅ ADESÃO > R$ 0,00 - VALIDAR CAMPOS DE PAGAMENTO
+    if (!dataPagamentoAdesao.value) {
+      dataPagamentoAdesao.classList.add('error');
+      document.getElementById('erro-data_pagamento_adesao').style.display = 'block';
+      isValid = false;
+      if (!primeiroErro) primeiroErro = dataPagamentoAdesao;
+      console.log("❌ Data pagamento adesão obrigatória para adesão > 0");
+    }
+    
+    if (!formaPagamento.value || formaPagamento.value === 'ISENTO') {
+      formaPagamento.classList.add('error');
+      document.getElementById('erro-forma_pagamento').style.display = 'block';
+      isValid = false;
+      if (!primeiroErro) primeiroErro = formaPagamento;
+      console.log("❌ Forma pagamento obrigatória para adesão > 0");
+    }
+    
+    if (!parcelas.value || parcelas.value === 'ISENTO') {
+      parcelas.classList.add('error');
+      document.getElementById('erro-parcelas').style.display = 'block';
+      isValid = false;
+      if (!primeiroErro) primeiroErro = parcelas;
+      console.log("❌ Parcelas obrigatórias para adesão > 0");
+    }
+  } else {
+    // ✅ ADESÃO = R$ 0,00 - REMOVER ERROS DOS CAMPOS DE PAGAMENTO
+    if (dataPagamentoAdesao) {
+      dataPagamentoAdesao.classList.remove('error');
+      document.getElementById('erro-data_pagamento_adesao').style.display = 'none';
+    }
+    if (formaPagamento) {
+      formaPagamento.classList.remove('error');
+      document.getElementById('erro-forma_pagamento').style.display = 'none';
+    }
+    if (parcelas) {
+      parcelas.classList.remove('error');
+      document.getElementById('erro-parcelas').style.display = 'none';
+    }
+    console.log("✅ Adesão = 0 - Campos de pagamento não obrigatórios");
+  }
+
+  // Validar cada campo obrigatório
+  requiredFields.forEach(field => {
+    const element = document.getElementById(field);
+    const errorElement = document.getElementById(`erro-${field}`);
+    
+    if (element && errorElement) {
+      const value = element.value ? element.value.toString().trim() : '';
       
-      // Lista de campos obrigatórios
-      const requiredFields = [
-        'loja', 'segmento', 'telefone', 'trafego', 
-        'quantidade_lojas', 'adesao', 'forma_pagamento', 
-        'parcelas', 'plano_assinatura', 'usuario'
-      ];
+      if (!value) {
+        element.classList.add('error');
+        errorElement.style.display = 'block';
+        isValid = false;
+        
+        // 🔥 CORREÇÃO: SALVAR O PRIMEIRO ERRO PARA SCROLL
+        if (!primeiroErro) {
+          primeiroErro = element;
+        }
+      }
+    }
+  });
 
-      // Limpar mensagens de erro anteriores
-      requiredFields.forEach(field => {
-        const element = document.getElementById(field);
-        const errorElement = document.getElementById(`erro-${field}`);
-        element.classList.remove('error');
-        errorElement.style.display = 'none';
-      });
+  // Validar fornecedor (campo especial)
+  const fornecedorCheckboxes = document.querySelectorAll('#fornecedor-container input:checked');
+  const fornecedorError = document.getElementById('erro-fornecedor');
+  if (fornecedorCheckboxes.length === 0) {
+    document.getElementById('fornecedor-container').style.border = '2px solid var(--danger)';
+    document.getElementById('fornecedor-container').style.borderRadius = '10px';
+    document.getElementById('fornecedor-container').style.padding = '10px';
+    fornecedorError.style.display = 'block';
+    isValid = false;
+    
+    // 🔥 CORREÇÃO: ADICIONAR FORNECEDOR COMO PRIMEIRO ERRO SE FOR O CASO
+    if (!primeiroErro) {
+      primeiroErro = document.getElementById('fornecedor-container');
+    }
+    console.log("❌ Nenhum fornecedor selecionado");
+  } else {
+    document.getElementById('fornecedor-container').style.border = '';
+    document.getElementById('fornecedor-container').style.padding = '';
+    fornecedorError.style.display = 'none';
+    console.log("✅ Fornecedores selecionados:", fornecedorCheckboxes.length);
+  }
 
-      // Validar cada campo
-      requiredFields.forEach(field => {
-        const element = document.getElementById(field);
-        const errorElement = document.getElementById(`erro-${field}`);
-        const value = element.value.trim();
+  // Validar seção de atualização (se visível)
+  if (document.getElementById('secaoAtualizacao').style.display !== 'none') {
+    const updateFields = ['status', 'evento', 'observacao'];
+    updateFields.forEach(field => {
+      const element = document.getElementById(field);
+      const errorElement = document.getElementById(`erro-${field}`);
+      
+      if (element && errorElement) {
+        const value = element.value ? element.value.toString().trim() : '';
         
         if (!value) {
           element.classList.add('error');
           errorElement.style.display = 'block';
           isValid = false;
           
-          // Scroll para o primeiro campo com erro
-          if (isValid === false) {
-            element.scrollIntoView({ behavior: 'smooth', block: 'center' });
-            element.focus();
+          // 🔥 CORREÇÃO: SALVAR O PRIMEIRO ERRO PARA SCROLL
+          if (!primeiroErro) {
+            primeiroErro = element;
           }
+          console.log(`❌ Campo de atualização obrigatório: ${field}`);
         }
-      });
-
-      // Validar fornecedor (campo especial)
-      const fornecedorCheckboxes = document.querySelectorAll('#fornecedor-container input:checked');
-      const fornecedorError = document.getElementById('erro-fornecedor');
-      if (fornecedorCheckboxes.length === 0) {
-        document.getElementById('fornecedor-container').style.border = '2px solid var(--danger)';
-        document.getElementById('fornecedor-container').style.borderRadius = '10px';
-        document.getElementById('fornecedor-container').style.padding = '10px';
-        fornecedorError.style.display = 'block';
-        isValid = false;
-      } else {
-        document.getElementById('fornecedor-container').style.border = '';
-        document.getElementById('fornecedor-container').style.padding = '';
-        fornecedorError.style.display = 'none';
       }
+    });
+  }
 
-      // Validar seção de atualização (se visível)
-      if (document.getElementById('secaoAtualizacao').style.display !== 'none') {
-        const updateFields = ['status', 'evento', 'observacao'];
-        updateFields.forEach(field => {
-          const element = document.getElementById(field);
-          const errorElement = document.getElementById(`erro-${field}`);
-          const value = element.value.trim();
-          
-          if (!value) {
-            element.classList.add('error');
-            errorElement.style.display = 'block';
-            isValid = false;
-          }
-        });
-      }
-
-      if (!isValid) {
-        showMessage('error', '⚠️ Preencha todos os campos obrigatórios!');
-        return false;
-      }
-
-      return true;
+  // 🔥 CORREÇÃO: FAZER SCROLL PARA O PRIMEIRO CAMPO COM ERRO
+  if (!isValid && primeiroErro) {
+    console.log("🎯 Fazendo scroll para o primeiro erro:", primeiroErro.id);
+    
+    // Scroll suave para o campo com erro
+    primeiroErro.scrollIntoView({ 
+      behavior: 'smooth', 
+      block: 'center' 
+    });
+    
+    // Focar no campo com erro
+    if (primeiroErro.tagName === 'INPUT' || primeiroErro.tagName === 'SELECT' || primeiroErro.tagName === 'TEXTAREA') {
+      setTimeout(() => {
+        primeiroErro.focus();
+      }, 500);
     }
+    
+    showMessage('error', '⚠️ Preencha todos os campos obrigatórios!');
+    return false;
+  }
+
+  if (!isValid) {
+    showMessage('error', '⚠️ Preencha todos os campos obrigatórios!');
+    console.log("❌ Validação do formulário falhou");
+    return false;
+  }
+
+  console.log("✅ Validação do formulário passou!");
+  return true;
+}
 
     // ⭐⭐ COLETAR DADOS DO FORMULÁRIO ⭐⭐
     function coletarDadosFormulario() { 
@@ -1488,6 +3208,11 @@ function cadastrarLoja() {
       document.getElementById('messageLojaNaoEncontrada').style.display = 'none';
       document.getElementById('messageSuccess').style.display = 'none';
       document.getElementById('messageError').style.display = 'none';
+      
+      // ⬇️ OCULTAR SEÇÕES DE LOJAS
+      document.getElementById('secaoDefasagem').style.display = 'none';
+      document.getElementById('secaoAgendadas').style.display = 'none';
+      document.getElementById('secaoTodas').style.display = 'none';
       
       // Limpar campo principal
       document.getElementById('loja').value = '';
@@ -1527,9 +3252,11 @@ function cadastrarLoja() {
       document.getElementById('btnAtualizar').style.display = 'none';
       document.getElementById('defasagem-info').style.display = 'none';
       document.getElementById('data-retorno-info').style.display = 'none';
+      document.getElementById('tipo-calculo-info').style.display = 'none';
       
       // Fechar sugestões
       document.getElementById('suggestions').style.display = 'none';
+      document.getElementById('suggestions-evento').style.display = 'none';
       
       // Limpar mensagens de erro
       const errorMessages = document.querySelectorAll('.error-message');
@@ -1538,6 +3265,9 @@ function cadastrarLoja() {
       const errorFields = document.querySelectorAll('.form-control.error');
       errorFields.forEach(field => field.classList.remove('error'));
       
+      // ✅ REVALIDAR ADESÃO APÓS LIMPAR
+      validarAdesao();
+      
       // Focar no campo loja
       document.getElementById('loja').focus();
       
@@ -1545,6 +3275,23 @@ function cadastrarLoja() {
       
       console.log("✅ Dados limpos com sucesso!");
     }
+
+    // 🔥 SUBSTITUIR A FUNÇÃO showLoading ATUAL POR ESTA:
+function showLoading(mensagem = "Carregando...") {
+    const loadingOverlay = document.getElementById('loadingOverlay');
+    const loadingText = loadingOverlay.querySelector('p');
+    
+    // Atualizar o texto do loading
+    loadingText.textContent = mensagem;
+    
+    // Mostrar o loading
+    loadingOverlay.style.display = 'flex';
+}
+
+// 🔥 MANTER A FUNÇÃO hideLoading (ela está correta):
+function hideLoading() {
+    document.getElementById('loadingOverlay').style.display = 'none';
+}
 
     // ⭐⭐ FUNÇÕES AUXILIARES ⭐⭐
     function inicializarMultiSelect() { 
@@ -1558,6 +3305,660 @@ function cadastrarLoja() {
         });
       });
     }
+
+
+// 🔥 SUBSTITUIR visualizarLoja POR ESTA:
+function visualizarLoja(idLoja) {
+    console.log("👁️ Visualizando loja ID:", idLoja);
+    
+    if (!idLoja) {
+        showMessage('error', 'ID da loja não encontrado');
+        return;
+    }
+
+    // 🔥 MOSTRAR LOADING CORRETO
+    showLoading('Carregando dados para visualização...');
+
+    google.script.run
+        .withSuccessHandler(function(resultado) {
+            hideLoading();
+            console.log("📊 Dados recebidos para visualização:", resultado);
+            
+            if (resultado && resultado.success && resultado.encontrado) {
+                exibirModalDetalhesCompleto(resultado.dados);
+                showMessage('success', 'Dados carregados com sucesso!');
+            } else {
+                showMessage('error', resultado?.message || 'Loja não encontrada para visualização');
+            }
+        })
+        .withFailureHandler(function(error) {
+            hideLoading();
+            console.error("❌ Erro ao visualizar:", error);
+            showMessage('error', 'Erro ao carregar dados: ' + error.message);
+        })
+        .buscarCadastroPorID(idLoja);
+}
+
+// 🔥🔥🔥 FUNÇÃO FALTANTE - ADICIONAR ANTES DO MODAL
+function formatarValorMonetario(valor) {
+    if (!valor || valor === 0 || valor === '0' || valor === 'R$ 0,00') return 'R$ 0,00';
+    if (typeof valor === 'string' && valor.includes('R$')) return valor;
+    
+    const numero = parseFloat(valor);
+    if (isNaN(numero)) return 'R$ 0,00';
+    
+    return numero.toLocaleString('pt-BR', {
+        style: 'currency',
+        currency: 'BRL'
+    });
+}
+
+// 🔥🔥🔥 FUNÇÃO PARA FORMATAR DATAS NO FRONTEND
+function formatarData(data) {
+    if (!data || data === 'N/A') return 'N/A';
+    if (data instanceof Date) return data.toLocaleDateString('pt-BR');
+    
+    // Se for string no formato YYYY-MM-DD
+    if (data.match(/^\d{4}-\d{2}-\d{2}$/)) {
+        const partes = data.split('-');
+        return `${partes[2]}/${partes[1]}/${partes[0]}`;
+    }
+    
+    return data;
+}
+
+
+
+function exibirModalDetalhesCompleto(dados) {
+    const modal = document.getElementById('modalDetalhes');
+    const content = document.getElementById('modalDetalhesContent');
+    
+    // 🔥 FUNÇÃO PARA FORMATAR VALORES MONETÁRIOS
+    function formatarValorMonetario(valor) {
+        if (!valor || valor === 0 || valor === '0' || valor === 'R$ 0,00') return 'R$ 0,00';
+        if (typeof valor === 'string' && valor.includes('R$')) return valor;
+        
+        const numero = parseFloat(valor);
+        if (isNaN(numero)) return 'R$ 0,00';
+        
+        return numero.toLocaleString('pt-BR', {
+            style: 'currency',
+            currency: 'BRL'
+        });
+    }
+
+    // 🔥 FUNÇÃO PARA FORMATAR DATAS
+    function formatarData(data) {
+        if (!data || data === 'N/A') return 'N/A';
+        if (data instanceof Date) return data.toLocaleDateString('pt-BR');
+        
+        // Se for string no formato YYYY-MM-DD
+        if (data.match(/^\d{4}-\d{2}-\d{2}$/)) {
+            const partes = data.split('-');
+            return `${partes[2]}/${partes[1]}/${partes[0]}`;
+        }
+        
+        return data;
+    }
+
+    // 🔥 FUNÇÃO PARA STATUS COM EMOJI
+    function getStatusComEmoji(status) {
+        if (!status) return '🆕 NOVO REGISTRO';
+        
+        const statusUpper = status.toUpperCase();
+        if (statusUpper.includes('ANDAMENTO')) return '🔄 EM ANDAMENTO';
+        if (statusUpper.includes('CONCLUÍDO') || statusUpper.includes('CONCLUIDO')) return '✅ CONCLUÍDO';
+        if (statusUpper.includes('NÃO CONCLUÍDO') || statusUpper.includes('NAO CONCLUIDO')) return '❌ NÃO CONCLUÍDO';
+        
+        return `📝 ${status}`;
+    }
+
+    // 🔥🔥🔥 CALCULAR DEFASAGEM PARA O MODAL - CORRIGIDO
+    // Verifica se o status é "CONCLUIDO" ou "NAO CONCLUIDO"
+    const statusNormalizado = String(dados.status).toUpperCase().trim();
+    const statusEncerrado = statusNormalizado.includes('CONCLUIDO') && 
+                           (statusNormalizado.includes('NAO') || statusNormalizado.includes('NÃO') || 
+                            !statusNormalizado.includes('NAO') && !statusNormalizado.includes('NÃO'));
+
+    let defasagemModal = '0 dias';
+    let tipoCalculoModal = 'encerrado';
+
+    if (!statusEncerrado) {
+        // Só calcula se NÃO for status encerrado
+        const calculoDefasagem = calcularDefasagemIgualCards(dados.data_retorno_cliente, dados.data_ultimo_evento, dados.status);
+        defasagemModal = calculoDefasagem.dias > 0 ? `${calculoDefasagem.dias} dias` : '0 dias';
+        tipoCalculoModal = calculoDefasagem.tipo;
+    }
+
+    console.log("🎯 MODAL - Status:", dados.status, "Encerrado:", statusEncerrado);
+    console.log("🎯 MODAL - Defasagem:", defasagemModal);
+
+    content.innerHTML = `
+        <div class="modal-detalhes-header">
+            <h2 class="modal-detalhes-title">
+                <i class="fas fa-store"></i>
+                ${normalizarNoFrontend(dados.loja) || 'DETALHES DA LOJA'}
+            </h2>
+            <button class="btn-fechar-modal" onclick="fecharModalDetalhes()">
+                <i class="fas fa-times"></i>
+            </button>
+        </div>
+        
+        <div class="detalhes-grid">
+            <!-- 🔥 SEÇÃO: INFORMAÇÕES PRINCIPAIS -->
+            <div class="detalhe-item" style="grid-column: 1 / -1; background: #f0f8ff; border-left: 4px solid #7E3E9A;">
+                <span class="detalhe-label" style="font-size: 1.1em; color: #7E3E9A;">
+                    <i class="fas fa-info-circle"></i> 📋 INFORMAÇÕES PRINCIPAIS
+                </span>
+            </div>
+            
+            <div class="detalhe-item">
+                <span class="detalhe-label">🏪 Loja</span>
+                <div class="detalhe-valor" style="font-weight: bold; color: #7E3E9A;">${normalizarNoFrontend(dados.loja) || 'N/A'}</div>
+            </div>
+            
+            <div class="detalhe-item">
+                <span class="detalhe-label">🏷️ Segmento</span>
+                <div class="detalhe-valor">${normalizarNoFrontend(dados.segmento) || 'N/A'}</div>
+            </div>
+            
+            <div class="detalhe-item">
+                <span class="detalhe-label">📞 Telefone</span>
+                <div class="detalhe-valor">${normalizarNoFrontend(dados.telefone) || 'N/A'}</div>
+            </div>
+            
+            <div class="detalhe-item">
+                <span class="detalhe-label">🚚 Fornecedor</span>
+                <div class="detalhe-valor">${normalizarNoFrontend(dados.fornecedor) || 'N/A'}</div>
+            </div>
+            
+            <div class="detalhe-item">
+                <span class="detalhe-label">🚗 Tráfego Apenas</span>
+                <div class="detalhe-valor">${normalizarNoFrontend(dados.trafego) || 'N/A'}</div>
+            </div>
+            
+            <div class="detalhe-item">
+                <span class="detalhe-label">🏬 Quantidade de Lojas</span>
+                <div class="detalhe-valor">${dados.quantidade_lojas || '0'}</div>
+            </div>
+
+            <!-- 🔥 SEÇÃO: FINANCEIRO -->
+            <div class="detalhe-item" style="grid-column: 1 / -1; background: #f0fff0; border-left: 4px solid #28a745; margin-top: 10px;">
+                <span class="detalhe-label" style="font-size: 1.1em; color: #28a745;">
+                    <i class="fas fa-chart-line"></i> 💰 INFORMAÇÕES FINANCEIRAS
+                </span>
+            </div>
+            
+            <div class="detalhe-item">
+                <span class="detalhe-label">💳 Adesão</span>
+                <div class="detalhe-valor">${formatarValorMonetario(dados.adesao)}</div>
+            </div>
+            
+            <div class="detalhe-item">
+                <span class="detalhe-label">📅 Data Pag. Adesão</span>
+                <div class="detalhe-valor">${formatarData(dados.data_pagamento_adesao) || 'N/A'}</div>
+            </div>
+            
+            <div class="detalhe-item">
+                <span class="detalhe-label">💸 Forma de Pagamento</span>
+                <div class="detalhe-valor">${normalizarNoFrontend(dados.forma_pagamento) || 'N/A'}</div>
+            </div>
+            
+            <div class="detalhe-item">
+                <span class="detalhe-label">📊 Parcelas</span>
+                <div class="detalhe-valor">${normalizarNoFrontend(dados.parcelas) || 'N/A'}</div>
+            </div>
+            
+            <div class="detalhe-item">
+                <span class="detalhe-label">📈 Plano de Assinatura</span>
+                <div class="detalhe-valor">${formatarValorMonetario(dados.plano_assinatura)}</div>
+            </div>
+
+            <!-- 🔥 SEÇÃO: ACOMPANHAMENTO -->
+            <div class="detalhe-item" style="grid-column: 1 / -1; background: #fff8f0; border-left: 4px solid #ff6b35; margin-top: 10px;">
+                <span class="detalhe-label" style="font-size: 1.1em; color: #ff6b35;">
+                    <i class="fas fa-tasks"></i> 📊 ACOMPANHAMENTO
+                </span>
+            </div>
+            
+            <div class="detalhe-item">
+                <span class="detalhe-label">👤 Usuário</span>
+                <div class="detalhe-valor">${normalizarNoFrontend(dados.usuario) || 'N/A'}</div>
+            </div>
+            
+            <div class="detalhe-item">
+                <span class="detalhe-label">👔 Representante</span>
+                <div class="detalhe-valor">${normalizarNoFrontend(dados.representante) || 'N/A'}</div>
+            </div>
+            
+            <div class="detalhe-item">
+                <span class="detalhe-label">📅 Data Retorno Cliente</span>
+                <div class="detalhe-valor">${formatarData(dados.data_retorno_cliente) || 'N/A'}</div>
+            </div>
+            
+            <div class="detalhe-item">
+                <span class="detalhe-label">🎯 Status</span>
+                <div class="detalhe-valor" style="font-weight: bold;">${getStatusComEmoji(dados.status)}</div>
+            </div>
+            
+            <div class="detalhe-item">
+                <span class="detalhe-label">📝 Evento</span>
+                <div class="detalhe-valor">${normalizarNoFrontend(dados.evento) || 'N/A'}</div>
+            </div>
+            
+            <div class="detalhe-item">
+                <span class="detalhe-label">📅 Data Último Evento</span>
+                <div class="detalhe-valor">${formatarData(dados.data_ultimo_evento) || 'N/A'}</div>
+            </div>
+
+            <!-- 🔥 SEÇÃO: OBSERVAÇÕES E LINKS -->
+            <div class="detalhe-item" style="grid-column: 1 / -1; background: #f0f0f0; border-left: 4px solid #6c757d; margin-top: 10px;">
+                <span class="detalhe-label" style="font-size: 1.1em; color: #6c757d;">
+                    <i class="fas fa-sticky-note"></i> 📝 OBSERVAÇÕES E LINKS
+                </span>
+            </div>
+            
+            <div class="detalhe-item" style="grid-column: 1 / -1;">
+                <span class="detalhe-label">📋 Observações</span>
+                <div class="detalhe-valor" style="max-height: 100px; overflow-y: auto; background: #f8f9fa; padding: 10px; border-radius: 5px;">
+                    ${normalizarNoFrontend(dados.observacoes) || 'Nenhuma observação registrada'}
+                </div>
+            </div>
+            
+            <div class="detalhe-item" style="grid-column: 1 / -1;">
+                <span class="detalhe-label">🔗 Link</span>
+                <div class="detalhe-valor">
+                    ${dados.link ? 
+                        `<a href="${dados.link}" target="_blank" style="color: #007bff; text-decoration: none;">
+                            <i class="fas fa-external-link-alt"></i> ${dados.link}
+                        </a>` 
+                        : 'N/A'
+                    }
+                </div>
+            </div>
+
+            <!-- 🔥 SEÇÃO: DEFASAGEM - MESMO ESTILO DOS CARDS -->
+            ${defasagemModal !== '0 dias' ? `
+            <div class="detalhe-item" style="grid-column: 1 / -1; background: #fff5f5; border-left: 4px solid #dc3545; margin-top: 10px;">
+                <span class="detalhe-label" style="font-size: 1.1em; color: #dc3545;">
+                    <i class="fas fa-clock"></i> ⚠️ INFORMAÇÕES DE DEFASAGEM
+                </span>
+            </div>
+            
+            <div class="detalhe-item">
+                <span class="detalhe-label">⏰ Defasagem</span>
+                <div class="detalhe-valor">
+                    <span style="display: inline-flex; align-items: center; gap: 5px; background: #dc3545; color: white; padding: 4px 10px; border-radius: 15px; font-size: 0.9rem; font-weight: 600;">
+                        <i class="fas fa-clock"></i>
+                        ${defasagemModal}
+                    </span>
+                </div>
+            </div>
+            
+            <div class="detalhe-item">
+                <span class="detalhe-label">🧮 Tipo de Cálculo</span>
+                <div class="detalhe-valor">
+                    ${tipoCalculoModal === 'data_retorno' ? 
+                        '📅 Data de retorno do cliente' : 
+                        tipoCalculoModal === 'ultimo_evento' ? 
+                        '🕒 Data do último evento' :
+                        '📝 Processo finalizado'
+                    }
+                </div>
+            </div>
+            ` : ''}
+        </div>
+
+        <!-- 🔥 BOTÕES DE AÇÃO -->
+        <div class="modal-detalhes-actions">
+            <button type="button" class="btn btn-warning" onclick="editarLoja('${dados.id}')">
+                <i class="fas fa-edit"></i> ✏️ Editar Loja
+            </button>
+            <button type="button" class="btn btn-info" onclick="fecharModalDetalhes()">
+                <i class="fas fa-times"></i> ❌ Fechar
+            </button>
+        </div>
+    `;
+    
+    modal.style.display = 'flex';
+}
+
+  // 🔥 FUNÇÃO PARA FORMATAR DATAS
+    function formatarData(data) {
+        if (!data || data === 'N/A') return 'N/A';
+        if (data instanceof Date) return data.toLocaleDateString('pt-BR');
+        
+        // Se for string no formato YYYY-MM-DD
+        if (data.match(/^\d{4}-\d{2}-\d{2}$/)) {
+            const partes = data.split('-');
+            return `${partes[2]}/${partes[1]}/${partes[0]}`;
+        }
+        
+        return data;
+    }
+
+
+// 🔥🔥🔥 FUNÇÕES AUXILIARES PARA FORMATAÇÃO 🔥🔥🔥
+function formatarMoedaParaExibicao(valor) {
+    if (!valor || valor === 0 || valor === '0') return 'R$ 0,00';
+    
+    const numero = parseFloat(valor);
+    if (isNaN(numero)) return 'R$ 0,00';
+    
+    return numero.toLocaleString('pt-BR', {
+        style: 'currency',
+        currency: 'BRL'
+    });
+}
+
+// 🔥🔥🔥 ADICIONAR ESTA FUNÇÃO SE AINDA NÃO EXISTIR - NORMALIZAR NO FRONTEND
+function normalizarNoFrontend(texto) {
+  if (!texto || typeof texto !== 'string') return texto;
+  
+  // 🔥 NÃO normalizar se for número, data, ou campo monetário
+  if (!isNaN(texto)) return texto; // Números
+  if (texto.includes('R$')) return texto; // Valores monetários
+  if (texto.match(/\d{2}\/\d{2}\/\d{4}/)) return texto; // Datas DD/MM/AAAA
+  
+  return texto
+    .normalize('NFD')
+    .replace(/[\u0300-\u036f]/g, '') // Remove acentos
+    .toUpperCase()
+    .trim();
+}
+
+function formatarPercentualParaExibicao(percentual) {
+    if (!percentual || percentual === '0%') return '';
+    
+    if (typeof percentual === 'string' && percentual.includes('%')) {
+        return percentual;
+    }
+    
+    const numero = parseFloat(percentual);
+    if (isNaN(numero)) return '';
+    
+    return `(${numero}%)`;
+}
+
+function formatarDataParaExibicao(data) {
+    if (!data) return 'N/A';
+    
+    if (data instanceof Date) {
+        return data.toLocaleDateString('pt-BR');
+    }
+    
+    if (typeof data === 'string') {
+        // Tentar converter string para data
+        const dataObj = new Date(data);
+        if (!isNaN(dataObj.getTime())) {
+            return dataObj.toLocaleDateString('pt-BR');
+        }
+        return data; // Retorna a string original se não for uma data válida
+    }
+    
+    return 'N/A';
+}
+
+function getSituacaoClass(situacao) {
+    if (!situacao) return 'status-novo';
+    
+    const situacaoLower = situacao.toLowerCase();
+    
+    if (situacaoLower.includes('novo')) return 'status-novo';
+    if (situacaoLower.includes('andamento')) return 'status-andamento';
+    if (situacaoLower.includes('concluído') || situacaoLower.includes('concluido')) return 'status-concluido';
+    if (situacaoLower.includes('cancelado') || situacaoLower.includes('cancelada')) return 'status-cancelado';
+    
+    return 'status-novo';
+}
+
+// 🔥 SUBSTITUIR editarLoja POR ESTA:
+function editarLoja(idLoja) {
+    console.log("✏️ Editando loja ID:", idLoja);
+    
+    if (!idLoja) {
+        showMessage('error', 'ID da loja não encontrado');
+        return;
+    }
+
+    // 🔥 MOSTRAR LOADING CORRETO
+    showLoading('Carregando dados para edição...');
+
+    google.script.run
+        .withSuccessHandler(function(resultado) {
+            hideLoading();
+            console.log("📊 Dados recebidos para edição:", resultado);
+            
+            if (resultado && resultado.success && resultado.encontrado) {
+                carregarDadosParaEdicao(resultado.dados);
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+                showMessage('success', 'Dados carregados para edição!');
+            } else {
+                showMessage('error', resultado?.message || 'Loja não encontrada para edição');
+            }
+        })
+        .withFailureHandler(function(error) {
+            hideLoading();
+            console.error("❌ Erro ao editar:", error);
+            showMessage('error', 'Erro ao carregar dados: ' + error.message);
+        })
+        .buscarCadastroPorID(idLoja);
+}
+
+// 🔥🔥🔥 FUNÇÃO: FECHAR MODAL DE DETALHES 🔥🔥🔥
+function fecharModalDetalhes() {
+    const modal = document.getElementById('modalDetalhes');
+    if (modal) {
+        modal.style.display = 'none';
+    }
+}
+
+function carregarDadosParaEdicao(dados) {
+    console.log("📝 Carregando dados para edição:", dados);
+
+    // 🔥 FECHAR SUGESTÕES DE EVENTO
+    document.getElementById('suggestions-evento').style.display = 'none';
+    
+    // 🔥 FUNÇÃO PARA CONVERTER DATAS DD/MM/AAAA para YYYY-MM-DD
+    function converterDataParaInput(data) {
+        if (!data || data === 'N/A' || data === '') return '';
+        if (data.match(/\d{2}\/\d{2}\/\d{4}/)) {
+            // Converte DD/MM/AAAA para YYYY-MM-DD
+            const partes = data.split('/');
+            return `${partes[2]}-${partes[1]}-${partes[0]}`;
+        }
+        return data;
+    }
+
+    // 🔥 FUNÇÃO PARA FORÇAR MAIÚSCULO EM TUDO
+    function forcarMaiusculo(texto) {
+        if (!texto || typeof texto !== 'string') return texto;
+        
+        // Não converter números, datas ou valores monetários
+        if (!isNaN(texto)) return texto;
+        if (texto.includes('R$')) return texto;
+        if (texto.match(/\d{2}\/\d{2}\/\d{4}/)) return texto;
+        
+        return texto
+            .normalize('NFD')
+            .replace(/[\u0300-\u036f]/g, '') // Remove acentos
+            .toUpperCase()
+            .trim();
+    }
+
+    // 🔥 PREENCHER TODOS OS CAMPOS FORÇANDO MAIÚSCULO
+    
+    // LOJA
+    document.getElementById('loja').value = forcarMaiusculo(dados.loja) || '';
+    console.log("🏪 Loja carregada:", document.getElementById('loja').value);
+    
+    // SEGMENTO
+    const segmentoValue = forcarMaiusculo(dados.segmento) || '';
+    document.getElementById('segmento').value = segmentoValue;
+    console.log("📊 Segmento carregado:", segmentoValue);
+    
+    // TELEFONE
+    document.getElementById('telefone').value = forcarMaiusculo(dados.telefone) || '';
+    console.log("📞 Telefone carregado:", document.getElementById('telefone').value);
+    
+    // FORNECEDOR (checkboxes) - MAIÚSCULO E DEBBUG EXTRA
+    if (dados.fornecedor) {
+        const fornecedoresMaiusculo = forcarMaiusculo(dados.fornecedor);
+        console.log("🔍 Fornecedores da planilha:", dados.fornecedor);
+        console.log("🔍 Fornecedores normalizados:", fornecedoresMaiusculo);
+        
+        const fornecedoresArray = fornecedoresMaiusculo.split(',').map(f => f.trim());
+        console.log("🔍 Fornecedores array:", fornecedoresArray);
+        
+        const checkboxes = document.querySelectorAll('#fornecedor-container input');
+        console.log("🔍 Checkboxes encontrados:", checkboxes.length);
+        
+        checkboxes.forEach(checkbox => {
+            const estaSelecionado = fornecedoresArray.includes(checkbox.value);
+            checkbox.checked = estaSelecionado;
+            checkbox.parentElement.classList.toggle('selected', estaSelecionado);
+            console.log(`📦 Fornecedor ${checkbox.value}: ${estaSelecionado ? 'SELECIONADO' : 'NÃO SELECIONADO'}`);
+        });
+        atualizarFornecedorSelecionado();
+    } else {
+        console.log("❌ Nenhum fornecedor encontrado nos dados");
+    }
+    
+    // TRÁFEGO
+    const trafegoValue = forcarMaiusculo(dados.trafego) || '';
+    document.getElementById('trafego').value = trafegoValue;
+    console.log("🚗 Tráfego carregado:", trafegoValue);
+    
+    // QUANTIDADE DE LOJAS
+    document.getElementById('quantidade_lojas').value = dados.quantidade_lojas || '';
+    console.log("🏬 Quantidade lojas:", document.getElementById('quantidade_lojas').value);
+    
+    // ADESÃO
+    document.getElementById('adesao').value = dados.adesao || '0';
+    console.log("💰 Adesão:", document.getElementById('adesao').value);
+    
+    // DATA PAGAMENTO ADESÃO
+    const dataPagamentoValue = converterDataParaInput(dados.data_pagamento_adesao) || '';
+    document.getElementById('data_pagamento_adesao').value = dataPagamentoValue;
+    console.log("📅 Data pagamento adesão:", dataPagamentoValue);
+    
+    // FORMA DE PAGAMENTO
+    const formaPgValue = forcarMaiusculo(dados.forma_pagamento) || '';
+    document.getElementById('forma_pagamento').value = formaPgValue;
+    console.log("💳 Forma pagamento:", formaPgValue);
+    
+    // PARCELAS
+    const parcelasValue = forcarMaiusculo(dados.parcelas) || '';
+    document.getElementById('parcelas').value = parcelasValue;
+    console.log("📋 Parcelas:", parcelasValue);
+    
+    // PLANO ASSINATURA
+    document.getElementById('plano_assinatura').value = dados.plano_assinatura || '';
+    console.log("📈 Plano assinatura:", document.getElementById('plano_assinatura').value);
+    
+    // USUÁRIO
+    const usuarioValue = forcarMaiusculo(dados.usuario) || '';
+    document.getElementById('usuario').value = usuarioValue;
+    console.log("👤 Usuário:", usuarioValue);
+    
+    // REPRESENTANTE
+    document.getElementById('representante').value = forcarMaiusculo(dados.representante) || '';
+    console.log("👔 Representante:", document.getElementById('representante').value);
+    
+    // DATA RETORNO CLIENTE
+    const dataRetornoValue = converterDataParaInput(dados.data_retorno_cliente) || '';
+    document.getElementById('data_retorno_cliente').value = dataRetornoValue;
+    console.log("📆 Data retorno:", dataRetornoValue);
+    
+    // STATUS
+    const statusValue = forcarMaiusculo(dados.status) || 'EM ANDAMENTO';
+    document.getElementById('status').value = statusValue;
+    console.log("🎯 Status:", statusValue);
+    
+    // EVENTO
+    const eventoValue = forcarMaiusculo(dados.evento) || '';
+    document.getElementById('evento').value = eventoValue;
+    console.log("📝 Evento:", eventoValue);
+    
+    // OBSERVAÇÃO
+    const observacaoValue = forcarMaiusculo(dados.observacao) || forcarMaiusculo(dados.observacoes) || '';
+    document.getElementById('observacao').value = observacaoValue;
+    console.log("📋 Observação:", observacaoValue);
+
+    // 🔥🔥🔥 CORREÇÃO: CHAMAR A FUNÇÃO DE CÁLCULO SEMPRE!
+    console.log("🎯 CHAMANDO ATUALIZAÇÃO DE CÁLCULO PARA EDIÇÃO:");
+    console.log("Data retorno:", dados.data_retorno_cliente);
+    console.log("Data último evento:", dados.data_ultimo_evento);
+    console.log("Status:", dados.status);
+    
+    // 🔥 ATUALIZAR INFORMAÇÕES DE CÁLCULO (CHAMADA CORRIGIDA)
+    atualizarInformacoesCalculoCompleto(
+        dados.data_retorno_cliente, 
+        dados.data_ultimo_evento, 
+        dados.defasagem,
+        dados.status // ⭐⭐ AGORA PASSA O STATUS
+    );
+
+    // 🔥 ATUALIZAR VARIÁVEIS GLOBAIS
+    registroId = dados.id;
+    lojaExiste = true;
+    
+    // 🔥 MOSTRAR SEÇÃO DE ATUALIZAÇÃO
+    document.getElementById('secaoAtualizacao').style.display = 'block';
+    document.getElementById('btnCadastrar').style.display = 'none';
+    document.getElementById('btnAtualizar').style.display = 'block';
+    
+    // ✅ ATUALIZAR VALIDAÇÃO DA ADESÃO
+    validarAdesao();
+    
+    console.log("✅✅✅ DADOS CARREGADOS COM SUCESSO - TUDO EM MAIÚSCULO!");
+    console.log("==========================================");
+    
+    showMessage('success', '✅ Loja carregada para edição! Modo de atualização ativado.');
+}
+
+// 🔥 FUNÇÃO SIMPLES PARA ATUALIZAR INFORMAÇÕES DE CÁLCULO
+function atualizarInformacoesCalculo(dataRetornoCliente) {
+    const dataBaseElement = document.getElementById('data-base-calculo');
+    const tipoCalculoElement = document.getElementById('tipo-calculo-text');
+    const tipoCalculoInfo = document.getElementById('tipo-calculo-info');
+    
+    console.log("🔍 Atualizando informações de cálculo:");
+    console.log("Data retorno recebida:", dataRetornoCliente);
+    
+    if (dataRetornoCliente && dataRetornoCliente !== 'N/A' && dataRetornoCliente !== '') {
+        // 🔥 TEM DATA RETORNO → calcula por data retorno
+        dataBaseElement.textContent = dataRetornoCliente;
+        dataBaseElement.style.color = '#28a745';
+        tipoCalculoElement.textContent = 'Data de retorno do cliente';
+        tipoCalculoElement.style.color = '#28a745';
+        console.log("✅ Tipo: Data de retorno do cliente");
+    } else {
+        // 🔥 NÃO TEM DATA RETORNO → calcula por último evento
+        dataBaseElement.textContent = 'Data do último evento';
+        dataBaseElement.style.color = '#dc3545';
+        tipoCalculoElement.textContent = 'Data do último evento';
+        tipoCalculoElement.style.color = '#dc3545';
+        console.log("✅ Tipo: Data do último evento");
+    }
+    
+    // Mostrar a seção
+    tipoCalculoInfo.style.display = 'block';
+    console.log("🎯 Seção de cálculo mostrada");
+}
+
+// 🔥 FUNÇÃO TEMPORÁRIA PARA DEBUG 🔥
+function testarFuncoes() {
+    console.log("🧪 Testando funções...");
+    
+    // Testar se as funções existem
+    console.log("visualizarLoja existe:", typeof visualizarLoja);
+    console.log("editarLoja existe:", typeof editarLoja);
+    console.log("buscarCadastroPorID existe no Google Apps Script:", true); // Assumindo que existe
+    
+    // Testar com um ID fictício (substitua por um ID real)
+    // visualizarLoja('2'); // Descomente para testar
+}
 
     function atualizarFornecedorSelecionado() { 
       const selected = document.querySelectorAll('#fornecedor-container input:checked');
@@ -1610,7 +4011,28 @@ function cadastrarLoja() {
           setTimeout(() => infoEl.style.display = 'none', 5000);
           break;
       }
+
+
     }
   </script>
+
+ <!-- 🔄 BOLINHA DE CARREGAMENTO CORRIGIDA -->
+<div id="loadingOverlay" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); z-index: 9999; justify-content: center; align-items: center;">
+  <div style="background: white; padding: 30px; border-radius: 15px; text-align: center; box-shadow: 0 4px 20px rgba(0,0,0,0.3); min-width: 200px;">
+    <div style="border: 5px solid #f3f3f3; border-top: 5px solid #7E3E9A; border-radius: 50%; width: 50px; height: 50px; animation: spin 1s linear infinite; margin: 0 auto 15px;"></div>
+    <p style="margin: 0; color: #333; font-weight: bold; font-size: 16px;">Salvando...</p>
+    <p style="margin: 5px 0 0 0; color: #666; font-size: 14px;">Aguarde um momento</p>
+  </div>
+</div>
+
+<!-- 🔥🔥🔥 MODAL DE DETALHES COMPLETOS 🔥🔥🔥 -->
+<div id="modalDetalhes" class="modal-detalhes">
+    <div class="modal-detalhes-content">
+        <div id="modalDetalhesContent">
+            <!-- Conteúdo será preenchido dinamicamente -->
+        </div>
+    </div>
+</div>
+
 </body>
 </html>
