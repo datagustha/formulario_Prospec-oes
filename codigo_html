@@ -3035,14 +3035,7 @@ function validarFormulario() {
   
   if (adesao > 0) {
     // ✅ ADESÃO > R$ 0,00 - VALIDAR CAMPOS DE PAGAMENTO
-    if (!dataPagamentoAdesao.value) {
-      dataPagamentoAdesao.classList.add('error');
-      document.getElementById('erro-data_pagamento_adesao').style.display = 'block';
-      isValid = false;
-      if (!primeiroErro) primeiroErro = dataPagamentoAdesao;
-      console.log("❌ Data pagamento adesão obrigatória para adesão > 0");
-    }
-    
+
     if (!formaPagamento.value || formaPagamento.value === 'ISENTO') {
       formaPagamento.classList.add('error');
       document.getElementById('erro-forma_pagamento').style.display = 'block';
