@@ -1078,33 +1078,34 @@
   <div class="form-grid" style="grid-template-columns: 1fr 1fr 1fr; gap: 15px; margin-bottom: 15px;">
     
     <!-- SEGMENTO -->
-    <div class="form-group">
-      <label class="form-label required">
-        <i class="fas fa-tag"></i>
-        Segmento
-      </label>
-      <select id="segmento" class="form-control" required>
-        <option value="">-- SELECIONE --</option>
-        <option value="ATACADISTA">ATACADISTA</option>
-        <option value="OTICA">OTICA</option>
-        <option value="MATERIAL DE CONSTRUCAO">MATERIAL DE CONSTRUCAO</option>
-        <option value="TELEFONIA">TELEFONIA</option>
-        <option value="VESTUARIO">VESTUARIO</option>
-        <option value="MOVEIS E ELETROS">MOVEIS E ELETROS</option>
-        <option value="AUTO PECAS">AUTO PECAS</option>
-        <option value="CALCADOS">CALCADOS</option>
-        <option value="CONSTRUCOES">CONSTRUCOES</option>
-        <option value="ELETRONICOS">ELETRONICOS</option>
-        <option value="CONFECCOES">CONFECCOES</option>
-        <option value="COSMETICOS">COSMETICOS</option>
-        <option value="POSTOS DE COMBUSTIVEL">POSTOS DE COMBUSTIVEL</option>
-        <option value="SUPERMERCADO">SUPERMERCADO</option>
-        <option value="DROGARIAS INDIVIDUAS E POR REDE">DROGARIAS INDIVIDUAS E POR REDE</option>
-        <option value="MATERIAIS DE CONTRACOES">MATERIAIS DE CONTRACOES</option>
-        <option value="PISCINAS(EXCETO RJ)">PISCINAS(EXCETO RJ)</option>
-      </select>
-      <div class="error-message" id="erro-segmento">Campo obrigatório</div>
-    </div>
+<div class="form-group">
+  <label class="form-label required">
+    <i class="fas fa-tag"></i>
+    Segmento
+  </label>
+  <select id="segmento" class="form-control" required>
+    <option value="">-- SELECIONE --</option>
+    <option value="ATACADISTA">ATACADISTA</option>
+    <option value="AUTO PECAS">AUTO PECAS</option>
+    <option value="CALCADOS">CALCADOS</option>
+    <option value="CONFECCOES">CONFECCOES</option>
+    <option value="CONSTRUCOES">CONSTRUCOES</option>
+    <option value="COSMETICOS">COSMETICOS</option>
+    <option value="DROGARIAS INDIVIDUAS E POR REDE">DROGARIAS INDIVIDUAS E POR REDE</option>
+    <option value="ELETRONICOS">ELETRONICOS</option>
+    <option value="MATERIAIS DE CONTRACOES">MATERIAIS DE CONTRACOES</option>
+    <option value="MATERIAL DE CONSTRUCAO">MATERIAL DE CONSTRUCAO</option>
+    <option value="MOVEIS E ELETROS">MOVEIS E ELETROS</option>
+    <option value="OTICA">OTICA</option>
+    <option value="PISCINAS(EXCETO RJ)">PISCINAS(EXCETO RJ)</option>
+    <option value="POSTOS DE COMBUSTIVEL">POSTOS DE COMBUSTIVEL</option>
+    <option value="SAUDE E ESTETICA">SAUDE E ESTETICA</option>
+    <option value="SUPERMERCADO">SUPERMERCADO</option>
+    <option value="TELEFONIA">TELEFONIA</option>
+    <option value="VESTUARIO">VESTUARIO</option>
+  </select>
+  <div class="error-message" id="erro-segmento">Campo obrigatório</div>
+</div>
 
     <!-- TELEFONE -->
     <div class="form-group">
